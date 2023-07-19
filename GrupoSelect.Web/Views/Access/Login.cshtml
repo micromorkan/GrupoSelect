@@ -1,0 +1,45 @@
+﻿@model GrupoSelect.Web.Models.LoginVM;
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+</head>
+<body>
+    <form asp-controller="Access" asp-action="Login" method="post">
+        <h1>Login</h1>
+        <input type="text" placeholder="Usuário" asp-for="User" />
+        <input type="password" placeholder="Senha" asp-for="Password" />
+
+        <label>
+            <input type="checkbox" asp-for="KeepLoggedIn" />
+            Manter Logado
+        </label>
+        <button type="submit">Entrar</button>
+
+        @if (ViewData["GS_ERRORS_ACCESS"] != null)
+        {
+            foreach (var item in (IList<FluentValidation.Results.ValidationFailure>)ViewData["GS_ERRORS_ACCESS"])
+            {
+                <br />
+                <br />
+
+                <label>@item</label>
+            }
+        }
+
+        @if (ViewData["GS_AUTH_ERROR"] != null)
+        {
+            <br />
+            <br />
+            <label>@ViewData["GS_AUTH_ERROR"]</label>
+        }
+    </form>
+</body>
+</html>
