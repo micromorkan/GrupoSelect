@@ -1,4 +1,20 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
+﻿function FillSelect(url, filter, selectId) {
+    $.ajax({
+        dataType: 'json',
+        type: 'POST',
+        url: url,
+        data: filter,
+        success: function (data) {
+            $.each(data, function (i, item) {
+                $(selectId).append($('<option>', {
+                    value: item.value,
+                    text: item.text,
+                    selected: item.selected,
+                }));
+            });
+        },
+        failure: function (response) {
+            $('#result').html(response);
+        }
+    });
+}

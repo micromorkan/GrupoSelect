@@ -4,6 +4,8 @@ using GrupoSelect.Web.Configurations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using GrupoSelect.Web.Util;
+using GrupoSelect.Services.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 

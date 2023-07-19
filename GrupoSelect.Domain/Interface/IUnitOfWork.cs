@@ -10,6 +10,7 @@ namespace GrupoSelect.Domain.Interface
     public interface IUnitOfWork : IDisposable
     {
         IBaseRepository<User> Users { get; }
+        IBaseRepository<Profile> Profiles { get; }
         void SaveAllChanges();
     }
 }

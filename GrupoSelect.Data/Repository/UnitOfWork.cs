@@ -8,6 +8,7 @@ namespace GrupoSelect.Data.Repository
     {
         private readonly GSDbContext _context;
         private IBaseRepository<User> _usuarios;
+        private IBaseRepository<Profile> _profiles;
 
         public UnitOfWork(GSDbContext context)
         {
@@ -15,6 +16,7 @@ namespace GrupoSelect.Data.Repository
         }
 
         public IBaseRepository<User> Users => _usuarios ??= new BaseRepository<User>(_context);
+        public IBaseRepository<Profile> Profiles => _profiles ??= new BaseRepository<Profile>(_context);
 
         public void SaveAllChanges()
         {

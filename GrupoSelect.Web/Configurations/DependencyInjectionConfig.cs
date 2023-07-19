@@ -12,8 +12,12 @@ namespace GrupoSelect.Web.Configurations
         {
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAccessService, AccessService>();
+            services.AddScoped<IProfileService, ProfileService>();
+
             services.AddTransient<IUserRepository, UserRepository>();
+
             services.AddTransient<IUnitOfWork, UnitOfWork>();
+
             return services;
         }
     }

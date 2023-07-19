@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
+@*<h1>Create</h1>
 
 <h4>User</h4>
 <hr />
@@ -32,8 +32,92 @@
 
 <div>
     <a asp-action="Index">Back to List</a>
+</div>*@
+<div class="page-title">
+    <div class="title_left">
+        <h3>Usuário</h3>
+    </div>
 </div>
-
+<div class="clearfix"></div>
+<div class="row">
+    <div class="col-md-12 col-sm-12">
+        <div class="x_panel">
+        <div class="x_title">
+            <h2>Cadastrar</h2>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <br>
+            <form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">
+                <div class="item form-group">
+                    <label class="col-form-label col-md-3 col-sm-3 label-align">
+                        Nome <span class="required">*</span>
+                    </label>
+                    <div class="col-md-6 col-sm-6 ">
+                        <input asp-for="Name" class="form-control" />
+                    </div>
+                </div>
+                <div class="item form-group">
+                    <label class="col-form-label col-md-3 col-sm-3 label-align">
+                        Email <span class="required">*</span>
+                    </label>
+                    <div class="col-md-6 col-sm-6 ">
+                        <input asp-for="Email" class="form-control" />
+                    </div>
+                </div>
+                <div class="item form-group">
+                    <label class="col-form-label col-md-3 col-sm-3 label-align">
+                        Login <span class="required">*</span>
+                    </label>
+                    <div class="col-md-6 col-sm-6 ">
+                        <input asp-for="Login" class="form-control" />
+                    </div>
+                </div>
+                <div class="item form-group">
+                    <label class="col-form-label col-md-3 col-sm-3 label-align">
+                        Senha <span class="required">*</span>
+                    </label>
+                    <div class="col-md-6 col-sm-6 ">
+                        <input asp-for="Password" type="password" class="form-control" />
+                    </div>
+                </div>
+                <div class="item form-group">
+                    <label class="col-form-label col-md-3 col-sm-3 label-align">
+                        Perfil <span class="required">*</span>
+                    </label>
+                    <div class="col-md-6 col-sm-6 ">
+                        <select asp-for="Profile" id="ddlProfile" class="form-control">
+                            <option selected="selected" value="">-- Selecione --</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="item form-group">
+                    <label class="col-form-label col-md-3 col-sm-3 label-align">
+                        Ativo <span class="required">*</span>
+                    </label>
+                    <div class="col-md-6 col-sm-6 ">
+                        @Html.DropDownListFor(model => model.Active, GrupoSelect.Web.Util.UtilWeb.GetBooleanList(), new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="ln_solid"></div>
+                <div class="item form-group">
+                    <div class="col-md-6 col-sm-6 offset-md-3">
+                        <button type="submit" class="btn btn-success">Salvar</button>
+                        <a asp-action="Index" class="btn btn-danger">Cancelar</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+</div>
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+            FillSelect("@Url.Action("GetProfileList", "Users")", { Active: true }, "#ddlProfile")
+        });
+    </script>
 }

@@ -1,18 +1,21 @@
-html {
-  font-size: 14px;
+i.fa-logo {
+    content: "";
+    background-image: url('../img/logo.png');
+    width: 40px;
+    height: 20px;
+    /*//WIDTH of the icon height: 100px;
+    //HEIGHT of the icon display: inline-block;*/
+    background-position: center;
+    background-size: cover;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
-body {
-  margin-bottom: 60px;
+i.fa-logo-white {
+    content: "";
+    background-image: url('../img/logo_white.png');
+    width: 40px;
+    height: 20px;
+    /*//WIDTH of the icon height: 100px;
+    //HEIGHT of the icon display: inline-block;*/
+    background-position: center;
+    background-size: cover;
 }

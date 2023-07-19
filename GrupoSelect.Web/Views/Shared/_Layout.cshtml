@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims;
+@*<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -50,6 +51,192 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>*@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Grupo Select | </title>
+
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="~/css/nprogress.css" rel="stylesheet">
+    <link href="~/css/custom.min.css" rel="stylesheet">
+    <link href="~/css/site.css" rel="stylesheet">
+    <meta name="robots" content="index, nofollow">
+</head>
+<body class="nav-md">
+    <div class="container body">
+        <div class="main_container">
+            <div class="col-md-3 left_col">
+                <div class="left_col scroll-view">
+                    <div class="navbar nav_title" style="border: 0;">
+                        <a href="index.html" class="site_title"><i class="fa fa-logo-white"></i><span> Grupo Select</span></a>
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <br />
+
+                    <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                        <div class="menu_section">
+                            <h3>Página Inicial</h3>
+                            <ul class="nav side-menu">
+                                <li>
+                                    <a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li><a href="index.html">Dashboard</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <br />
+                            <h3>Ficha Cadastral</h3>
+                            <ul class="nav side-menu">
+                                <li>
+                                    <a><i class="fa fa-users"></i> Clientes <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li><a href="index.html">Pesquisar</a></li>
+                                        <li><a href="index2.html">Cadastrar</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a><i class="fa fa-suitcase"></i> Propostas <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li><a href="index.html">Pesquisar</a></li>
+                                        <li><a href="index2.html">Cadastrar</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a><i class="fa fa-file-text-o"></i> Contratos <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li><a href="index.html">Pesquisar</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <br />
+                            <h3>Financeiro</h3>
+                            <ul class="nav side-menu">
+                                <li>
+                                    <a><i class="fa fa-money"></i> Borderô <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li><a href="index.html">Consultar</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <br />
+                            <h3>Configuração</h3>
+                            <ul class="nav side-menu">
+                                <li>
+                                    <a><i class="fa fa-cogs"></i> Tipo Tabela <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li><a href="index.html">Pesquisar</a></li>
+                                        <li><a href="index2.html">Cadastrar</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a><i class="fa fa-cogs"></i> Administradoras <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li><a href="index.html">Pesquisar</a></li>
+                                        <li><a href="index2.html">Cadastrar</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a><i class="fa fa-cogs"></i> Tipo Produto <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li><a href="index.html">Pesquisar</a></li>
+                                        <li><a href="index2.html">Cadastrar</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a><i class="fa fa-cogs"></i> Tabela Crédito <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li><a href="index.html">Pesquisar</a></li>
+                                        <li><a href="index2.html">Cadastrar</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <br />
+                            <h3>Gerenciamento</h3>
+                            <ul class="nav side-menu">
+                                <li>
+                                    <a><i class="fa fa-user"></i> Usuários <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li><a href="@Url.Action("Index", "Users")">Pesquisar</a></li>
+                                        <li><a href="@Url.Action("Create", "Users")">Cadastrar</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-footer hidden-small">
+                        <a data-toggle="tooltip" data-placement="top" title="Settings">
+                            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                        </a>
+                        <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+                            <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+                        </a>
+                        <a data-toggle="tooltip" data-placement="top" title="Lock">
+                            <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+                        </a>
+                        <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
+                            <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="top_nav">
+                <div class="nav_menu">
+                    <div class="nav toggle">
+                        <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                    </div>
+                    <nav class="nav navbar-nav">
+                        <ul class=" navbar-right">
+                            <li class="nav-item dropdown open" style="padding-left: 15px;">
+                                <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
+                                    @User.Identity.Name
+                                </a>
+                                <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="@Url.Action("ChangePassword", "Users", new { id = User.FindFirstValue(ClaimTypes.NameIdentifier) })"><i class="fa fa-cog pull-right"></i> Trocar Senha</a>
+                                    <a class="dropdown-item" href="@Url.Action("LogOut", "Home")"><i class="fa fa-sign-out pull-right"></i> Sair</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+
+            <div class="right_col" role="main">
+                @RenderBody()
+            </div>
+
+
+           @* <footer>
+                <div class="pull-right">
+                    Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+                </div>
+                <div class="clearfix"></div>
+            </footer>*@
+
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/fastclick.js"></script>
+    <script src="~/js/nprogress.js"></script>
+    <script src="~/js/custom.min.js"></script>
+    <script src="~/js/site.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -3,6 +3,7 @@ using GrupoSelect.Domain.Entity;
 using GrupoSelect.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace GrupoSelect.Web.Controllers
@@ -11,13 +12,15 @@ namespace GrupoSelect.Web.Controllers
     public class UsersController : Controller
     {
         private IUserService _userService;
+        private IProfileService _profileService;
 
-        public UsersController(GSDbContext context, IUserService userService)
+        public UsersController(GSDbContext context, IUserService userService, IProfileService profileService)
         {
             _userService = userService;
+            _profileService = profileService;
         }
 
-        [Authorize(Roles = "USUARIOCOMUM,ADMINISTRATIVO")]
+        [Authorize(Roles = "REPRESENTANTE,ADMINISTRATIVO")]
         public async Task<IActionResult> Index()
         {
             var result = await _userService.GetAll(new Domain.Entity.User());
@@ -27,7 +30,7 @@ namespace GrupoSelect.Web.Controllers
             return View(new User());
         }
 
-        [Authorize(Roles = "USUARIOCOMUM")]
+        [Authorize(Roles = "REPRESENTANTE")]
         [HttpPost]
         public async Task<IActionResult> Index([Bind("Id,Name,Email")] User filter)
         {
@@ -56,13 +59,13 @@ namespace GrupoSelect.Web.Controllers
         }
 
         public IActionResult Create()
-        {
+        {           
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Email")] User user)
+        public async Task<IActionResult> Create(User user)
         {
             var result = _userService.Insert(user);
 
@@ -98,7 +101,7 @@ namespace GrupoSelect.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Email")] User user)
+        public async Task<IActionResult> Edit(int id, User user)
         {
             var result = _userService.Update(user);
 
@@ -149,6 +152,28 @@ namespace GrupoSelect.Web.Controllers
                 ViewData["GS_MESSAGE_USER"] = result.Message;
 
                 return RedirectToAction(nameof(Index));
+            }
+        }
+
+        [HttpPost]
+        public async Task<IEnumerable<SelectListItem>> GetProfileList(Profile filter)
+        {
+            var result = await _profileService.GetAll(filter);
+
+            if (result.Success)
+            {
+                IList<SelectListItem> items = new List<SelectListItem>();
+
+                foreach (Profile item in result.Object)
+                {
+                    items.Add(new SelectListItem() { Value = item.Name, Text = item.Name, Selected = filter.Id == item.Id ? true : false });
+                }
+
+                return items;
+            }
+            else
+            {
+                return new List<SelectListItem>();
             }
         }
     }

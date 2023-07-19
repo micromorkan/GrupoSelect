@@ -26,6 +26,7 @@ namespace GrupoSelect.Data.Context
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new UserMap());
+            modelBuilder.ApplyConfiguration(new ProfileMap());
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

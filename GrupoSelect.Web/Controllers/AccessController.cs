@@ -44,12 +44,13 @@ namespace GrupoSelect.Web.Controllers
             {
                 List<Claim> claims = new List<Claim>()
                 {
-                    new Claim(ClaimTypes.NameIdentifier, result.Object.Name),
+                    new Claim(ClaimTypes.NameIdentifier, result.Object.Id.ToString()),
+                    new Claim(ClaimTypes.Name, result.Object.Name),
                     new Claim(ClaimTypes.Role, result.Object.Profile),
                 };
 
                 ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
+                
                 AuthenticationProperties properties = new AuthenticationProperties()
                 {
                     AllowRefresh = true,
