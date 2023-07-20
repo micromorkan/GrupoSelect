@@ -31,7 +31,7 @@ namespace GrupoSelect.Data.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=DESKTOP-CMHO5R3;Database=GrupoSelect;User Id=sa;Password=diegoand;encrypt=yes;trustservercertificate=true;");
+            optionsBuilder.UseSqlServer(@"Server=DESKTOP-CMHO5R3\MSSQLSERVER2022;Database=GrupoSelect;User Id=sa;Password=diegoand;encrypt=yes;trustservercertificate=true;");
         }
     }
 }

@@ -1,10 +1,10 @@
 ﻿using FluentValidation.Results;
 using GrupoSelect.Domain.Entity;
 using GrupoSelect.Domain.Interface;
+using GrupoSelect.Domain.Model;
 using GrupoSelect.Services.FluentValidation;
 using GrupoSelect.Services.FluentValidation.User;
 using GrupoSelect.Services.Interface;
-using GrupoSelect.Services.Model;
 
 namespace GrupoSelect.Services.Service
 {
@@ -37,6 +37,21 @@ namespace GrupoSelect.Services.Service
             }
         }
 
+        public async Task<PaginateResult<IEnumerable<User>>> GetAllPaginate(User filter, int page, int qtPage)
+        {
+            try
+            {
+                return _unitOfWork.Users.GetAllPaginate(f => (string.IsNullOrEmpty(filter.Name) || f.Name.Contains(filter.Name)) && (string.IsNullOrEmpty(filter.Email) || f.Email.Contains(filter.Email)), null, page, qtPage);
+            }
+            catch (Exception ex)
+            {
+                return new PaginateResult<IEnumerable<User>>
+                {
+                    Success = false,
+                    Message = ex.Message
+                };
+            }
+        }
         public async Task<Result<User>> GetById(int id)
         {
             try

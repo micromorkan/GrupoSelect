@@ -4,7 +4,7 @@ using GrupoSelect.Domain.Interface;
 using GrupoSelect.Services.FluentValidation;
 using GrupoSelect.Services.FluentValidation.User;
 using GrupoSelect.Services.Interface;
-using GrupoSelect.Services.Model;
+using GrupoSelect.Domain.Model;
 
 namespace GrupoSelect.Services.Service
 {

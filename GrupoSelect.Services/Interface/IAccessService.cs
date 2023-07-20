@@ -1,5 +1,5 @@
 ﻿using GrupoSelect.Domain.Entity;
-using GrupoSelect.Services.Model;
+using GrupoSelect.Domain.Model;
 
 namespace GrupoSelect.Services.Interface
 {

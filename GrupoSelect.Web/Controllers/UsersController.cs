@@ -1,6 +1,7 @@
 ﻿using GrupoSelect.Data.Context;
 using GrupoSelect.Domain.Entity;
 using GrupoSelect.Services.Interface;
+using GrupoSelect.Web.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -23,22 +24,23 @@ namespace GrupoSelect.Web.Controllers
         [Authorize(Roles = "REPRESENTANTE,ADMINISTRATIVO")]
         public async Task<IActionResult> Index()
         {
-            var result = await _userService.GetAll(new Domain.Entity.User());
+            //var result = await _userService.GetAll(new Domain.Entity.User());
 
-            ViewData["GS_LIST_USER_INDEX"] = result.Object;
+            //ViewData["GS_LIST_USER_INDEX"] = result.Object;
 
             return View(new User());
         }
 
         [Authorize(Roles = "REPRESENTANTE")]
         [HttpPost]
-        public async Task<IActionResult> Index([Bind("Id,Name,Email")] User filter)
+        public async Task<IActionResult> Index(User filter, int page, int qtPage)
         {
-            var result = await _userService.GetAll(filter);
+            var result = await _userService.GetAllPaginate(filter, page, qtPage);
 
-            ViewData["GS_LIST_USER_INDEX"] = result.Object;
-
-            return View(filter);
+            return Json(new
+            {
+                result = result,
+            });
         }
 
         [Authorize(Roles = "ADMINISTRATIVO")]

@@ -1,6 +1,6 @@
 ﻿using FluentValidation.Results;
 
-namespace GrupoSelect.Services.Model
+namespace GrupoSelect.Domain.Model
 {
     public class Result<T>
     {

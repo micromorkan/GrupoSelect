@@ -14,8 +14,13 @@ i.fa-logo-white {
     background-image: url('../img/logo_white.png');
     width: 40px;
     height: 20px;
-    /*//WIDTH of the icon height: 100px;
-    //HEIGHT of the icon display: inline-block;*/
     background-position: center;
     background-size: cover;
+}
+
+.btn-group-xs > .btn, .btn-xs {
+    padding: .30rem;
+    font-size: .6rem;
+    line-height: .5;
+    border-radius: .2rem;
 }
