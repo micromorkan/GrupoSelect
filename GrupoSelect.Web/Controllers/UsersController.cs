@@ -1,5 +1,7 @@
-﻿using GrupoSelect.Data.Context;
+﻿using AutoMapper;
+using GrupoSelect.Data.Context;
 using GrupoSelect.Domain.Entity;
+using GrupoSelect.Domain.Model;
 using GrupoSelect.Services.Interface;
 using GrupoSelect.Web.ViewModel;
 using Microsoft.AspNetCore.Authorization;
@@ -14,27 +16,27 @@ namespace GrupoSelect.Web.Controllers
     {
         private IUserService _userService;
         private IProfileService _profileService;
+        public readonly IMapper _mapper;
 
-        public UsersController(GSDbContext context, IUserService userService, IProfileService profileService)
+        public UsersController(GSDbContext context, IUserService userService, IProfileService profileService, IMapper mapper)
         {
             _userService = userService;
             _profileService = profileService;
+            _mapper = mapper;
         }
 
         [Authorize(Roles = "REPRESENTANTE,ADMINISTRATIVO")]
         public async Task<IActionResult> Index()
         {
-            //var result = await _userService.GetAll(new Domain.Entity.User());
-
-            //ViewData["GS_LIST_USER_INDEX"] = result.Object;
-
-            return View(new User());
+            return View(new UserVM());
         }
 
         [Authorize(Roles = "REPRESENTANTE")]
         [HttpPost]
-        public async Task<IActionResult> Index(User filter, int page, int qtPage)
+        public async Task<IActionResult> Index(UserVM userVM, int page, int qtPage)
         {
+            var filter = _mapper.Map<User>(userVM);
+
             var result = await _userService.GetAllPaginate(filter, page, qtPage);
 
             return Json(new
@@ -67,21 +69,17 @@ namespace GrupoSelect.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(User user)
+        public async Task<IActionResult> Create(UserVM userVM)
         {
+            var user = _mapper.Map<User>(userVM);
+
             var result = _userService.Insert(user);
 
-            if (result.Success)
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            else
-            {
-                ViewData["GS_ERRORS_USER"] = result.Errors;
-                ViewData["GS_MESSAGE_USER"] = result.Message;
+            //Result<User> result = new Result<User>();
+            //result.Success = false;
+            //result.Message = "teste erro";
 
-                return View(user);
-            }
+            return Json(result);
         }
 
         public async Task<IActionResult> Edit(int id)
@@ -103,8 +101,10 @@ namespace GrupoSelect.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, User user)
+        public async Task<IActionResult> Edit(int id, UserVM userVM)
         {
+            var user = _mapper.Map<User>(userVM);
+
             var result = _userService.Update(user);
 
             if (result.Success)
@@ -120,7 +120,6 @@ namespace GrupoSelect.Web.Controllers
             }
         }
 
-        // GET: Users/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _userService.GetById(id);
@@ -158,7 +157,7 @@ namespace GrupoSelect.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IEnumerable<SelectListItem>> GetProfileList(Profile filter)
+        public async Task<IEnumerable<SelectListItem>> GetProfileList(Domain.Entity.Profile filter)
         {
             var result = await _profileService.GetAll(filter);
 
@@ -166,7 +165,7 @@ namespace GrupoSelect.Web.Controllers
             {
                 IList<SelectListItem> items = new List<SelectListItem>();
 
-                foreach (Profile item in result.Object)
+                foreach (Domain.Entity.Profile item in result.Object)
                 {
                     items.Add(new SelectListItem() { Value = item.Name, Text = item.Name, Selected = filter.Id == item.Id ? true : false });
                 }

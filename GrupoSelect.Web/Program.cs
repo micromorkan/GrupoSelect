@@ -23,6 +23,7 @@ builder.Services.AddDbContext<GSDbContext>(options =>
 });
 builder.Services.ConfigureDependencies();
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 

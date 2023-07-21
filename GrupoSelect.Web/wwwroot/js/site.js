@@ -1,4 +1,8 @@
-﻿(function ($) {
+﻿$("form").submit(function (event) {
+    event.preventDefault();
+});
+
+(function ($) {
     $.fn.serializeObject = function () {
         var o = {};
         var form = this;
@@ -87,6 +91,153 @@ function StartDatatables() {
         }],
         responsive: !0
     })
+}
+
+function Create(ignoreValidation = false, sendFiles = false) {
+    if (sendFiles) {
+        var formData = new FormData(jQuery('#create')[0]);
+        var form = $("#create");
+
+        form.find("[type=file]").each(function () {
+            formData.append(this.id, this.files[0]);
+        });
+
+        if ($("form").valid() || ignoreValidation) {
+            $('#loading').show();
+            $.ajax({
+                url: form[0].action,
+                type: 'POST',
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (data) {
+                    if (data.success) {
+                        $('select').select2().val("").trigger("change");
+                        $('input').val('');
+                        $('textarea').val('');
+                        //swal('Sucesso!', data.message, 'success');
+                        swal('Sucesso!', 'Operação realizada com sucesso!', 'success');
+                    } else {
+                        if (data.errors) {
+                            ShowModalListWarning(data.errors);
+                        } else {
+                            swal('Aviso!', data.message, 'warning');
+                        }
+                    }
+                },
+                error: function (xhr, status, error) {
+                    ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador.');
+                }
+            });
+        } else {
+            swal('Aviso!', 'Preencha todos os campos corretamente!', 'warning');
+        }
+    } else {
+        var form = $("#create");
+        var model = form.serializeObject();
+
+        if ($("form").valid() || ignoreValidation) {
+            $('#loading').show();
+            $.ajax({
+                url: form[0].action,
+                type: 'POST',
+                dataType: 'json',
+                //contentType: 'application/json; charset=utf-8',
+                data: model,
+                //data: JSON.stringify(model),
+                success: function (data) {
+                    if (data.success) {
+                        $('select').select2().val("").trigger("change");
+                        $('input').val('');
+                        $('textarea').val('');
+                        //swal('Sucesso!', data.message, 'success');
+                        swal('Sucesso!', 'Operação realizada com sucesso!', 'success');
+                    } else {
+                        if (data.errors) {
+                            ShowModalListWarning(data.errors);
+                        } else {
+                            swal('Aviso!', data.message, 'warning');
+                        }
+                    }
+                },
+                error: function (xhr, status, error) {
+                    ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador.');
+                }
+            });
+        } else {
+            swal('Aviso!', 'Preencha todos os campos corretamente!', 'warning');
+        }
+    }
+}
+
+function Edit(urlSucesso, ignoreValidation = false, sendFiles = false) {
+    if (sendFiles) {
+        var formData = new FormData(jQuery('#edit')[0]);
+        var form = $("#edit");
+
+        form.find("[type=file]").each(function () {
+            formData.append(this.id, this.files[0]);
+        });
+
+        if ($("form").valid() || ignoreValidation) {
+            $('#loading').show();
+            $.ajax({
+                url: form[0].action,
+                type: 'POST',
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (data) {
+                    if (data.success) {
+                        swal({ title: 'Sucesso!', text: data.message, type: 'success', allowOutsideClick: false, allowEscapeKey: false }).then(function () { window.location.pathname = urlSucesso; });
+                    } else {
+                        if (data.errors) {
+                            ShowModalListWarning(data.errors);
+                        } else {
+                            swal('Aviso!', data.message, 'warning');
+                        }
+                    }
+                },
+                error: function (xhr, status, error) {
+                    ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador.');
+                }
+            });
+        } else {
+            swal('Aviso!', 'Preencha todos os campos corretamente!', 'warning');
+        }
+    } else {
+        var form = $("#edit");
+        var model = form.serializeObject();
+        if ($("form").valid()) {
+            $('#loading').show();
+            $.ajax({
+                url: form[0].action,
+                type: 'POST',
+                dataType: 'json',
+                //contentType: 'application/json; charset=utf-8',
+                //data: JSON.stringify(model),
+                data: model,
+                success: function (data) {
+                    if (data.success) {
+                        swal({ title: 'Sucesso!', text: data.message, type: 'success', allowOutsideClick: false, allowEscapeKey: false }).then(function () { window.location.pathname = urlSucesso; });
+                    } else {
+                        if (data.errors) {
+                            ShowModalListWarning(data.errors);
+                        } else {
+                            swal('Aviso!', data.message, 'warning');
+                        }
+                    }
+                },
+                error: function (xhr, status, error) {
+                    ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador.');
+                }
+            });
+        } else {
+            swal('Aviso!', 'Preencha todos os campos corretamente!', 'warning');
+        }
+    }
 }
 
 function Search(editar, urlEditar, excluir, urlExlcuir, pagina) {
@@ -192,11 +343,15 @@ function Search(editar, urlEditar, excluir, urlExlcuir, pagina) {
 
                 RenderPagination(data.result.page, data.result.total, qtdPagina);
             } else {
-                ExibirModalErro(data.result.Message);
+                if (data.result.errors) {
+                    ShowModalListWarning(data.result.errors);
+                } else {
+                    ShowModalError(data.result.message);
+                }
             }
         },
         error: function (xhr, status, error) {
-            ExibirModalErro('Não foi possível acessar o servidor. Entre em contato com o Administrador.');
+            ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador.');
         }
     });
 }
@@ -304,6 +459,14 @@ function MaskCnpj() {
     });
 }
 
-function ExibirModalErro(mensagem) {
+function ShowModalError(mensagem) {
     swal('Erro!', mensagem, 'error');
+}
+
+function ShowModalListWarning(errors) {
+    var message = "";
+    for (var i = 0; i < errors.length; i++) {
+        message += errors[i].errorMessage + " <br> ";
+    }
+    swal('Aviso!', message, 'warning');
 }
