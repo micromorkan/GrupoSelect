@@ -82,7 +82,7 @@
                         </label>
                         <div class="col-md-6 col-sm-6 ">
                             <select asp-for="Profile" id="ddlProfile" class="form-control js-example-responsive" style="width: 100%">
-                                <option selected="selected" value="">-- Selecione --</option>
+                                <option value="">-- Selecione --</option>
                             </select>
                             @Html.ValidationMessageFor(model => model.Profile, null, new { @class = "text-danger" })
                         </div>
@@ -120,7 +120,7 @@
             MaskCnpj();
         });
         $(".submit").click(function (event) {
-            Create(true, false);
+            Create(false, false);
         });
     </script>
 }

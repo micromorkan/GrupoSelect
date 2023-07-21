@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using GrupoSelect.Web.Util;
 using GrupoSelect.Services.Interface;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,18 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         option.AccessDeniedPath = "/Access/AccessDenied";
         option.ExpireTimeSpan = TimeSpan.FromHours(24);
     });
+//builder.Services.Configure<CookiePolicyOptions>(options =>
+//{
+//    // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+//    options.CheckConsentNeeded = _ => true;
+//    options.MinimumSameSitePolicy = SameSiteMode.Strict;
+//});
+
+//builder.Services.Configure<CookieTempDataProviderOptions>(options =>
+//{
+//    options.Cookie.IsEssential = true;
+//});
+
 builder.Services.AddDbContext<GSDbContext>(options =>
 {
     options.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));

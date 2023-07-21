@@ -52,20 +52,30 @@
         return o;
     };
 })(jQuery);
-function FillSelect(url, filter, selectId) {
+function FillSelect(url, filter, selectId, selectedItem = null, compareValue = true) {
     $.ajax({
         dataType: 'json',
         type: 'POST',
         url: url,
         data: filter,
         success: function (data) {
-            $.each(data, function (i, item) {
-                $(selectId).append($('<option>', {
-                    value: item.value,
-                    text: item.text,
-                    selected: item.selected,
-                }));
-            });
+            if (compareValue) {
+                $.each(data, function (i, item) {
+                    $(selectId).append($('<option>', {
+                        value: item.value,
+                        text: item.text,
+                        selected: selectedItem === item.value ? true : false,
+                    }));
+                });
+            } else {
+                $.each(data, function (i, item) {
+                    $(selectId).append($('<option>', {
+                        value: item.value,
+                        text: item.text,
+                        selected: selectedItem === item.text ? true : false,
+                    }));
+                });
+            }
         },
         failure: function (response) {
             $('#result').html(response);
@@ -116,8 +126,7 @@ function Create(ignoreValidation = false, sendFiles = false) {
                         $('select').select2().val("").trigger("change");
                         $('input').val('');
                         $('textarea').val('');
-                        //swal('Sucesso!', data.message, 'success');
-                        swal('Sucesso!', 'Operação realizada com sucesso!', 'success');
+                        swal('Sucesso!', data.message, 'success');                        
                     } else {
                         if (data.errors) {
                             ShowModalListWarning(data.errors);
@@ -151,8 +160,7 @@ function Create(ignoreValidation = false, sendFiles = false) {
                         $('select').select2().val("").trigger("change");
                         $('input').val('');
                         $('textarea').val('');
-                        //swal('Sucesso!', data.message, 'success');
-                        swal('Sucesso!', 'Operação realizada com sucesso!', 'success');
+                        swal('Sucesso!', data.message, 'success');                        
                     } else {
                         if (data.errors) {
                             ShowModalListWarning(data.errors);
@@ -326,29 +334,33 @@ function Search(editar, urlEditar, excluir, urlExlcuir, pagina) {
                     });
 
                     if (editar && excluir) {
-                        row.push("<a title='Editar' class='btn btn-xs btn-warning' href='" + urlEditar + "\/" + item.Id + "'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></a> " +
-                            "<a title='Excluir' class='btn btn-xs btn-danger' onclick='ConfirmarExclusao(" + item.Id + ", \"" + urlExlcuir + "\", " + editar + ", \"" + urlEditar + "\", " + excluir + ", \"" + urlExlcuir + "\", " + pagina + ", " + qtdPagina + ");'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></a>")
+                        row.push("<a title='Editar' class='btn btn-xs btn-warning' href='" + urlEditar + "\/" + item.id + "'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></a> " +
+                            "<a title='Excluir' class='btn btn-xs btn-danger' onclick='DeleteConfirm(" + item.id + ", \"" + urlExlcuir + "\", " + editar + ", \"" + urlEditar + "\", " + excluir + ", \"" + urlExlcuir + "\", " + pagina + ", " + qtdPagina + ");'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></a>")
                     } else if (editar && !excluir) {
-                        row.push("<a title='Editar' class='btn btn-xs btn-warning' href='" + urlEditar + "\/" + item.Id + "'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></a>")
+                        row.push("<a title='Editar' class='btn btn-xs btn-warning' href='" + urlEditar + "\/" + item.id + "'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></a>")
                     } else if (!editar && excluir) {
-                        row.push("<a title='Excluir' class='btn btn-xs btn-danger' onclick='ConfirmarExclusao(" + item.Id + ", \"" + urlExlcuir + "\", " + editar + ", \"" + urlEditar + "\", " + excluir + ", \"" + urlExlcuir + "\", " + pagina + ", " + qtdPagina + ");'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></a>")
+                        row.push("<a title='Excluir' class='btn btn-xs btn-danger' onclick='DeleteConfirm(" + item.id + ", \"" + urlExlcuir + "\", " + editar + ", \"" + urlEditar + "\", " + excluir + ", \"" + urlExlcuir + "\", " + pagina + ", " + qtdPagina + ");'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></a>")
                     }
 
                     dt.row.add(row).draw(false);
                 });
 
                 AplicarCSSDTT();
-
                 AplicarDTT();
 
                 RenderPagination(data.result.page, data.result.total, qtdPagina);
             } else {
+                AplicarCSSDTT();
+                AplicarDTT();
+
                 if (data.result.errors) {
                     ShowModalListWarning(data.result.errors);
                 } else {
                     ShowModalError(data.result.message);
                 }
             }
+
+          
         },
         error: function (xhr, status, error) {
             ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador.');
@@ -401,7 +413,48 @@ function AplicarDTT() {
 
     $("div[id^=DataTables_Table_] div").last().hide();
 }
+function DeleteConfirm(idExclusao, urlExclusao, editar, urlEditar, excluir, urlExlcuir, pagina, qtdPagina) {
+    swal({
+        title: 'Deseja continuar a exclusão?',
+        text: "Após confirmação, não será possível reverter!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#286090',
+        cancelButtonColor: '#d9534f',
+        confirmButtonText: 'Sim, deletar!',
+        cancelButtonText: 'Não, cancelar!',
+        confirmButtonClass: 'btn btn-primary',
+        cancelButtonClass: 'btn btn-danger',
+        buttonsStyling: false
+    }).then(function () {
+        $('#loading').show();
+        $.ajax({
+            url: urlExclusao,
+            type: 'POST',
+            data: { 'id': idExclusao },
+            success: function (data) {
+                if (data.success) {
+                    swal('Sucesso!', data.message, 'success');
+                } else {
+                    if (data.errors) {
+                        ShowModalListWarning(data.errors);
+                    } else {
+                        ShowModalError(data.message);
+                    }
+                }
 
+                Search(editar, urlEditar, excluir, urlExlcuir, pagina, qtdPagina);
+            },
+            error: function (xhr, status, error) {
+                ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador.');
+            }
+        });
+    }, function (dismiss) {
+        if (dismiss === 'cancel') {
+            swal('Cancelado', 'A exclusão foi cancelada pelo usuário!', 'error');
+        }
+    });
+}
 function MaskMoney() {
     var maxLength = '0.000.000,00'.length;
 

@@ -7,7 +7,8 @@
         '<div class="col-sm-12 col-md-5">';
 
     if (totalregistros === 0) {
-        html = html + '<div class="dataTables_info">Não há registros</div>';
+        //html = html + '<div class="dataTables_info">Não há registros</div>';
+        html = html + '<div class="dataTables_info"></div>';
     } else if ((paginaatual * qtdpage) >= totalregistros) {
         html = html + '<div class="dataTables_info">Exibindo ' + ((paginaatual * qtdpage) - (qtdpage - 1)) + ' a ' + totalregistros + ' de um total de ' + totalregistros + ' registros</div>';
     } else {

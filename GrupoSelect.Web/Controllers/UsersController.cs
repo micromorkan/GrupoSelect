@@ -2,12 +2,14 @@
 using GrupoSelect.Data.Context;
 using GrupoSelect.Domain.Entity;
 using GrupoSelect.Domain.Model;
+using GrupoSelect.Domain.Util;
 using GrupoSelect.Services.Interface;
 using GrupoSelect.Web.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 
 namespace GrupoSelect.Web.Controllers
 {
@@ -25,13 +27,13 @@ namespace GrupoSelect.Web.Controllers
             _mapper = mapper;
         }
 
-        [Authorize(Roles = "REPRESENTANTE,ADMINISTRATIVO")]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_ADMINISTRATIVO)]
         public async Task<IActionResult> Index()
         {
             return View(new UserVM());
         }
 
-        [Authorize(Roles = "REPRESENTANTE")]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE)]
         [HttpPost]
         public async Task<IActionResult> Index(UserVM userVM, int page, int qtPage)
         {
@@ -45,7 +47,7 @@ namespace GrupoSelect.Web.Controllers
             });
         }
 
-        [Authorize(Roles = "ADMINISTRATIVO")]
+        [Authorize(Roles = Constants.PROFILE_ADMINISTRATIVO)]
         public async Task<IActionResult> Details(int id)
         {
             var result = await _userService.GetById(id);
@@ -63,7 +65,7 @@ namespace GrupoSelect.Web.Controllers
         }
 
         public IActionResult Create()
-        {           
+        {
             return View();
         }
 
@@ -73,11 +75,7 @@ namespace GrupoSelect.Web.Controllers
         {
             var user = _mapper.Map<User>(userVM);
 
-            var result = _userService.Insert(user);
-
-            //Result<User> result = new Result<User>();
-            //result.Success = false;
-            //result.Message = "teste erro";
+            var result = _userService.Insert(user);         
 
             return Json(result);
         }
@@ -88,13 +86,11 @@ namespace GrupoSelect.Web.Controllers
 
             if (result.Success)
             {
-                return View(result.Object);
+                return View(_mapper.Map<UserVM>(result.Object));
             }
             else
             {
-                ViewData["GS_ERRORS_USER"] = result.Errors;
-                ViewData["GS_MESSAGE_USER"] = result.Message;
-
+                TempData[Constants.SYSTEM_ERROR_KEY] = result.Message;
                 return RedirectToAction(nameof(Index));
             }
         }
@@ -107,53 +103,14 @@ namespace GrupoSelect.Web.Controllers
 
             var result = _userService.Update(user);
 
-            if (result.Success)
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            else
-            {
-                ViewData["GS_ERRORS_USER"] = result.Errors;
-                ViewData["GS_MESSAGE_USER"] = result.Message;
-
-                return View(user);
-            }
+            return Json(result);
         }
 
         public async Task<IActionResult> Delete(int id)
         {
-            var result = await _userService.GetById(id);
-
-            if (result.Success)
-            {
-                return View(result.Object);
-            }
-            else
-            {
-                ViewData["GS_ERRORS_USER"] = result.Errors;
-                ViewData["GS_MESSAGE_USER"] = result.Message;
-
-                return RedirectToAction(nameof(Index));
-            }
-        }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
             var result = _userService.Delete(id);
 
-            if (result.Success)
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            else
-            {
-                ViewData["GS_ERRORS_USER"] = result.Errors;
-                ViewData["GS_MESSAGE_USER"] = result.Message;
-
-                return RedirectToAction(nameof(Index));
-            }
+            return Json(result);
         }
 
         [HttpPost]
