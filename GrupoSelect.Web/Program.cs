@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using GrupoSelect.Web.Util;
 using GrupoSelect.Services.Interface;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Session;
+using GrupoSelect.Web.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,17 +20,6 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         option.AccessDeniedPath = "/Access/AccessDenied";
         option.ExpireTimeSpan = TimeSpan.FromHours(24);
     });
-//builder.Services.Configure<CookiePolicyOptions>(options =>
-//{
-//    // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-//    options.CheckConsentNeeded = _ => true;
-//    options.MinimumSameSitePolicy = SameSiteMode.Strict;
-//});
-
-//builder.Services.Configure<CookieTempDataProviderOptions>(options =>
-//{
-//    options.Cookie.IsEssential = true;
-//});
 
 builder.Services.AddDbContext<GSDbContext>(options =>
 {
@@ -49,12 +40,16 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<GrupoSelect.Web.Helpers.SessionMiddleware>();
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

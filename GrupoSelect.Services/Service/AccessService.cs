@@ -5,7 +5,6 @@ using GrupoSelect.Domain.Model;
 using GrupoSelect.Domain.Util;
 using GrupoSelect.Services.FluentValidation.User;
 using GrupoSelect.Services.Interface;
-using GrupoSelect.Services.Interface.Helpers;
 
 namespace GrupoSelect.Services.Service
 {
@@ -13,9 +12,9 @@ namespace GrupoSelect.Services.Service
     {
         private readonly IUserRepository _userRepository;
         private readonly IValidator<User> _validator;
-        private readonly ILogExceptions _logExceptions;
+        private readonly ILogService _logExceptions;
 
-        public AccessService(IUserRepository userRepository, IValidator<User> validator, ILogExceptions logExceptions)
+        public AccessService(IUserRepository userRepository, IValidator<User> validator, ILogService logExceptions)
         {
             _userRepository = userRepository;
             _validator = validator;
@@ -59,7 +58,7 @@ namespace GrupoSelect.Services.Service
             }
             catch (Exception ex)
             {
-                _logExceptions.Log(ex);
+                _logExceptions.LogException(ex);
 
                 return new Result<User>
                 {

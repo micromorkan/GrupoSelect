@@ -25,6 +25,7 @@
 
         public const string SYSTEM_SUCCESS = "Operação realizada com sucesso!";
         public const string SYSTEM_ERROR_KEY = "GS_ERROR";
+        public const string SYSTEM_EXCEPTION_OBJ = "EXOBJECT";
         
 
         #endregion

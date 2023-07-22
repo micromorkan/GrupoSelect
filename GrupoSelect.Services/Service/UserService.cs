@@ -3,23 +3,21 @@ using GrupoSelect.Domain.Entity;
 using GrupoSelect.Domain.Interface;
 using GrupoSelect.Domain.Model;
 using GrupoSelect.Domain.Util;
-using GrupoSelect.Services.FluentValidation.User;
 using GrupoSelect.Services.Interface;
-using GrupoSelect.Services.Interface.Helpers;
 
 namespace GrupoSelect.Services.Service
-{    
+{
     public class UserService : IUserService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IValidator<User> _validator;
-        private readonly ILogExceptions _logExceptions;
+        private readonly ILogService _logService;
 
-        public UserService(IUnitOfWork unitOfWork, IValidator<User> validator, ILogExceptions logExceptions)
+        public UserService(IUnitOfWork unitOfWork, IValidator<User> validator, ILogService logService)
         {
             _unitOfWork = unitOfWork;
             _validator = validator;
-            _logExceptions = logExceptions;
+            _logService = logService;
         }
 
         public async Task<Result<IEnumerable<User>>> GetAll(User filter)
@@ -34,7 +32,8 @@ namespace GrupoSelect.Services.Service
             }
             catch (Exception ex)
             {
-                _logExceptions.Log(ex);
+                ex.Data.Add(Constants.SYSTEM_EXCEPTION_OBJ, filter);
+                _logService.LogException(ex);
 
                 return new Result<IEnumerable<User>>
                 {
@@ -48,7 +47,7 @@ namespace GrupoSelect.Services.Service
         {
             try
             {
-                //throw new Exception("teste");
+                throw new Exception("teste");
                 return _unitOfWork.Users.GetAllPaginate(f => (string.IsNullOrEmpty(filter.Name) || f.Name.Contains(filter.Name)) && 
                                                              (string.IsNullOrEmpty(filter.Representation) || f.Representation.Contains(filter.Representation)) &&
                                                              (string.IsNullOrEmpty(filter.Login) || f.Login.Contains(filter.Login)) &&
@@ -56,7 +55,8 @@ namespace GrupoSelect.Services.Service
             }
             catch (Exception ex)
             {
-                _logExceptions.Log(ex);
+                ex.Data.Add(Constants.SYSTEM_EXCEPTION_OBJ, new { filter = filter, page = page, qtPage = qtPage });
+                _logService.LogException(ex);
 
                 return new PaginateResult<IEnumerable<User>>
                 {
@@ -91,7 +91,8 @@ namespace GrupoSelect.Services.Service
             }
             catch (Exception ex)
             {
-                _logExceptions.Log(ex);
+                ex.Data.Add(Constants.SYSTEM_EXCEPTION_OBJ, id);
+                _logService.LogException(ex);
 
                 return new Result<User>
                 {
@@ -129,7 +130,8 @@ namespace GrupoSelect.Services.Service
             }
             catch (Exception ex)
             {
-                _logExceptions.Log(ex);
+                ex.Data.Add(Constants.SYSTEM_EXCEPTION_OBJ, user);
+                _logService.LogException(ex);
 
                 return new Result<User>
                 {
@@ -167,7 +169,8 @@ namespace GrupoSelect.Services.Service
             }
             catch (Exception ex)
             {
-                _logExceptions.Log(ex);
+                ex.Data.Add(Constants.SYSTEM_EXCEPTION_OBJ, user);
+                _logService.LogException(ex);
 
                 return new Result<User>
                 {
@@ -206,7 +209,8 @@ namespace GrupoSelect.Services.Service
             }
             catch (Exception ex)
             {
-                _logExceptions.Log(ex);
+                ex.Data.Add(Constants.SYSTEM_EXCEPTION_OBJ, id);
+                _logService.LogException(ex);
 
                 return new Result<User>
                 {

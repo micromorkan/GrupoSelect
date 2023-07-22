@@ -14,4 +14,9 @@
     <ProjectReference Include="..\GrupoSelect.Domain\GrupoSelect.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Interface\Helpers\" />
+    <Folder Include="Service\Helpers\" />
+  </ItemGroup>
+
 </Project>

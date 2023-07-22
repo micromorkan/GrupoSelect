@@ -1,18 +1,12 @@
 ﻿using GrupoSelect.Data.Mapping;
 using GrupoSelect.Domain.Entity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GrupoSelect.Data.Context
 {
     public class GSDbContext : DbContext
     {
+        public DbSet<SystemLog> SystemLogs { get; set; }
         public DbSet<User> Users { get; set; }
 
         public GSDbContext() { }
@@ -26,6 +20,7 @@ namespace GrupoSelect.Data.Context
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new UserMap());
+            modelBuilder.ApplyConfiguration(new SystemLogMap());
             modelBuilder.ApplyConfiguration(new ProfileMap());
         }
 

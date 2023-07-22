@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using GrupoSelect.Data.Context;
 using GrupoSelect.Domain.Entity;
+using GrupoSelect.Domain.Interface;
 using GrupoSelect.Domain.Model;
 using GrupoSelect.Domain.Util;
 using GrupoSelect.Services.Interface;
@@ -19,6 +20,7 @@ namespace GrupoSelect.Web.Controllers
         private IUserService _userService;
         private IProfileService _profileService;
         public readonly IMapper _mapper;
+        public UserSession userSession;
 
         public UsersController(GSDbContext context, IUserService userService, IProfileService profileService, IMapper mapper)
         {
