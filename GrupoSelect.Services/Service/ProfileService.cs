@@ -1,8 +1,8 @@
 ﻿using GrupoSelect.Domain.Entity;
 using GrupoSelect.Domain.Interface;
 using GrupoSelect.Services.Interface;
-using GrupoSelect.Domain.Model;
 using GrupoSelect.Domain.Util;
+using GrupoSelect.Domain.Models;
 
 namespace GrupoSelect.Services.Service
 {
@@ -35,7 +35,7 @@ namespace GrupoSelect.Services.Service
                 return new Result<IEnumerable<Profile>>
                 {
                     Success = false,
-                    Message = ex.Message
+                    Message = Constants.SYSTEM_ERROR_MSG
                 };
             }
         }
@@ -59,7 +59,7 @@ namespace GrupoSelect.Services.Service
                     return new Result<Profile>
                     {
                         Success = false,
-                        Message = "O id informado não foi encontrado."
+                        Message = Constants.SYSTEM_ERROR_ID
                     };
                 }
             }

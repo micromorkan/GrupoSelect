@@ -1,7 +1,7 @@
 ﻿using Azure;
 using GrupoSelect.Domain.Entity;
 using GrupoSelect.Domain.Interface;
-using GrupoSelect.Domain.Model;
+using GrupoSelect.Domain.Models;
 using GrupoSelect.Domain.Util;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;

@@ -1,5 +1,5 @@
 ﻿using GrupoSelect.Domain.Entity;
-using GrupoSelect.Domain.Model;
+using GrupoSelect.Domain.Models;
 using System.Linq.Expressions;
 
 namespace GrupoSelect.Domain.Interface

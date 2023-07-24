@@ -1,6 +1,7 @@
 ﻿using GrupoSelect.Data.Mapping;
 using GrupoSelect.Domain.Entity;
 using GrupoSelect.Domain.Interface;
+using GrupoSelect.Domain.Models;
 using GrupoSelect.Domain.Util;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;

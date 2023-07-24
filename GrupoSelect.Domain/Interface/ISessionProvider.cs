@@ -1,4 +1,5 @@
 ﻿using GrupoSelect.Domain.Entity;
+using GrupoSelect.Domain.Models;
 using GrupoSelect.Domain.Util;
 
 namespace GrupoSelect.Domain.Interface

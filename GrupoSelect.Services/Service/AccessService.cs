@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using GrupoSelect.Domain.Entity;
 using GrupoSelect.Domain.Interface;
-using GrupoSelect.Domain.Model;
+using GrupoSelect.Domain.Models;
 using GrupoSelect.Domain.Util;
 using GrupoSelect.Services.FluentValidation;
 using GrupoSelect.Services.Interface;
@@ -63,7 +63,7 @@ namespace GrupoSelect.Services.Service
                 return new Result<User>
                 {
                     Success = false,
-                    Message = ex.Message
+                    Message = Constants.SYSTEM_ERROR_MSG
                 };
             }
         }

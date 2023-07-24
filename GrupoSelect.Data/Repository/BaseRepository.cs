@@ -1,6 +1,6 @@
 ﻿using GrupoSelect.Data.Context;
 using GrupoSelect.Domain.Interface;
-using GrupoSelect.Domain.Model;
+using GrupoSelect.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 

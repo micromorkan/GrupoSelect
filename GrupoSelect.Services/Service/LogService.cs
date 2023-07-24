@@ -4,6 +4,7 @@ using GrupoSelect.Domain.Util;
 using GrupoSelect.Services.Interface;
 using System.Text.Json;
 using Microsoft.Extensions.Configuration;
+using GrupoSelect.Domain.Models;
 
 namespace GrupoSelect.Services.Service
 {

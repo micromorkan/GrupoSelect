@@ -1,6 +1,6 @@
 ﻿using GrupoSelect.Domain.Interface;
 
-namespace GrupoSelect.Domain.Util
+namespace GrupoSelect.Domain.Models
 {
     public class SessionProvider : ISessionProvider
     {

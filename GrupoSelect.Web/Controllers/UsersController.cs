@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using GrupoSelect.Data.Context;
 using GrupoSelect.Domain.Entity;
-using GrupoSelect.Domain.Model;
+using GrupoSelect.Domain.Models;
 using GrupoSelect.Domain.Util;
 using GrupoSelect.Services.Interface;
 using GrupoSelect.Web.Helpers;

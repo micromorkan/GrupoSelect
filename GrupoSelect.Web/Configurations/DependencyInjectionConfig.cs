@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using GrupoSelect.Data.Repository;
 using GrupoSelect.Domain.Interface;
-using GrupoSelect.Domain.Util;
+using GrupoSelect.Domain.Models;
 using GrupoSelect.Services.FluentValidation;
 using GrupoSelect.Services.Interface;
 using GrupoSelect.Services.Service;
