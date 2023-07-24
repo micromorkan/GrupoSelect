@@ -103,7 +103,7 @@ function StartDatatables() {
     })
 }
 
-function Create(ignoreValidation = false, sendFiles = false) {
+function Create(ignoreValidation = false, sendFiles = false, defaultSelectValue = "") {
     if (sendFiles) {
         var formData = new FormData(jQuery('#create')[0]);
         var form = $("#create");
@@ -123,10 +123,8 @@ function Create(ignoreValidation = false, sendFiles = false) {
                 data: formData,
                 success: function (data) {
                     if (data.success) {
-                        $('select').select2().val("").trigger("change");
-                        $('input').val('');
-                        $('textarea').val('');
-                        swal('Sucesso!', data.message, 'success');                        
+                        ClearAllInputs(defaultSelectValue);
+                        swal('Sucesso!', data.message, 'success');
                     } else {
                         if (data.errors) {
                             ShowModalListWarning(data.errors);
@@ -157,10 +155,8 @@ function Create(ignoreValidation = false, sendFiles = false) {
                 //data: JSON.stringify(model),
                 success: function (data) {
                     if (data.success) {
-                        $('select').select2().val("").trigger("change");
-                        $('input').val('');
-                        $('textarea').val('');
-                        swal('Sucesso!', data.message, 'success');                        
+                        ClearAllInputs(defaultSelectValue);
+                        swal('Sucesso!', data.message, 'success');
                     } else {
                         if (data.errors) {
                             ShowModalListWarning(data.errors);
@@ -360,7 +356,7 @@ function Search(editar, urlEditar, excluir, urlExlcuir, pagina) {
                 }
             }
 
-          
+
         },
         error: function (xhr, status, error) {
             ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador.');
@@ -413,6 +409,7 @@ function AplicarDTT() {
 
     $("div[id^=DataTables_Table_] div").last().hide();
 }
+
 function DeleteConfirm(idExclusao, urlExclusao, editar, urlEditar, excluir, urlExlcuir, pagina, qtdPagina) {
     swal({
         title: 'Deseja continuar a exclusão?',
@@ -455,6 +452,7 @@ function DeleteConfirm(idExclusao, urlExclusao, editar, urlEditar, excluir, urlE
         }
     });
 }
+
 function MaskMoney() {
     var maxLength = '0.000.000,00'.length;
 
@@ -522,4 +520,10 @@ function ShowModalListWarning(errors) {
         message += errors[i].errorMessage + " <br> ";
     }
     swal('Aviso!', message, 'warning');
+}
+
+function ClearAllInputs(defaultSelectValue) {
+    $('select').select2().val(defaultSelectValue).trigger("change");
+    $('input').val('');
+    $('textarea').val('');
 }
