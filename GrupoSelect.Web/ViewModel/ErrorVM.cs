@@ -1,6 +1,6 @@
-namespace GrupoSelect.Web.Models
+namespace GrupoSelect.Web.ViewModel
 {
-    public class ErrorViewModel
+    public class ErrorVM
     {
         public string? RequestId { get; set; }
 

@@ -13,6 +13,13 @@
 
         #endregion
 
+        #region ACCESS CONSTANTS
+
+        public const string GS_ERRORS_ACCESS = "GS_ERRORS_ACCESS";
+        public const string GS_AUTH_ERROR = "GS_AUTH_ERROR";
+
+        #endregion
+
         #region FLUENT VALIDATION CONSTANTS
 
         public const string FLUENT_INSERT = "Insert";
@@ -40,6 +47,8 @@
         public const string SYSTEM_LOG_INSERT = "INSERT";
         public const string SYSTEM_LOG_UPDATE = "UPDATE";
         public const string SYSTEM_LOG_DELETE = "DELETE";
+
+      
 
         #endregion
     }

@@ -2,9 +2,11 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using GrupoSelect.Web.Models;
 using GrupoSelect.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
+using GrupoSelect.Web.ViewModel;
+using System.Reflection.Metadata;
+using GrupoSelect.Domain.Util;
 
 namespace GrupoSelect.Web.Controllers
 {
@@ -54,7 +56,7 @@ namespace GrupoSelect.Web.Controllers
                 AuthenticationProperties properties = new AuthenticationProperties()
                 {
                     AllowRefresh = true,
-                    IsPersistent = login.KeepLoggedIn
+                    IsPersistent = true
                 };
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
@@ -64,8 +66,8 @@ namespace GrupoSelect.Web.Controllers
             }
             else
             {
-                ViewData["GS_ERRORS_ACCESS"] = result.Errors;
-                ViewData["GS_AUTH_ERROR"] = result.Message;
+                ViewData[Constants.GS_ERRORS_ACCESS] = result.Errors;
+                ViewData[Constants.GS_AUTH_ERROR] = result.Message;
 
                 return View(login);
             }

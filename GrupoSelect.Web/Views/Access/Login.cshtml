@@ -1,4 +1,4 @@
-﻿@model GrupoSelect.Web.Models.LoginVM;
+﻿@model LoginVM;
 
 @{
     Layout = null;
@@ -10,8 +10,16 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Login</title>
+
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/css/nprogress.css" rel="stylesheet" />
+    <link href="~/css/animate.min.css" rel="stylesheet" />
+    <link href="~/css/custom.min.css" rel="stylesheet" />
+
+    <meta name="robots" content="noindex, follow">
 </head>
-<body>
+@*<body>
     <form asp-controller="Access" asp-action="Login" method="post">
         <h1>Login</h1>
         <input type="text" placeholder="Usuário" asp-for="User" />
@@ -41,5 +49,57 @@
             <label>@ViewData["GS_AUTH_ERROR"]</label>
         }
     </form>
+</body>*@
+<body class="login">
+    <div>
+        <a class="hiddenanchor" id="signup"></a>
+        <a class="hiddenanchor" id="signin"></a>
+        <div class="login_wrapper">
+            <div class="animate form login_form">
+                <section class="login_content">
+                    <p style="font: normal 30px Helvetica, Arial, sans-serif;
+                             letter-spacing: -0.05em;
+                             line-height: 20px;
+                             margin: 10px 0 30px;">
+                        <b>Sistema Grupo Select</b>
+                    </p>
+                    <img src="~/img/logo.png" height="50%" width="50%"/>
+                   
+                    @using (Html.BeginForm("Login", "Access", FormMethod.Post))
+                    {
+                        <h1>Bem vindo!</h1>
+                        <div>
+                            @Html.TextBoxFor(model => model.User, new { required = "required", @class = "form-control", @placeholder = "Usuário" })
+                        </div>
+                        <div>
+                            @Html.PasswordFor(model => model.Password, new { required = "required", @class = "form-control", @placeholder = "Senha" })
+                        </div>
+                        @if (ViewData["GS_ERRORS_ACCESS"] != null)
+                        {
+                            foreach (var item in (IList<FluentValidation.Results.ValidationFailure>)ViewData["GS_ERRORS_ACCESS"])
+                            {
+                                <label id="errolabel" class="text-danger">@item</label>                                
+                            }
+                        }
+
+                        @if (ViewData["GS_AUTH_ERROR"] != null)
+                        {
+                            <label id="errolabel" class="text-danger">@ViewData["GS_AUTH_ERROR"]</label>
+                        }
+                        <div>
+                            <button class="btn btn-default submit" type="submit" style="color: inherit;text-decoration: none;margin: 10px 15px 0 0;">Acessar Sistema</button>
+                        </div>
+                        <div class="clearfix"></div>
+                    }
+                </section>
+            </div>
+        </div>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#errolabel').delay(5000).fadeOut('slow');
+        });
+    </script>
 </body>
 </html>
