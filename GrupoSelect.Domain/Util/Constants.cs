@@ -6,6 +6,7 @@
 
         public const string PROFILE_REPRESENTANTE = "REPRESENTANTE";
         public const string PROFILE_ADMINISTRATIVO = "ADMINISTRATIVO";
+        public const string PROFILE_GERENTE = "GERENTE";
         public const string PROFILE_DIRETOR = "DIRETOR";
         public const string PROFILE_ADVOGADO = "ADVOGADO";
         public const string PROFILE_TI = "TI";
@@ -22,11 +23,23 @@
         #endregion
 
         #region SYSTEM CONSTANTS
+        
+        public const string SYSTEM_CONN_STRING = "DefaultConnection";
+        public const string SYSTEM_SETTINGS = "SystemSettings";
+        public const string SYSTEM_SETTINGS_REGISTERSYSTEMLOG = "RegisterSystemLog";
+        public const string SYSTEM_SETTINGS_REGISTERERRORLOG = "RegisterErrorLog";
+        
+        public const string SYSTEM_SUCCESS_MSG = "Operação realizada com sucesso!";
+        public const string SYSTEM_ERROR_MSG = "Não foi possível executar esta ação. Contate a equipe de TI.";
+        public const string SYSTEM_ERROR_ID = "O id informado não foi encontrado.";
+        
 
-        public const string SYSTEM_SUCCESS = "Operação realizada com sucesso!";
         public const string SYSTEM_ERROR_KEY = "GS_ERROR";
         public const string SYSTEM_EXCEPTION_OBJ = "EXOBJECT";
-        
+        public static readonly string[] SYSTEM_IGNORE_AUDIT_TABLES = { "AccessLog", "SystemLog", "ErrorLog" };
+        public const string SYSTEM_LOG_INSERT = "INSERT";
+        public const string SYSTEM_LOG_UPDATE = "UPDATE";
+        public const string SYSTEM_LOG_DELETE = "DELETE";
 
         #endregion
     }

@@ -1,9 +1,8 @@
 ﻿using FluentValidation;
 using GrupoSelect.Domain.Interface;
 using GrupoSelect.Domain.Util;
-using GrupoSelect.Services.Interface;
 
-namespace GrupoSelect.Services.FluentValidation.User
+namespace GrupoSelect.Services.FluentValidation
 {
     public class UserValidator : AbstractValidator<Domain.Entity.User>
     {
@@ -20,7 +19,7 @@ namespace GrupoSelect.Services.FluentValidation.User
                 RuleFor(usuario => usuario.Representation).NotEmpty().WithMessage("O representante é obrigatório.");
                 RuleFor(usuario => usuario.Login).NotEmpty().WithMessage("O login é obrigatório.");
                 RuleFor(usuario => usuario.Password).NotEmpty().WithMessage("A senha é obrigatória.");
-                RuleFor(usuario => usuario.Email).NotEmpty().EmailAddress().WithMessage("O email é obrigatório.");
+                RuleFor(usuario => usuario.Email).NotEmpty().EmailAddress().WithMessage("Informe um email válido.");
                 RuleFor(usuario => usuario.Profile).NotEmpty().WithMessage("O perfil é obrigatório.");
                 RuleFor(usuario => usuario).Custom(InsertUniqueCnpjLoginNameEmail);
             });
@@ -116,17 +115,5 @@ namespace GrupoSelect.Services.FluentValidation.User
                 }
             }
         }
-
-        //public bool UniqueCnpj(Domain.Entity.User user)
-        //{
-        //    var result = _unitOfWork.Users.GetAll(filter => filter.Cnpj == user.Cnpj);
-
-        //    if (result.Any())
-        //    {
-        //        return true;
-        //    }
-
-        //    return false;
-        //}
     }
 }

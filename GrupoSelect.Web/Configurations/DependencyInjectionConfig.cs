@@ -2,7 +2,7 @@
 using GrupoSelect.Data.Repository;
 using GrupoSelect.Domain.Interface;
 using GrupoSelect.Domain.Util;
-using GrupoSelect.Services.FluentValidation.User;
+using GrupoSelect.Services.FluentValidation;
 using GrupoSelect.Services.Interface;
 using GrupoSelect.Services.Service;
 
@@ -12,6 +12,7 @@ namespace GrupoSelect.Web.Configurations
     {
         public static IServiceCollection ConfigureDependencies(this IServiceCollection services)
         {
+            services.AddHttpContextAccessor();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAccessService, AccessService>();
             services.AddScoped<IProfileService, ProfileService>();
@@ -22,14 +23,6 @@ namespace GrupoSelect.Web.Configurations
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<ILogService, LogService>();
-
-            services.AddDistributedMemoryCache();
-            services.AddSession(options =>
-            {
-                options.IdleTimeout = TimeSpan.FromSeconds(1800);
-                options.Cookie.HttpOnly = true;
-                options.Cookie.IsEssential = true;
-            });
 
             return services;
         }

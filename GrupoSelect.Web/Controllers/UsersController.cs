@@ -1,26 +1,23 @@
 ﻿using AutoMapper;
 using GrupoSelect.Data.Context;
 using GrupoSelect.Domain.Entity;
-using GrupoSelect.Domain.Interface;
 using GrupoSelect.Domain.Model;
 using GrupoSelect.Domain.Util;
 using GrupoSelect.Services.Interface;
+using GrupoSelect.Web.Helpers;
 using GrupoSelect.Web.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata;
 
 namespace GrupoSelect.Web.Controllers
-{
+{    
     [Authorize]
     public class UsersController : Controller
     {
         private IUserService _userService;
         private IProfileService _profileService;
         public readonly IMapper _mapper;
-        public UserSession userSession;
 
         public UsersController(GSDbContext context, IUserService userService, IProfileService profileService, IMapper mapper)
         {
@@ -35,35 +32,25 @@ namespace GrupoSelect.Web.Controllers
             return View(new UserVM());
         }
 
-        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE)]
         [HttpPost]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE)]
+        [TypeFilter(typeof(ExceptionLog))]
         public async Task<IActionResult> Index(UserVM userVM, int page, int qtPage)
         {
-            var filter = _mapper.Map<User>(userVM);
+            var result = new PaginateResult<IEnumerable<User>>();
 
-            var result = await _userService.GetAllPaginate(filter, page, qtPage);
-
-            return Json(new
+            try
             {
-                result = result,
-            });
-        }
+                var filter = _mapper.Map<User>(userVM);
 
-        [Authorize(Roles = Constants.PROFILE_ADMINISTRATIVO)]
-        public async Task<IActionResult> Details(int id)
-        {
-            var result = await _userService.GetById(id);
+                result = await _userService.GetAllPaginate(filter, page, qtPage);
 
-            if (result.Success)
-            {
-                return View(result.Object);
+                return Json(result);
             }
-            else
+            catch (Exception)
             {
-                ViewData["GS_MESSAGE_USER"] = result.Message;
+                throw;
             }
-
-            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Create()
@@ -72,47 +59,79 @@ namespace GrupoSelect.Web.Controllers
         }
 
         [HttpPost]
+        [TypeFilter(typeof(ExceptionLog))]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(UserVM userVM)
         {
-            var user = _mapper.Map<User>(userVM);
+            try
+            {
+                var user = _mapper.Map<User>(userVM);
 
-            var result = _userService.Insert(user);         
+                var result = _userService.Insert(user);
 
-            return Json(result);
+                return Json(result);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var result = await _userService.GetById(id);
+            try
+            {
+                var result = await _userService.GetById(id);
 
-            if (result.Success)
-            {
-                return View(_mapper.Map<UserVM>(result.Object));
+                if (result.Success)
+                {
+                    return View(_mapper.Map<UserVM>(result.Object));
+                }
+                else
+                {
+                    TempData[Constants.SYSTEM_ERROR_KEY] = result.Message;
+                    return RedirectToAction(nameof(Index));
+                }
             }
-            else
+            catch (Exception ex)
             {
-                TempData[Constants.SYSTEM_ERROR_KEY] = result.Message;
+                TempData[Constants.SYSTEM_ERROR_KEY] = ex.Message;
                 return RedirectToAction(nameof(Index));
             }
         }
 
         [HttpPost]
+        [TypeFilter(typeof(ExceptionLog))]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, UserVM userVM)
         {
-            var user = _mapper.Map<User>(userVM);
+            try
+            {
+                var user = _mapper.Map<User>(userVM);
 
-            var result = _userService.Update(user);
+                var result = _userService.Update(user);
 
-            return Json(result);
+                return Json(result);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
+        [TypeFilter(typeof(ExceptionLog))]
         public async Task<IActionResult> Delete(int id)
         {
-            var result = _userService.Delete(id);
+            try
+            {
+                var result = _userService.Delete(id);
 
-            return Json(result);
+                return Json(result);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         [HttpPost]

@@ -267,7 +267,7 @@ function Search(editar, urlEditar, excluir, urlExlcuir, pagina) {
         data: model,
         success: function (data) {
 
-            if (data.result.success) {
+            if (data.success) {
                 if (!$.fn.DataTable.isDataTable($('table'))) {
                     $('table').DataTable({
                         paging: false,
@@ -297,7 +297,7 @@ function Search(editar, urlEditar, excluir, urlExlcuir, pagina) {
 
                 var dt = $('table').DataTable().clear().draw();
 
-                $.each(data.result.object, function (i, item) {
+                $.each(data.object, function (i, item) {
                     var row = [];
 
                     $('.column').each(function () {
@@ -348,15 +348,15 @@ function Search(editar, urlEditar, excluir, urlExlcuir, pagina) {
                 AplicarCSSDTT();
                 AplicarDTT();
 
-                RenderPagination(data.result.page, data.result.total, qtdPagina);
+                RenderPagination(data.page, data.total, qtdPagina);
             } else {
                 AplicarCSSDTT();
                 AplicarDTT();
 
-                if (data.result.errors) {
-                    ShowModalListWarning(data.result.errors);
+                if (data.errors) {
+                    ShowModalListWarning(data.errors);
                 } else {
-                    ShowModalError(data.result.message);
+                    ShowModalError(data.message);
                 }
             }
 

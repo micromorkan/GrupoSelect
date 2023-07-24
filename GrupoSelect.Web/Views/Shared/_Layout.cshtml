@@ -87,40 +87,45 @@
                                     </ul>
                                 </li>
                             </ul>
-                            <br />
-                            <h3>Configuração</h3>
-                            <ul class="nav side-menu">
-                                <li>
-                                    <a><i class="fa fa-cogs"></i> Tipo Tabela <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li><a href="index.html">Pesquisar</a></li>
-                                        <li><a href="index2.html">Cadastrar</a></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a><i class="fa fa-cogs"></i> Administradoras <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li><a href="index.html">Pesquisar</a></li>
-                                        <li><a href="index2.html">Cadastrar</a></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a><i class="fa fa-cogs"></i> Tipo Produto <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li><a href="index.html">Pesquisar</a></li>
-                                        <li><a href="index2.html">Cadastrar</a></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a><i class="fa fa-cogs"></i> Tabela Crédito <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li><a href="index.html">Pesquisar</a></li>
-                                        <li><a href="index2.html">Cadastrar</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
                             @{
-                                if (User.GetProfile() == "REPRESENTANTE")
+                                if (User.GetProfile() == Constants.PROFILE_DIRETOR)
+                                {
+                                    <br />
+                                    <h3>Configuração</h3>
+                                    <ul class="nav side-menu">
+                                        <li>
+                                            <a><i class="fa fa-cogs"></i> Tipo Tabela <span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu">
+                                                <li><a href="index.html">Pesquisar</a></li>
+                                                <li><a href="index2.html">Cadastrar</a></li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a><i class="fa fa-cogs"></i> Administradoras <span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu">
+                                                <li><a href="index.html">Pesquisar</a></li>
+                                                <li><a href="index2.html">Cadastrar</a></li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a><i class="fa fa-cogs"></i> Tipo Produto <span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu">
+                                                <li><a href="index.html">Pesquisar</a></li>
+                                                <li><a href="index2.html">Cadastrar</a></li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a><i class="fa fa-cogs"></i> Tabela Crédito <span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu">
+                                                <li><a href="index.html">Pesquisar</a></li>
+                                                <li><a href="index2.html">Cadastrar</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                }
+                            }
+                            @{
+                                if (User.GetProfile() == Constants.PROFILE_REPRESENTANTE)
                                 {
                                     <br />
                                     <h3>Gerenciamento</h3>
@@ -140,16 +145,16 @@
 
                     <div class="sidebar-footer hidden-small">
                         @*<a data-toggle="tooltip" data-placement="top" title="Settings">
-                            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                         </a>
                         <a data-toggle="tooltip" data-placement="top" title="FullScreen">
-                            <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+                        <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
                         </a>
                         <a data-toggle="tooltip" data-placement="top" title="Lock">
-                            <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+                        <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
                         </a>
                         <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
-                            <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+                        <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
                         </a>*@
                     </div>
 
@@ -165,7 +170,7 @@
                         <ul class=" navbar-right">
                             <li class="nav-item dropdown open" style="padding-left: 15px;">
                                 <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
-                                    @User.Identity.Name                                    
+                                    @User.Identity.Name
                                 </a>
                                 <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
                                     @*<a class="dropdown-item" href="@Url.Action("ChangePassword", "Users", new { id = User.FindFirstValue(ClaimTypes.NameIdentifier) })"><i class="fa fa-cog pull-right"></i> Trocar Senha</a>*@
@@ -183,11 +188,11 @@
             </div>
 
 
-           @* <footer>
-                <div class="pull-right">
-                    Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
-                </div>
-                <div class="clearfix"></div>
+            @* <footer>
+            <div class="pull-right">
+            Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+            </div>
+            <div class="clearfix"></div>
             </footer>*@
 
         </div>
@@ -197,7 +202,7 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/fastclick.js"></script>
     <script src="~/js/nprogress.js"></script>
-    
+
     <script src="~/js/jquery.datatables.min.js"></script>
     <script src="~/js/datatables.bootstrap.min.js"></script>
     <script src="~/js/datatables.buttons.min.js"></script>

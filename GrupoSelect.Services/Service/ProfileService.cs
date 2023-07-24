@@ -2,16 +2,19 @@
 using GrupoSelect.Domain.Interface;
 using GrupoSelect.Services.Interface;
 using GrupoSelect.Domain.Model;
+using GrupoSelect.Domain.Util;
 
 namespace GrupoSelect.Services.Service
 {
     public class ProfileService : IProfileService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ILogService _logService;
 
-        public ProfileService(IUnitOfWork unitOfWork)
+        public ProfileService(IUnitOfWork unitOfWork, ILogService logService)
         {
             _unitOfWork = unitOfWork;
+            _logService = logService;
         }
 
         public async Task<Result<IEnumerable<Profile>>> GetAll(Profile filter)
@@ -26,6 +29,9 @@ namespace GrupoSelect.Services.Service
             }
             catch (Exception ex)
             {
+                ex.Data.Add(Constants.SYSTEM_EXCEPTION_OBJ, filter);
+                _logService.LogException(ex);
+
                 return new Result<IEnumerable<Profile>>
                 {
                     Success = false,

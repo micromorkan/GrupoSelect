@@ -3,7 +3,7 @@ using GrupoSelect.Domain.Entity;
 using GrupoSelect.Domain.Interface;
 using GrupoSelect.Domain.Model;
 using GrupoSelect.Domain.Util;
-using GrupoSelect.Services.FluentValidation.User;
+using GrupoSelect.Services.FluentValidation;
 using GrupoSelect.Services.Interface;
 
 namespace GrupoSelect.Services.Service

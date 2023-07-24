@@ -1,24 +1,17 @@
 ﻿namespace GrupoSelect.Domain.Entity
 {
-    public class SystemLog
+    public class ErrorLog
     {
-        public SystemLog()
+        public ErrorLog() 
         {
-            this.Date = DateTime.Now;
+            Date = DateTime.Now;
         }
 
         public Guid Id { get; set; }
-
-        public string Action { get; set; }
-
+        public string Method { get; set; }
+        public string Message { get; set; }
         public string Object { get; set; }
-
         public string Username { get; set; }
-
-        public string OriginalValues { get; set; }
-
-        public string NewValues { get; set; }
-
         public DateTime Date { get; set; }
     }
 }
