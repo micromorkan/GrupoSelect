@@ -35,13 +35,13 @@ namespace GrupoSelect.Web.Controllers
         [HttpPost]
         [Authorize(Roles = Constants.PROFILE_REPRESENTANTE)]
         [TypeFilter(typeof(ExceptionLog))]
-        public async Task<IActionResult> Index(UserVM userVM, int page, int qtPage)
+        public async Task<IActionResult> Index(UserVM modelVM, int page, int qtPage)
         {
             var result = new PaginateResult<IEnumerable<User>>();
 
             try
             {
-                var filter = _mapper.Map<User>(userVM);
+                var filter = _mapper.Map<User>(modelVM);
 
                 result = await _userService.GetAllPaginate(filter, page, qtPage);
 
@@ -60,14 +60,13 @@ namespace GrupoSelect.Web.Controllers
 
         [HttpPost]
         [TypeFilter(typeof(ExceptionLog))]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(UserVM userVM)
+        public async Task<IActionResult> Create(UserVM modelVM)
         {
             try
             {
-                var user = _mapper.Map<User>(userVM);
+                var model = _mapper.Map<User>(modelVM);
 
-                var result = _userService.Insert(user);
+                var result = _userService.Insert(model);
 
                 return Json(result);
             }
@@ -103,13 +102,13 @@ namespace GrupoSelect.Web.Controllers
         [HttpPost]
         [TypeFilter(typeof(ExceptionLog))]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, UserVM userVM)
+        public async Task<IActionResult> Edit(int id, UserVM modelVM)
         {
             try
             {
-                var user = _mapper.Map<User>(userVM);
+                var model = _mapper.Map<User>(modelVM);
 
-                var result = _userService.Update(user);
+                var result = _userService.Update(model);
 
                 return Json(result);
             }
