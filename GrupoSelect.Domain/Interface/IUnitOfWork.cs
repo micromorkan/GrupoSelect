@@ -13,6 +13,7 @@ namespace GrupoSelect.Domain.Interface
         IBaseRepository<Profile> Profiles { get; }
         IBaseRepository<SystemLog> SystemLogs { get; }
         IBaseRepository<ErrorLog> ErrorLogs { get; }
+        IBaseRepository<FinancialAdmin> FinancialAdmins { get; }
         void SaveAllChanges();
     }
 }

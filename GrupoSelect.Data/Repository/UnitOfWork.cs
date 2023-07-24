@@ -11,6 +11,7 @@ namespace GrupoSelect.Data.Repository
         private IBaseRepository<ErrorLog> _errorLogs;
         private IBaseRepository<User> _usuarios;
         private IBaseRepository<Profile> _profiles;
+        private IBaseRepository<FinancialAdmin> _financialAdmins;
 
         public UnitOfWork(GSDbContext context)
         {
@@ -21,6 +22,7 @@ namespace GrupoSelect.Data.Repository
         public IBaseRepository<SystemLog> SystemLogs => _systemLogs ??= new BaseRepository<SystemLog>(_context);
         public IBaseRepository<User> Users => _usuarios ??= new BaseRepository<User>(_context);
         public IBaseRepository<Profile> Profiles => _profiles ??= new BaseRepository<Profile>(_context);
+        public IBaseRepository<FinancialAdmin> FinancialAdmins => _financialAdmins ??= new BaseRepository<FinancialAdmin>(_context);
 
         public void SaveAllChanges()
         {
