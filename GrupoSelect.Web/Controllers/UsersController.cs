@@ -60,7 +60,6 @@ namespace GrupoSelect.Web.Controllers
 
         [HttpPost]
         [TypeFilter(typeof(ExceptionLog))]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(UserVM userVM)
         {
             try

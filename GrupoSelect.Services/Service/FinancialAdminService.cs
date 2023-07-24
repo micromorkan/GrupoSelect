@@ -29,7 +29,7 @@ namespace GrupoSelect.Services.Service
 
         public async Task<PaginateResult<IEnumerable<FinancialAdmin>>> GetAllPaginate(FinancialAdmin filter, int page, int qtPage)
         {
-            return _unitOfWork.FinancialAdmins.GetAllPaginate(f => (string.IsNullOrEmpty(filter.Name) || f.Name.Contains(filter.Name)) && f.Active == filter.Active, null, page, qtPage);
+            return _unitOfWork.FinancialAdmins.GetAllPaginate(f => (string.IsNullOrEmpty(filter.Name) || f.Name.Contains(filter.Name)) && (filter.Active == null || f.Active == filter.Active), null, page, qtPage);
         }
 
         public async Task<Result<FinancialAdmin>> GetById(int id)

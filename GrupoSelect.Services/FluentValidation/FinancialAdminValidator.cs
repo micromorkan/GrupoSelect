@@ -16,6 +16,7 @@ namespace GrupoSelect.Services.FluentValidation
             {
                 RuleFor(x => x.Name).NotEmpty().WithMessage("O nome é obrigatório.");
                 RuleFor(x => x.Name).Length(1, 50).WithMessage("O nome deve conter no máximo 50 caracteres.");
+                RuleFor(x => x.Active).NotEmpty().WithMessage("O status é obrigatório.");
                 RuleFor(x => x).Custom(InsertUniqueName);
             });
 
@@ -24,6 +25,7 @@ namespace GrupoSelect.Services.FluentValidation
                 RuleFor(x => x.Id).GreaterThan(0).WithMessage("O id da administradora é inválido.");
                 RuleFor(x => x.Name).NotEmpty().WithMessage("O nome é obrigatório.");
                 RuleFor(x => x.Name).Length(1, 50).WithMessage("O nome deve conter no máximo 50 caracteres.");
+                RuleFor(x => x.Active).NotEmpty().WithMessage("O status é obrigatório.");
                 RuleFor(x => x).Custom(EditUniqueName);
             });
 

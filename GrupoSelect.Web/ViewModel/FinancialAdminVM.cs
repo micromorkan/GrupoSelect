@@ -12,6 +12,6 @@ namespace GrupoSelect.Web.ViewModel
         public string Name { get; set; }
 
         [Display(Name = "Ativo")]
-        public bool Active { get; set; }
+        public bool? Active { get; set; }
     }
 }

@@ -27,7 +27,7 @@ namespace GrupoSelect.Web.Controllers
         [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_ADMINISTRATIVO)]
         public async Task<IActionResult> Index()
         {
-            return View(new FinancialAdminVM { Active = true });
+            return View(new FinancialAdminVM());
         }
 
         [HttpPost]
@@ -58,7 +58,6 @@ namespace GrupoSelect.Web.Controllers
 
         [HttpPost]
         [TypeFilter(typeof(ExceptionLog))]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(FinancialAdminVM modelVM)
         {
             try
