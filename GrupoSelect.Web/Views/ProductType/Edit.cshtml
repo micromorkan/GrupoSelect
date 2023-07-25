@@ -24,7 +24,7 @@
                             @Html.LabelFor(model => model.ProductName) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            @Html.TextBoxFor(model => model.ProductName, new { required = "required", @class = "form-control" })
+                            @Html.TextBoxFor(model => model.ProductName, new { required = "required", @class = "form-control text-uppercase" })
                             @Html.ValidationMessageFor(model => model.ProductName, null, new { @class = "text-danger" })
                         </div>
                     </div>
