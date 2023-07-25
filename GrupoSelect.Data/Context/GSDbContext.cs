@@ -20,6 +20,7 @@ namespace GrupoSelect.Data.Context
         public DbSet<User> Users { get; set; }
         public DbSet<FinancialAdmin> FinancialAdmins { get; set; }
         public DbSet<ProductType> ProductTypeAdmins { get; set; }
+        public DbSet<TableType> TableTypeAdmins { get; set; }
 
         public GSDbContext(IConfiguration configuration)
         {
@@ -42,6 +43,7 @@ namespace GrupoSelect.Data.Context
             modelBuilder.ApplyConfiguration(new ProfileMap());
             modelBuilder.ApplyConfiguration(new FinancialAdminMap());
             modelBuilder.ApplyConfiguration(new ProductTypeMap());
+            modelBuilder.ApplyConfiguration(new TableTypeMap());
 
         }
 

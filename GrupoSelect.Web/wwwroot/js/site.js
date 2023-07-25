@@ -527,3 +527,7 @@ function ClearAllInputs(defaultSelectValue) {
     $('input').val('');
     $('textarea').val('');
 }
+
+function InputMaskTax(inputName) {
+    $(inputName).inputmask('Regex', { regex: "^[0-9]{1,3}(\\,\\d{1,2})?$" });
+}

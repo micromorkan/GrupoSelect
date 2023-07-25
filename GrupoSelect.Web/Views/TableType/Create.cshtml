@@ -1,0 +1,77 @@
+﻿@model GrupoSelect.Web.ViewModel.TableTypeVM
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="clearfix"></div>
+<div class="row">
+    <div class="col-md-12 col-sm-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>
+                    Tipo Tabela <i class="fa fa-chevron-right"></i> Cadastrar
+                </h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <br>
+                @using (Html.BeginForm("Create", "TableType", FormMethod.Post, new { @id = "create", @class = "form-horizontal form-label-left" }))
+                {
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.TableTax) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.TableTax, new { required = "required", @class = "form-control text-uppercase" })
+                            @Html.ValidationMessageFor(model => model.TableTax, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.MembershipFee) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.MembershipFee, new { required = "required", @class = "form-control text-uppercase" })
+                            @Html.ValidationMessageFor(model => model.MembershipFee, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.RemainingRate) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.RemainingRate, new { required = "required", @class = "form-control text-uppercase" })
+                            @Html.ValidationMessageFor(model => model.RemainingRate, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="item form-group">
+                        <div class="col-md-6 col-sm-6 offset-md-3">
+                            <button type="button" class="btn btn-success submit">Salvar</button>
+                            <a asp-action="Index" class="btn btn-danger">Cancelar</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="~/js/jquery.mask.min.js"></script>
+    <script src="~/js/jquery.inputmask.bundle.min.js"></script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+            InputMaskTax("#MembershipFee");
+            InputMaskTax("#RemainingRate");
+        });
+        $(".submit").click(function (event) {
+            Create(false, false, "true");
+        });
+    </script>
+}
