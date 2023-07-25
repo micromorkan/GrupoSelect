@@ -71,6 +71,11 @@ namespace GrupoSelect.Services.Service
                 };
             }
 
+            user.Name = user.Name.ToUpper();
+            user.Email = user.Email.ToUpper();
+            user.Representation = user.Representation.ToUpper();
+            user.Profile = user.Profile.ToUpper();
+
             _unitOfWork.Users.Insert(user);
             _unitOfWork.Users.Save();
 
@@ -95,6 +100,11 @@ namespace GrupoSelect.Services.Service
                     Errors = resultValidation.Errors
                 };
             }
+
+            user.Name = user.Name.ToUpper();
+            user.Email = user.Email.ToUpper();
+            user.Representation = user.Representation.ToUpper();
+            user.Profile = user.Profile.ToUpper();
 
             _unitOfWork.Users.Update(user);
             _unitOfWork.Users.Save();

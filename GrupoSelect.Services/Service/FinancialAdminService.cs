@@ -7,7 +7,7 @@ using GrupoSelect.Services.Interface;
 
 namespace GrupoSelect.Services.Service
 {
-    public class FinancialAdminService : IFinancialAdminService 
+    public class FinancialAdminService : IFinancialAdminService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IValidator<FinancialAdmin> _validator;
@@ -68,6 +68,8 @@ namespace GrupoSelect.Services.Service
                 };
             }
 
+            model.Name = model.Name.ToUpper();
+
             _unitOfWork.FinancialAdmins.Insert(model);
             _unitOfWork.FinancialAdmins.Save();
 
@@ -92,6 +94,8 @@ namespace GrupoSelect.Services.Service
                     Errors = resultValidation.Errors
                 };
             }
+
+            model.Name = model.Name.ToUpper();
 
             _unitOfWork.FinancialAdmins.Update(model);
             _unitOfWork.FinancialAdmins.Save();

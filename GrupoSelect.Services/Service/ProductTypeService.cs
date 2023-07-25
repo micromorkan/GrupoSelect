@@ -68,6 +68,8 @@ namespace GrupoSelect.Services.Service
                 };
             }
 
+            model.ProductName = model.ProductName.ToUpper();
+
             _unitOfWork.ProductTypes.Insert(model);
             _unitOfWork.ProductTypes.Save();
 
@@ -92,6 +94,8 @@ namespace GrupoSelect.Services.Service
                     Errors = resultValidation.Errors
                 };
             }
+
+            model.ProductName = model.ProductName.ToUpper();
 
             _unitOfWork.ProductTypes.Update(model);
             _unitOfWork.ProductTypes.Save();
