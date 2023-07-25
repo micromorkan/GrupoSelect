@@ -19,8 +19,9 @@ namespace GrupoSelect.Data.Context
         public DbSet<SystemLog> SystemLogs { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<FinancialAdmin> FinancialAdmins { get; set; }
+        public DbSet<ProductType> ProductTypeAdmins { get; set; }
 
-        public GSDbContext(IConfiguration configuration) 
+        public GSDbContext(IConfiguration configuration)
         {
             _configuration = configuration;
         }
@@ -34,12 +35,14 @@ namespace GrupoSelect.Data.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            
+
             modelBuilder.ApplyConfiguration(new UserMap());
             modelBuilder.ApplyConfiguration(new SystemLogMap());
             modelBuilder.ApplyConfiguration(new ErrorLogMap());
             modelBuilder.ApplyConfiguration(new ProfileMap());
             modelBuilder.ApplyConfiguration(new FinancialAdminMap());
+            modelBuilder.ApplyConfiguration(new ProductTypeMap());
+
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -14,6 +14,7 @@ namespace GrupoSelect.Domain.Interface
         IBaseRepository<SystemLog> SystemLogs { get; }
         IBaseRepository<ErrorLog> ErrorLogs { get; }
         IBaseRepository<FinancialAdmin> FinancialAdmins { get; }
+        IBaseRepository<ProductType> ProductTypes { get; }
         void SaveAllChanges();
     }
 }

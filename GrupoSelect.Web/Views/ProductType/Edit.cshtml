@@ -1,7 +1,7 @@
-﻿@model GrupoSelect.Web.ViewModel.FinancialAdminVM
+﻿@model GrupoSelect.Web.ViewModel.ProductTypeVM
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -11,29 +11,21 @@
         <div class="x_panel">
             <div class="x_title">
                 <h2>
-                    Usuários <i class="fa fa-chevron-right"></i> Cadastrar
+                    Produto <i class="fa fa-chevron-right"></i> Editar
                 </h2>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
                 <br>
-                @using (Html.BeginForm("Create", "FinancialAdmin", FormMethod.Post, new { @id = "create", @class = "form-horizontal form-label-left" }))
+                @using (Html.BeginForm("Edit", "ProductType", FormMethod.Post, new { @id = "edit", @class = "form-horizontal form-label-left" }))
                 {
                     <div class="item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align">
-                            @Html.LabelFor(model => model.Name) <span class="required">*</span>
+                            @Html.LabelFor(model => model.ProductName) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            @Html.TextBoxFor(model => model.Name, new { required = "required", @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.Name, null, new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <div class="item form-group">
-                        <label class="col-form-label col-md-3 col-sm-3 label-align">
-                            @Html.LabelFor(model => model.Active) <span class="required">*</span>
-                        </label>
-                        <div class="col-md-6 col-sm-6 ">
-                            @Html.DropDownListFor(model => model.Active, GrupoSelect.Web.Util.UtilWeb.GetBooleanList(), new { @class = "form-control js-example-responsive", @style = "width: 100%;" })
+                            @Html.TextBoxFor(model => model.ProductName, new { required = "required", @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ProductName, null, new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="ln_solid"></div>
@@ -57,9 +49,11 @@
     <script>
         $(document).ready(function () {
             $('select').select2();
+            MaskCnpj();
         });
         $(".submit").click(function (event) {
-            Create(false, false, "true");
+            Edit("@Url.Action("Index", "ProductType")", false, false);
         });
     </script>
 }
+
