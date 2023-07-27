@@ -6,22 +6,22 @@
 
 <div class="clearfix"></div>
 
-@foreach (var item in Model.LstFill)
-{
-    @Html.Partial("Components/_FillBar", item)
-}
-
 @foreach (var item in Model.LstTile)
 {
     @Html.Partial("Components/_Tile", item)
 }
 
-@* @foreach (var item in Model.LstChart)
-    {
-        <div class="col-md-6 col-sm-6 col-xs-12">
-            @Html.Partial("Components/_Chart", item)
-        </div>
-    }*@
+@foreach (var item in Model.LstFill)
+{
+    @Html.Partial("Components/_FillBar", item)
+}
+
+@foreach (var item in Model.LstChart)
+{
+    <div class="col-md-6 col-sm-6 col-xs-12">
+        @Html.Partial("Components/_Chart", item)
+    </div>
+}
 
 @* <div class="col-md-12">
         @Html.Partial("Components/_Calendar", Model.Calendar)

@@ -88,7 +88,7 @@ namespace GrupoSelect.Web.Controllers
             Chart chart = new Chart
             {
                 Id = 1,
-                Titulo = "Usuários Cadastrados",
+                Titulo = "Usuários Ativos",
                 Cores = new string[3] { "rgba(255, 99, 132, 1)", "rgba(255, 206, 86, 1)", "rgba(54, 162, 235, 1)" },
                 Textos = new string[3] { "Red", "Yellow", "Blue" },
                 Valores = new int[3] { 15, 20, 30 },
@@ -129,7 +129,7 @@ namespace GrupoSelect.Web.Controllers
             tile.BackgroundColor = "#FFF";
             tile.Icone = "fa-user";
             tile.Descricao = "Descrição";
-            tile.Titulo = "Usuarios Cadastrados";
+            tile.Titulo = "Usuarios Ativos";
             tile.Valor = "15";
             tile.Controller = "Home";
             tile.Action = "AtualizarTile";
@@ -266,6 +266,47 @@ namespace GrupoSelect.Web.Controllers
 
 
             return Json(tile3);
+        }
+
+        [HttpPost]
+        public JsonResult AtualizarChart()
+        {
+            var a = new Random().Next(1, 10);
+            var b = new Random().Next(11, 20);
+            var c = new Random().Next(21, 30);
+
+            Chart chart = new Chart
+            {
+                Id = 1,
+                Titulo = "Usuários Cadastrados",
+                Cores = new string[3] { "rgba(255, 99, 132, 1)", "rgba(255, 206, 86, 1)", "rgba(54, 162, 235, 1)" },
+                Textos = new string[3] { "Red", "Yellow", "Blue" },
+                Valores = new int[3] { a, b, c },
+                PermiteMinimizar = true,
+                TipoChart = UtilWeb.GetEnumDescription(UtilWebEnums.TipoChart.BarraHorizontal),
+            };
+
+            return Json(chart);
+        }
+
+        [HttpPost]
+        public JsonResult AtualizarChart2()
+        {
+            var a = new Random().Next(1, 10);
+            var b = new Random().Next(11, 20);
+            var c = new Random().Next(21, 30);
+
+            Chart chart = new Chart
+            {
+                Titulo = "Usuários Cadastrados",
+                Cores = new string[3] { "rgba(255, 99, 132, 1)", "rgba(255, 206, 86, 1)", "rgba(54, 162, 235, 1)" },
+                Textos = new string[3] { "Red", "Yellow", "Blue" },
+                Valores = new int[3] { a, b, c },
+                PermiteMinimizar = true,
+                TipoChart = UtilWeb.GetEnumDescription(UtilWebEnums.TipoChart.BarraVertical),
+            };
+
+            return Json(chart);
         }
 
         public async Task<IActionResult> LogOut()
