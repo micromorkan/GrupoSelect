@@ -5,6 +5,7 @@ using GrupoSelect.Domain.Models;
 using GrupoSelect.Domain.Util;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using System.Text.Json;
 
@@ -53,7 +54,7 @@ namespace GrupoSelect.Data.Context
         {
             var connString = _configuration.GetConnectionString(Constants.SYSTEM_CONN_STRING);
 
-            optionsBuilder.UseLazyLoadingProxies(true).UseSqlServer(connString);
+            optionsBuilder.UseLazyLoadingProxies().ConfigureWarnings(warnings => warnings.Ignore(CoreEventId.DetachedLazyLoadingWarning)).UseSqlServer(connString);
             //optionsBuilder.UseSqlServer(@"Server=DESKTOP-CMHO5R3\MSSQLSERVER2022;Database=GrupoSelect;User Id=sa;Password=diegoand;encrypt=yes;trustservercertificate=true;");
         }
 

@@ -19,6 +19,7 @@
                 <br>
                 @using (Html.BeginForm("Edit", "Credit", FormMethod.Post, new { @id = "edit", @class = "form-horizontal form-label-left" }))
                 {
+                    @Html.HiddenFor(model => model.DateCreate)
                     <div class="item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align">
                             @Html.LabelFor(model => model.ProductTypeId) <span class="required">*</span>

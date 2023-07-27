@@ -37,5 +37,7 @@ namespace GrupoSelect.Web.ViewModel
         [Display(Name = "Valor Total")]
         [Required(ErrorMessage = "O campo {0} é obrigatório!")]
         public string TotalValue { get; set; }
+
+        public DateTime DateCreate { get; set; }
     }
 }
