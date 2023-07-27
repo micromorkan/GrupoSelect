@@ -19,6 +19,7 @@ namespace GrupoSelect.Web.Configurations
             services.AddScoped<IFinancialAdminService, FinancialAdminService>();
             services.AddScoped<IProductTypeService, ProductTypeService>();
             services.AddScoped<ITableTypeService, TableTypeService>();
+            services.AddScoped<ICreditService, CreditService>();
 
             services.AddScoped<ISessionProvider, SessionProvider>();
             services.AddValidatorsFromAssemblyContaining<UserValidator>();

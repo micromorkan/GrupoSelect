@@ -306,7 +306,7 @@ function Search(editar, urlEditar, excluir, urlExlcuir, pagina) {
                             if (cols.length == 1) {
                                 if (typeof (item[coluna]) === "boolean") {
                                     row.push(item[coluna] ? 'Sim' : 'Não');
-                                } else if (item[coluna] !== null && item[coluna] !== undefined && item[coluna].indexOf("/Date(") !== -1) {
+                                } else if (item[coluna] !== null && item[coluna] !== undefined && item[coluna].toString().indexOf("/Date(") !== -1) {
                                     row.push(moment(item[coluna]).format("DD/MM/YYYY HH:mm:ss"));
                                 } else {
                                     row.push(item[coluna]);
@@ -320,7 +320,7 @@ function Search(editar, urlEditar, excluir, urlExlcuir, pagina) {
 
                                 if (typeof (value) === "boolean") {
                                     row.push(value ? 'Sim' : 'Não');
-                                } else if (item[coluna] !== null && item[coluna] !== undefined && item[coluna].indexOf("/Date(") !== -1) {
+                                } else if (item[coluna] !== null && item[coluna] !== undefined && item[coluna].toString().indexOf("/Date(") !== -1) {
                                     row.push(moment(item[coluna]).format("DD/MM/YYYY HH:mm:ss"));
                                 } else {
                                     row.push(value);
@@ -530,4 +530,7 @@ function ClearAllInputs(defaultSelectValue) {
 
 function InputMaskTax(inputName) {
     $(inputName).inputmask('Regex', { regex: "^[0-9]{1,3}(\\,\\d{1,2})?$" });
+}
+function InputMaskNumber(inputName, maxDigits) {
+    $(inputName).inputmask('Regex', { regex: "^[0-9]{1,"+maxDigits+"}$" });
 }

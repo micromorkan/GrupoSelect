@@ -21,6 +21,7 @@ namespace GrupoSelect.Data.Context
         public DbSet<FinancialAdmin> FinancialAdmins { get; set; }
         public DbSet<ProductType> ProductTypeAdmins { get; set; }
         public DbSet<TableType> TableTypeAdmins { get; set; }
+        public DbSet<Credit> CreditAdmins { get; set; }
 
         public GSDbContext(IConfiguration configuration)
         {
@@ -44,6 +45,7 @@ namespace GrupoSelect.Data.Context
             modelBuilder.ApplyConfiguration(new FinancialAdminMap());
             modelBuilder.ApplyConfiguration(new ProductTypeMap());
             modelBuilder.ApplyConfiguration(new TableTypeMap());
+            modelBuilder.ApplyConfiguration(new CreditMap());
 
         }
 
@@ -51,7 +53,7 @@ namespace GrupoSelect.Data.Context
         {
             var connString = _configuration.GetConnectionString(Constants.SYSTEM_CONN_STRING);
 
-            optionsBuilder.UseSqlServer(connString);
+            optionsBuilder.UseLazyLoadingProxies(true).UseSqlServer(connString);
             //optionsBuilder.UseSqlServer(@"Server=DESKTOP-CMHO5R3\MSSQLSERVER2022;Database=GrupoSelect;User Id=sa;Password=diegoand;encrypt=yes;trustservercertificate=true;");
         }
 
