@@ -182,7 +182,8 @@
                 </div>
             </div>
 
-
+            <script src="~/lib/jquery/dist/jquery.min.js"></script>
+            <script src="~/js/moment-with-locales.min.js"></script>
             <div class="right_col" role="main">
                 @RenderBody()
             </div>
@@ -198,11 +199,10 @@
         </div>
     </div>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/fastclick.js"></script>
     <script src="~/js/nprogress.js"></script>
-
     <script src="~/js/jquery.datatables.min.js"></script>
     <script src="~/js/datatables.bootstrap.min.js"></script>
     <script src="~/js/datatables.buttons.min.js"></script>
@@ -224,6 +224,7 @@
 
     <script src="~/js/custom.min.js"></script>
     <script src="~/js/site.js"></script>
+    <script src="~/js/switchery.min.js"></script>
     <script src="~/js/pagination/pagination.js"></script>
     <script src="~/js/select2.full.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)

@@ -30,8 +30,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Views\Shared\Components\Models\" />
     <Folder Include="wwwroot\lib\font-awesome\fonts\" />
-    <Folder Include="wwwroot\img\" />
   </ItemGroup>
 
 </Project>

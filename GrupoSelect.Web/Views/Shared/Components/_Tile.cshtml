@@ -1,0 +1,127 @@
+﻿@using System.Text.Json;
+@model Web.Views.Shared.Componentes.ComponentModels.Tile
+@*
+                    MODO DE USO
+
+    ###### EXEMPLO PREENCHIMENTO DO OBJETO #######
+    Tile tile = new Tile();
+
+    tile.Id = 1; //Incremental para cada novo Tile na mesma tela
+    tile.BackgroudColor = "#FFF";
+    tile.Icone = "fa-user";
+    tile.Descricao = "Descrição";
+    tile.Titulo = "Usuarios Cadastrados";
+    tile.Valor = "15";
+    tile.Controller = "Home";
+    tile.Action = "AtualizarTile";
+    tile.IntervaloAtualizacao = 5000;
+    ############################################
+
+    ########## FUNÇÃO PARA ATUALIZAR ###########
+    [HttpPost]
+    public JsonResult AtualizarTile()
+    {
+        Tile tile = new Tile();
+
+        //OBTER VALORES NO QUAL SE DESEJA ATUALIZAR
+
+        return Json(tile);
+    }
+    ############################################
+*@
+<style>
+    .tile_loading {
+        width: 95%;
+        position: absolute;
+        opacity: 0.7;
+        background-color: #fff;
+        z-index: 99;
+        text-align: center;
+    }
+
+    .tile_loading_image {
+        position: center;
+        z-index: 100;
+    }
+</style>
+@*<div class="animated flipInY col-lg-4 col-md-4 col-sm-4 col-xs-12">
+    <div id="tile_loading_@Model.Id" class="tile_loading">
+        <img class="tile_loading_image" src="~/img/loading.gif" alt="Loading..." />
+    </div>
+    <div class="tile-stats" id="tile_backgound_@Model.Id">
+        <div class="icon">
+            <i class="fa @Model.Icone"></i>
+        </div>
+        <div class="count" id="tile_valor_@Model.Id"></div>
+        <h3 id="tile_titulo_@Model.Id"></h3>
+        <p id="tile_descricao_@Model.Id"></p>
+    </div>
+</div>*@
+
+
+<div class="animated flipInY col-lg-4 col-md-4 col-sm-6  ">
+    <div id="tile_loading_@Model.Id" class="tile_loading">
+        <img class="tile_loading_image" src="~/img/loading.gif" alt="Loading..." />
+    </div>
+    <div class="tile-stats" id="tile_backgound_@Model.Id">
+        <div class="icon">
+            <i class="fa @Model.Icone"></i>
+        </div>
+        <div class="count" id="tile_valor_@Model.Id"></div>
+        <h3 id="tile_titulo_@Model.Id"></h3>
+        <p id="tile_descricao_@Model.Id"></p>
+    </div>
+</div>
+
+<script>
+    var blinkColor = "#de64c9";
+
+    $(document).ready(function () {
+        $('#tile_valor_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).text(@Html.Raw(JsonSerializer.Serialize(Model.Valor)));
+        $('#tile_titulo_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).text(@Html.Raw(JsonSerializer.Serialize(Model.Titulo)));
+        $('#tile_descricao_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).text(@Html.Raw(JsonSerializer.Serialize(Model.Descricao)));
+
+        if (@Html.Raw(JsonSerializer.Serialize(Model.BackgroundColor)) != "") {
+            $('#tile_backgound_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).css('background-color', @Html.Raw(JsonSerializer.Serialize(Model.BackgroundColor)));
+        } else {
+            $('#tile_backgound_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).css('background-color', "#FFF");
+        }
+
+        var controller_@Html.Raw(JsonSerializer.Serialize(Model.Id)) = @Html.Raw(JsonSerializer.Serialize(Model.Controller));
+        var action_@Html.Raw(JsonSerializer.Serialize(Model.Id)) = @Html.Raw(JsonSerializer.Serialize(Model.Action));
+
+        $('#tile_loading_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).hide();
+
+        if (@Html.Raw(JsonSerializer.Serialize(Model.Controller)) != "" && @Html.Raw(JsonSerializer.Serialize(Model.Controller)) != null && @Html.Raw(JsonSerializer.Serialize(Model.Action)) != "" && @Html.Raw(JsonSerializer.Serialize(Model.Action)) != null) {
+            setInterval(function () {
+                $('#tile_loading_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).show();
+                $.ajax({
+                    url: '@Url.Action(Html.Raw(JsonSerializer.Serialize(Model.Action).Replace("\"", "")).ToString(), Html.Raw(JsonSerializer.Serialize(Model.Controller).Replace("\"", "")).ToString())',
+                    type: 'POST',
+                    data: null,
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (dados) {
+                        $('#tile_valor_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).text(dados.valor);
+                        $('#tile_titulo_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).text(dados.titulo);
+                        $('#tile_descricao_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).text(dados.descricao);
+                        $('#tile_loading_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).hide();
+
+                        if (dados.backgroundColor != "") {
+                            $('#tile_backgound_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).css('background-color', blinkColor);
+                            setTimeout(function () { $('#tile_backgound_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).css('background-color', dados.backgroundColor); }, 300);
+                        } else {
+                            $('#tile_backgound_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).css('background-color', blinkColor);
+                            setTimeout(function () { $('#tile_backgound_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).css('background-color', "#FFF"); }, 300);
+                        }
+                    },
+                    error: function (xhr) {
+                        ExibirModalErro('Não foi possivel atualizar os dados do ' + @Html.Raw(JsonSerializer.Serialize(Model.Titulo)) + '!');
+                    },
+                    async: true,
+                    processData: false
+                });
+            }, @Html.Raw(JsonSerializer.Serialize(Model.IntervaloAtualizacao)));
+        }
+    });
+</script>

@@ -1,0 +1,115 @@
+﻿@using System.Text.Json;
+@model Web.Views.Shared.Componentes.ComponentModels.FillBar
+
+@*
+                    MODO DE USO
+
+    ###### EXEMPLO PREENCHIMENTO DO OBJETO #######
+
+    FillBar bar = new FillBar
+    {
+        Id = 1,
+        Titulo = "Pré-Pago Semanal",
+        Descricao = "Smart Pre Local + 500mb",
+        ValorReal = "350mb",
+        ValorPorcentagem = 65,
+        BarColor = "#74DF00",
+        BadgeText = "R$ 9,99",
+        BadgeColor = "#00ff00"
+    });
+    ############################################
+
+*@
+@*<link href="~/lib/bootstrap/dist/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet" />*@
+<style>
+    .valorreal {
+        display: inline-block;
+        line-height: 110px;
+        z-index: 2;
+    }
+
+    .valorreal:after {
+        font-size: .8em;
+    }
+</style>
+<div class="col-md-3">
+    <div class="x_panel panel-body ui-ribbon-container">
+        @if (!string.IsNullOrEmpty(Model.BadgeText))
+        {
+            <div class="ui-ribbon-wrapper">
+                <div class="ui-ribbon" style="background-color: @Model.BadgeColor;">
+                    @Model.BadgeText
+                </div>
+            </div>
+        }
+        <div class="x_title text-center">
+            <h4>@Model.Titulo</h4>
+        </div>
+        <div class="row text-center">
+            <div>
+                <span id="fillbar_@Model.Id" class="chart" data-percent="@Model.ValorPorcentagem">
+                    <span class="valorreal">@Model.ValorReal</span>
+                </span>
+            </div>
+            <div class="clearfix"></div>
+            @if (!string.IsNullOrEmpty(Model.Descricao))
+            {
+                <div class="divider"></div>
+                <p>@Model.Descricao</p>
+            }
+        </div>
+    </div>
+    @*<div class="x_panel ui-ribbon-container fixed_height_390">
+        <div class="x_title">
+            <h2>User Mail</h2>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div style="text-align: center; margin-bottom: 17px">
+                <span class="chart" data-percent="86">
+                    <span class="percent">86</span>
+                    <canvas height="110" width="110"></canvas>
+                </span>
+            </div>
+            <h3 class="name_title">Finance</h3>
+            <p>Short Description</p>
+            <div class="divider"></div>
+            <p>If you've decided to go in development mode and tweak all of this a bit, there are few things you should do.</p>
+        </div>
+    </div>*@
+</div>
+
+    <script src="~/js/fillbar/jquery.easypiechart.min.js"></script>
+    @*<script src="~/lib/bootstrap/dist/js/bootstrap-progressbar.min.js"></script>*@
+    <script>
+        $(document).ready(function () {
+            if ("undefined" != typeof $.fn.easyPieChart) {
+                $("#fillbar_@Html.Raw(JsonSerializer.Serialize(Model.Id))").easyPieChart({
+                    easing: "easeOutElastic",
+                    delay: 3e3,
+                    barColor: @Html.Raw(JsonSerializer.Serialize(Model.BarColor)),
+                    trackColor: "#f2f2f2",
+                    scaleColor: !1,
+                    lineWidth: 3,
+                    trackWidth: 3,
+                    lineCap: "butt",
+                    onStep: function (a, b, c) {
+                        $(this.el).find(".percent").text(Math.round(c))
+                    }
+                });
+                $(".chart").easyPieChart({
+                    easing: "easeOutElastic",
+                    delay: 3e3,
+                    barColor: "#26B99A",
+                    trackColor: "#fff",
+                    scaleColor: !1,
+                    lineWidth: 20,
+                    trackWidth: 16,
+                    lineCap: "butt",
+                    onStep: function (e, a, t) {
+                        $(this.el).find(".percent").text(Math.round(t))
+                    }
+                });
+            }
+        });
+    </script>

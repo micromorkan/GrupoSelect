@@ -1,0 +1,283 @@
+﻿@using System.Text.Json;
+@model Web.Views.Shared.Componentes.ComponentModels.Chart
+
+@*
+                    MODO DE USO
+
+    ###### EXEMPLO PREENCHIMENTO DO OBJETO #######
+
+    Chart chart = new Chart
+    {
+        Id = 1,
+        Titulo = "Usuários Cadastrados",
+        Cores = new string[3] { "rgba(255, 99, 132, 1)", "rgba(255, 206, 86, 1)", "rgba(54, 162, 235, 1)" },
+        Textos = new string[3] { "Red", "Yellow", "Blue" },
+        Valores = new int[3] { 15, 20, 30 },
+        PermiteMinimizar = true,
+        TipoChart = UtilWeb.GetEnumDescription(UtilWebEnums.TipoChart.BarraHorizontal),
+        Controller = "Home",
+        Action = "AtualizarChart",
+        BackgroundColor = "#FFF",
+        IntervaloAtualizacao = 8500
+    };
+    ############################################
+
+    ########## FUNÇÃO PARA ATUALIZAR ###########
+    [HttpPost]
+    public JsonResult AtualizarChart()
+    {
+        Chart chart = new Chart();
+
+        //OBTER VALORES NO QUAL SE DESEJA ATUALIZAR
+
+        return Json(chart);
+    }
+    ############################################
+
+*@
+@* fixed_height_320 *@
+<style>
+    .chart_loading {
+        width: 95%;
+        height: 95%;
+        position: absolute;
+        opacity: 0.7;
+        background-color: #fff;
+        z-index: 99;
+        text-align: center;
+        overflow: hidden;
+    }
+
+    .chart_loading_image {
+        position: absolute;
+        left: 40%;
+        top: 30%;
+        z-index: 100;
+    }
+</style>
+@*<link href="~/Content/rotate-icon.css" rel="stylesheet" />*@
+<div class="x_panel tile overflow_hidden" id="chart_backgound_@Model.Id">
+    <div id="chart_loading_@Model.Id" class="chart_loading">
+        <img class="chart_loading_image" src="~/img/loading.gif" alt="Loading..." />
+    </div>
+    <div class="x_title">
+        <h2>@Model.Titulo</h2>
+
+        <ul class="nav navbar-right panel_toolbox">
+            <li class="pull-right" title="Ative para atualizar">
+                <input id="chk_update_chart_@Model.Id" type="checkbox" checked="" class="js-switch" style="display: none;" data-switchery="true">
+            </li>
+            @if (Model.PermiteMinimizar)
+            {
+                <li class="pull-right">
+                    &nbsp;
+                </li>
+                <li class="pull-right">
+                    <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+            }
+        </ul>
+
+        <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+        <canvas id="chart_@Model.Id" />
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/chart/chart.min.js"></script>
+    <script>
+        var canvasHeight;
+
+        if (!chartList) {
+            var chartList = [];
+        }
+
+        $(document).ready(function () {
+
+            var blinkColor = "#de64c9";
+
+            if (@Html.Raw(JsonSerializer.Serialize(Model.TipoChart)) == 'pie') {
+                chartList[@Html.Raw(JsonSerializer.Serialize(Model.Id))] = new Chart($("#chart_" + @Html.Raw(JsonSerializer.Serialize(Model.Id))), {
+                    type: @Html.Raw(JsonSerializer.Serialize(Model.TipoChart)),
+                    data: {
+                        datasets: [{
+                            data: @Html.Raw(JsonSerializer.Serialize(Model.Valores)),
+                            backgroundColor: @Html.Raw(JsonSerializer.Serialize(Model.Cores)),
+                        }],
+                        labels: @Html.Raw(JsonSerializer.Serialize(Model.Textos)),
+                    },
+                    options: null
+                });
+
+                if (!canvasHeight) {
+                    canvasHeight = $("#chart_" + @Html.Raw(JsonSerializer.Serialize(Model.Id))).height();
+                }
+
+                $('#chart_loading_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).hide();
+
+                if (@Html.Raw(JsonSerializer.Serialize(Model.Controller)) != "" && @Html.Raw(JsonSerializer.Serialize(Model.Controller)) != null && @Html.Raw(JsonSerializer.Serialize(Model.Action)) != "" && @Html.Raw(JsonSerializer.Serialize(Model.Action)) != null) {
+                    setInterval(function () {
+                        if ($('#chk_update_chart_@Model.Id').is(':checked')) {
+                            $('#chart_loading_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).show();
+                            $.ajax({
+                                url: '@Url.Action(Html.Raw(JsonSerializer.Serialize(Model.Action).Replace("\"", "")).ToString(), Html.Raw(JsonSerializer.Serialize(Model.Controller).Replace("\"", "")).ToString())',
+                                type: 'POST',
+                                data: null,
+                                dataType: 'json',
+                                contentType: 'application/json; charset=utf-8',
+                                success: function (dados) {
+
+                                    $('#chart_loading_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).hide();
+                                    chartList[@Html.Raw(JsonSerializer.Serialize(Model.Id))].destroy();
+                                    $("#chart_" + @Html.Raw(JsonSerializer.Serialize(Model.Id))).height(canvasHeight)
+
+                                    chartList[@Html.Raw(JsonSerializer.Serialize(Model.Id))] = new Chart($("#chart_" + @Html.Raw(JsonSerializer.Serialize(Model.Id))), {
+                                        type: dados.TipoChart,
+                                        data: {
+                                            datasets: [{
+                                                data: dados.Valores,
+                                                backgroundColor: dados.Cores,
+                                            }],
+                                            labels: dados.Textos,
+                                        },
+                                        options: null
+                                    });
+
+                                    if (dados.BackgroundColor != "" && dados.BackgroundColor) {
+                                        $('#chart_backgound_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).css('background-color', blinkColor);
+                                        setTimeout(function () { $('#chart_backgound_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).css('background-color', dados.BackgroundColor); }, 300);
+                                    } else {
+                                        $('#chart_backgound_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).css('background-color', blinkColor);
+                                        setTimeout(function () { $('#chart_backgound_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).css('background-color', "#FFF"); }, 300);
+                                    }
+                                },
+                                error: function (xhr) {
+                                    ExibirModalErro('Não foi possivel atualizar os dados do ' + @Html.Raw(JsonSerializer.Serialize(Model.Titulo)) + '!');
+                                },
+                                async: true,
+                                processData: false
+                            });
+                        }
+                    }, @Html.Raw(JsonSerializer.Serialize(Model.IntervaloAtualizacao)));
+                }
+            } else if (@Html.Raw(JsonSerializer.Serialize(Model.TipoChart)) == 'bar' || @Html.Raw(JsonSerializer.Serialize(Model.TipoChart)) == 'horizontalBar') {
+                chartList[@Html.Raw(JsonSerializer.Serialize(Model.Id))] = new Chart($("#chart_" + @Html.Raw(JsonSerializer.Serialize(Model.Id))), {
+                    type: @Html.Raw(JsonSerializer.Serialize(Model.TipoChart)),
+                    data: {
+                        datasets: [{
+                            data: @Html.Raw(JsonSerializer.Serialize(Model.Valores)),
+                            backgroundColor: @Html.Raw(JsonSerializer.Serialize(Model.Cores)),
+                        }],
+                        labels: @Html.Raw(JsonSerializer.Serialize(Model.Textos)),
+                    },
+                    options: {
+                        legend: {
+                            display: false
+                        },
+                        scales: {
+                            yAxes: [{
+                                display: true,
+                                ticks: {
+                                    beginAtZero: true,
+                                    steps: 10,
+                                    stepValue: 5,
+                                    max: Math.max.apply(null, @Html.Raw(JsonSerializer.Serialize(Model.Valores))) + Math.min.apply(null, @Html.Raw(JsonSerializer.Serialize(Model.Valores)))
+                                }
+                            }],
+                            xAxes: [{
+                                display: true,
+                                ticks: {
+                                    beginAtZero: true,
+                                    steps: 10,
+                                    stepValue: 5,
+                                    max: Math.max.apply(null, @Html.Raw(JsonSerializer.Serialize(Model.Valores))) + Math.min.apply(null, @Html.Raw(JsonSerializer.Serialize(Model.Valores)))
+                                }
+                            }]
+                        },
+                    }
+                });
+
+                if (!canvasHeight) {
+                    canvasHeight = $("#chart_" + @Html.Raw(JsonSerializer.Serialize(Model.Id))).height();
+                }
+
+                $('#chart_loading_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).hide();
+
+                if (@Html.Raw(JsonSerializer.Serialize(Model.Controller)) != "" && @Html.Raw(JsonSerializer.Serialize(Model.Controller)) != null && @Html.Raw(JsonSerializer.Serialize(Model.Action)) != "" && @Html.Raw(JsonSerializer.Serialize(Model.Action)) != null) {
+                    setInterval(function () {
+                        if ($('#chk_update_chart_@Model.Id').is(':checked')) {
+                            $('#chart_loading_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).show();
+                            $.ajax({
+                                url: '@Url.Action(Html.Raw(JsonSerializer.Serialize(Model.Action).Replace("\"", "")).ToString(), Html.Raw(JsonSerializer.Serialize(Model.Controller).Replace("\"", "")).ToString())',
+                                type: 'POST',
+                                data: null,
+                                dataType: 'json',
+                                contentType: 'application/json; charset=utf-8',
+                                success: function (dados) {
+                                    $('#chart_loading_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).hide();
+                                    chartList[@Html.Raw(JsonSerializer.Serialize(Model.Id))].destroy();
+                                    $("#chart_" + @Html.Raw(JsonSerializer.Serialize(Model.Id))).height(canvasHeight)
+
+                                    chartList[@Html.Raw(JsonSerializer.Serialize(Model.Id))] = new Chart($("#chart_" + @Html.Raw(JsonSerializer.Serialize(Model.Id))), {
+                                        type: dados.TipoChart,
+                                        data: {
+                                            datasets: [{
+                                                data: dados.Valores,
+                                                backgroundColor: dados.Cores,
+                                            }],
+                                            labels: dados.Textos,
+                                        },
+                                        options: {
+                                            legend: {
+                                                display: false
+                                            },
+                                            scales: {
+                                                yAxes: [{
+                                                    display: true,
+                                                    ticks: {
+                                                        beginAtZero: true,
+                                                        steps: 10,
+                                                        stepValue: 5,
+                                                        max: Math.max.apply(null, dados.Valores) + Math.min.apply(null, dados.Valores),
+                                                    }
+                                                }],
+                                                xAxes: [{
+                                                    display: true,
+                                                    ticks: {
+                                                        beginAtZero: true,
+                                                        steps: 10,
+                                                        stepValue: 5,
+                                                        max: Math.max.apply(null, dados.Valores) + Math.min.apply(null, dados.Valores),
+                                                    }
+                                                }]
+                                            },
+                                        }
+                                    });
+
+                                    if (dados.BackgroundColor != "" && dados.BackgroundColor) {
+                                        $('#chart_backgound_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).css('background-color', blinkColor);
+                                        setTimeout(function () { $('#chart_backgound_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).css('background-color', dados.BackgroundColor); }, 300);
+                                    } else {
+                                        $('#chart_backgound_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).css('background-color', blinkColor);
+                                        setTimeout(function () { $('#chart_backgound_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).css('background-color', "#FFF"); }, 300);
+                                    }
+                                },
+                                error: function (xhr) {
+                                    ExibirModalErro('Não foi possivel atualizar os dados do ' + @Html.Raw(JsonSerializer.Serialize(Model.Titulo)) + '!');
+                                },
+                                async: true,
+                                processData: false
+                            });
+                        }
+                    }, @Html.Raw(JsonSerializer.Serialize(Model.IntervaloAtualizacao)));
+                }
+            }
+
+            //$(".click").click(function () {
+            //    $(this).toggleClass("rotating");
+            //});
+        });
+    </script>
+}
