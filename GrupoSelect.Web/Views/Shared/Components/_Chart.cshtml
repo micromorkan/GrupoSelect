@@ -86,7 +86,6 @@
 </div>
 
 
-<script src="~/js/chart/chart.min.js"></script>
 <script>
     var canvasHeight;
 
@@ -108,7 +107,12 @@
                     }],
                     labels: @Html.Raw(JsonSerializer.Serialize(Model.Textos)),
                 },
-                options: null
+                options: {
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                    }
+                }
             });
 
             if (!canvasHeight) {
@@ -142,7 +146,18 @@
                                         }],
                                         labels: dados.textos,
                                     },
-                                    options: null
+                                    options: {
+                                        legend: {
+                                            display: true,
+                                            position: "bottom",
+                                            fullWidth: true,
+                                            reverse: false,
+                                            labels: {
+                                                boxWidth: 40,
+                                                padding: 10
+                                            }
+                                        }
+                                    }
                                 });
 
                                 if (dados.backgroundColor != "" && dados.backgroundColor) {

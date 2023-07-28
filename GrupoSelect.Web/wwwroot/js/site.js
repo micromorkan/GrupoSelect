@@ -52,6 +52,66 @@
         return o;
     };
 })(jQuery);
+
+(function ($, viewport) {
+    if (viewport.is('xs')) {
+        // ...
+    }
+    if (viewport.is('>=sm')) {
+        // ...
+    }
+    if (viewport.is('<md')) {
+        // ...
+    }
+    $(document).ready(function () {
+        $(document).ajaxComplete(function () {
+            $('#loading').fadeOut();
+        });
+
+        if ($("body").hasClass("nav-md")) {
+            if (viewport.is('lg')) {
+                $("#menu").addClass("menu_fixed");
+            } else if (viewport.is('md')) {
+                $("#menu").addClass("menu_fixed");
+            } else {
+                $("#menu").removeClass("menu_fixed");
+            }
+        } else {
+            $("#menu").removeClass("menu_fixed");
+        }
+
+        $("#menu_toggle").on("click", function () {
+            if ($("body").hasClass("nav-md")) {
+                if (viewport.is('lg')) {
+                    $("#menu").addClass("menu_fixed");
+                } else if (viewport.is('md')) {
+                    $("#menu").addClass("menu_fixed");
+                } else {
+                    $("#menu").removeClass("menu_fixed");
+                }
+            } else {
+                $("#menu").removeClass("menu_fixed");
+            }
+        });
+    });
+    $(window).resize(
+        viewport.changed(function () {
+            if ($("body").hasClass("nav-md")) {
+                if (viewport.is('lg')) {
+                    $("#menu").addClass("menu_fixed");
+                } else if (viewport.is('md')) {
+                    $("#menu").addClass("menu_fixed");
+                } else {
+                    $("#menu").removeClass("menu_fixed");
+                }
+            } else {
+                $("#menu").removeClass("menu_fixed");
+            }
+        })
+    );
+
+})(jQuery, ResponsiveBootstrapToolkit);
+
 function FillSelect(url, filter, selectId, selectedItem = null, compareValue = true) {
     $.ajax({
         dataType: 'json',
@@ -83,25 +143,25 @@ function FillSelect(url, filter, selectId, selectedItem = null, compareValue = t
     });
 }
 
-function StartDatatables() {
-    $("#search").length && $("#search").DataTable({
-        paging: true,
-        searching: true,
-        lengthChange: false,
-        dom: "Blfrtip",
-        buttons: [{
-            extend: "excel",
-            className: "btn btn-primary btn-sm"
-        }, {
-            extend: "pdfHtml5",
-            className: "btn btn-primary btn-sm"
-        }, {
-            extend: "print",
-            className: "btn btn-primary btn-sm"
-        }],
-        responsive: !0
-    })
-}
+//function StartDatatables() {
+//    $("#search").length && $("#search").DataTable({
+//        paging: true,
+//        searching: true,
+//        lengthChange: false,
+//        dom: "Blfrtip",
+//        buttons: [{
+//            extend: "excel",
+//            className: "btn btn-primary btn-sm"
+//        }, {
+//            extend: "pdfHtml5",
+//            className: "btn btn-primary btn-sm"
+//        }, {
+//            extend: "print",
+//            className: "btn btn-primary btn-sm"
+//        }],
+//        responsive: !0
+//    })
+//}
 
 function Create(ignoreValidation = false, sendFiles = false, defaultSelectValue = "") {
     if (sendFiles) {
@@ -253,7 +313,7 @@ function Search(editar, urlEditar, excluir, urlExlcuir, pagina) {
         pagina = 1;
     }
 
-    //$('#loading').show();
+    $('#loading').show();
     $.ajax({
         url: form[0].action + "?page=" + pagina + "&qtPage=" + qtdPagina,
         type: 'POST',

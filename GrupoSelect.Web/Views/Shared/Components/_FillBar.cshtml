@@ -32,7 +32,10 @@
         }
 </style>
 <div class="col-lg-3 col-md-3 col-sm-4">
-    <div class="x_panel ui-ribbon-container fixed_height_390">
+    <div class="x_panel ui-ribbon-container">
+        <div id="fillbar_loading_@Model.Id" class="chart_loading">
+            <img class="fillbar_loading_image" src="~/img/loading.gif" alt="Loading..." />
+        </div>
         @if (!string.IsNullOrEmpty(Model.BadgeText))
         {
             <div class="ui-ribbon-wrapper">
@@ -61,7 +64,6 @@
     </div>
 </div>
 
-<script src="~/js/fillbar/jquery.easypiechart.min.js"></script>
 <script>
     $(document).ready(function () {
         if ("undefined" != typeof $.fn.easyPieChart) {
@@ -78,6 +80,30 @@
                     $(this.el).find(".percent").text(Math.round(c))
                 }
             });
+
+            $('#fillbar_loading_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).hide();
+
+            setInterval(function () {
+                $('#fillbar_loading_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).show();
+                $.ajax({
+                    url: '@Url.Action(Html.Raw(JsonSerializer.Serialize(Model.Action).Replace("\"", "")).ToString(), Html.Raw(JsonSerializer.Serialize(Model.Controller).Replace("\"", "")).ToString())',
+                    type: 'POST',
+                    data: null,
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (dados) {
+
+                        $('#fillbar_loading_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).hide();
+                        var e = window.chart = $("#fillbar_@Html.Raw(JsonSerializer.Serialize(Model.Id))").data("easyPieChart");
+                        e.update(dados.valorPorcentagem)
+                    },
+                    error: function (xhr) {
+                        ExibirModalErro('Não foi possivel atualizar os dados do ' + @Html.Raw(JsonSerializer.Serialize(Model.Titulo)) + '!');
+                    },
+                    async: true,
+                    processData: false
+                });
+            }, @Html.Raw(JsonSerializer.Serialize(Model.IntervaloAtualizacao)));
         }
     });
 </script>

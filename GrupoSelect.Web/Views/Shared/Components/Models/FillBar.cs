@@ -46,5 +46,20 @@ namespace Web.Views.Shared.Componentes.ComponentModels
         /// Cor da "orelha". Deixa em branco para cor padrão do sistema (cinza escuro).
         /// </summary>
         public string BadgeColor { get; set; }
+
+        /// <summary>
+        /// Controller usada para atualizar o componente. Caso deixe em branco o componente não será atualizado.
+        /// </summary>
+        public string Controller { get; set; }
+
+        /// <summary>
+        /// Action usada para atualizar o componente. Caso deixe em branco o componente não será atualizado.
+        /// </summary>
+        public string Action { get; set; }
+
+        /// <summary>
+        /// Valor definido em milisegundos. Ex: 6000 = 6 segundos
+        /// </summary>
+        public int IntervaloAtualizacao { get; set; }
     }
 }

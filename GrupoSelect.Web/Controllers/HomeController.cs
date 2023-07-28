@@ -44,7 +44,10 @@ namespace GrupoSelect.Web.Controllers
                 Descricao = "Seu saldo expira em 10 dias!",
                 ValorReal = "72%",
                 ValorPorcentagem = 72,
-                BarColor = "#0404B4"
+                BarColor = "#0404B4",
+                Controller = "Home",
+                Action = "AtualizarFill",
+                IntervaloAtualizacao = 5500
             });
 
             lstBar.Add(new FillBar
@@ -54,7 +57,10 @@ namespace GrupoSelect.Web.Controllers
                 Descricao = "O pacote será renovado em 18 dias!",
                 ValorReal = "132 mensagens",
                 ValorPorcentagem = 43,
-                BarColor = "#FF0040"
+                BarColor = "#FF0040",
+                Controller = "Home",
+                Action = "AtualizarFill",
+                IntervaloAtualizacao = 6500
             });
 
             lstBar.Add(new FillBar
@@ -64,7 +70,10 @@ namespace GrupoSelect.Web.Controllers
                 Descricao = "Seu limite é de R$ 5.000,00",
                 ValorReal = "R$ 4.450,00",
                 ValorPorcentagem = 89,
-                BarColor = "#74DF00"
+                BarColor = "#74DF00",
+                Controller = "Home",
+                Action = "AtualizarFill",
+                IntervaloAtualizacao = 7500
             });
 
             lstBar.Add(new FillBar
@@ -76,7 +85,10 @@ namespace GrupoSelect.Web.Controllers
                 ValorPorcentagem = 65,
                 BarColor = "#74DF00",
                 BadgeText = "R$ 9,99",
-                BadgeColor = "#000099"
+                BadgeColor = "#000099",
+                Controller = "Home",
+                Action = "AtualizarFill",
+                IntervaloAtualizacao = 8500
             });
 
             index.LstFill = lstBar;
@@ -118,6 +130,23 @@ namespace GrupoSelect.Web.Controllers
             };
 
             index.LstChart.Add(chart2);
+
+            Chart chart3 = new Chart
+            {
+                Id = 3,
+                Titulo = "Usuários Ativos",
+                Cores = new string[3] { "rgba(255, 99, 132, 1)", "rgba(255, 206, 86, 1)", "rgba(54, 162, 235, 1)" },
+                Textos = new string[3] { "Red", "Yellow", "Blue" },
+                Valores = new int[3] { 15, 20, 30 },
+                PermiteMinimizar = true,
+                TipoChart = UtilWeb.GetEnumDescription(UtilWebEnums.TipoChart.Torta),
+                Controller = "Home",
+                Action = "AtualizarChart3",
+                BackgroundColor = "#FFF",
+                IntervaloAtualizacao = 8500
+            };
+
+            index.LstChart.Add(chart3);
 
             #endregion
 
@@ -304,6 +333,39 @@ namespace GrupoSelect.Web.Controllers
                 Valores = new int[3] { a, b, c },
                 PermiteMinimizar = true,
                 TipoChart = UtilWeb.GetEnumDescription(UtilWebEnums.TipoChart.BarraVertical),
+            };
+
+            return Json(chart);
+        }
+
+        [HttpPost]
+        public JsonResult AtualizarChart3()
+        {
+            var a = new Random().Next(1, 10);
+            var b = new Random().Next(11, 20);
+            var c = new Random().Next(21, 30);
+
+            Chart chart = new Chart
+            {
+                Titulo = "Propostas Preenchidas",
+                Cores = new string[3] { "rgba(255, 99, 132, 1)", "rgba(255, 206, 86, 1)", "rgba(54, 162, 235, 1)" },
+                Textos = new string[3] { "Red", "Yellow", "Blue" },
+                Valores = new int[3] { a, b, c },
+                PermiteMinimizar = true,
+                TipoChart = UtilWeb.GetEnumDescription(UtilWebEnums.TipoChart.Torta),
+            };
+
+            return Json(chart);
+        }
+
+        [HttpPost]
+        public JsonResult AtualizarFill()
+        {
+            var a = new Random().Next(1, 100);
+
+            FillBar chart = new FillBar
+            {
+                ValorPorcentagem = a,
             };
 
             return Json(chart);

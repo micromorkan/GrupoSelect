@@ -11,10 +11,14 @@
     @Html.Partial("Components/_Tile", item)
 }
 
+<script src="~/js/fillbar/jquery.easypiechart.min.js"></script>
+
 @foreach (var item in Model.LstFill)
 {
     @Html.Partial("Components/_FillBar", item)
 }
+
+<script src="~/js/chart/chart.min.js"></script>
 
 @foreach (var item in Model.LstChart)
 {
