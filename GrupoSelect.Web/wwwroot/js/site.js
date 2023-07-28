@@ -332,15 +332,29 @@ function Search(editar, urlEditar, excluir, urlExlcuir, pagina) {
                         dom: "Blfrtip",
                         buttons: [{
                             extend: "excel",
-                            className: "btn btn-primary btn-sm"
+                            className: "btn btn-primary btn-sm",
+                            exportOptions: {
+                                columns: 'th:not(:last-child)'
+                            }
                         }, {
                             extend: "pdfHtml5",
                             orientation: 'landscape',
                             pageSize: 'A4',
-                            className: "btn btn-primary btn-sm"
+                            className: "btn btn-primary btn-sm",
+                            exportOptions: {
+                                columns: 'th:not(:last-child)'
+                            },
+                            customize: function (doc) {
+                                doc.content[1].margin = [100, 0, 100, 0];
+                                //doc.styles.tableBodyOdd.alignment = 'center';
+                                //doc.styles.tableBodyEven.alignment = 'center'; 
+                            }
                         }, {
                             extend: "print",
-                            className: "btn btn-primary btn-sm"
+                            className: "btn btn-primary btn-sm",
+                            exportOptions: {
+                                columns: 'th:not(:last-child)'
+                            }
                         }],
                         "responsive": true,
                         "bAutoWidth": false,
@@ -441,15 +455,29 @@ function AplicarDTT() {
             dom: "Blfrtip",
             buttons: [{
                 extend: "excel",
-                className: "btn btn-primary btn-sm"
+                className: "btn btn-primary btn-sm",
+                exportOptions: {
+                    columns: 'th:not(:last-child)'
+                }
             }, {
                 extend: "pdfHtml5",
                 orientation: 'landscape',
                 pageSize: 'A4',
-                className: "btn btn-primary btn-sm"
+                className: "btn btn-primary btn-sm",
+                exportOptions: {
+                    columns: 'th:not(:last-child)'
+                },
+                customize: function (doc) {
+                    doc.content[1].margin = [100, 0, 100, 0];
+                    //doc.styles.tableBodyOdd.alignment = 'center';
+                    //doc.styles.tableBodyEven.alignment = 'center'; 
+                }
             }, {
                 extend: "print",
-                className: "btn btn-primary btn-sm"
+                className: "btn btn-primary btn-sm",
+                exportOptions: {
+                    columns: 'th:not(:last-child)'
+                }
             }],
             "responsive": true,
             "bAutoWidth": false,
