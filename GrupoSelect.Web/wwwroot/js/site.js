@@ -372,6 +372,8 @@ function Search(editar, urlEditar, excluir, urlExlcuir, pagina) {
 
                     $('.column').each(function () {
                         var coluna = $(this).data('column');
+                        var prefix = $(this).data('prefix');
+                        var sufix = $(this).data('sufix');
 
                         if (coluna) {
 
@@ -383,7 +385,7 @@ function Search(editar, urlEditar, excluir, urlExlcuir, pagina) {
                                 } else if (item[coluna] !== null && item[coluna] !== undefined && item[coluna].toString().indexOf("/Date(") !== -1) {
                                     row.push(moment(item[coluna]).format("DD/MM/YYYY HH:mm:ss"));
                                 } else {
-                                    row.push(item[coluna]);
+                                    row.push(prefix + item[coluna] + sufix);
                                 }
                             } else if (cols.length > 1) {
                                 var value = item[cols[0]];
@@ -397,7 +399,7 @@ function Search(editar, urlEditar, excluir, urlExlcuir, pagina) {
                                 } else if (item[coluna] !== null && item[coluna] !== undefined && item[coluna].toString().indexOf("/Date(") !== -1) {
                                     row.push(moment(item[coluna]).format("DD/MM/YYYY HH:mm:ss"));
                                 } else {
-                                    row.push(value);
+                                    row.push(prefix + value + sufix);
                                 }
                             }
                         }
