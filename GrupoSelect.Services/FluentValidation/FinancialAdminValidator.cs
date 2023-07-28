@@ -32,6 +32,7 @@ namespace GrupoSelect.Services.FluentValidation
             RuleSet(Constants.FLUENT_DELETE, () =>
             {
                 RuleFor(x => x.Id).GreaterThan(0).WithMessage("O id da administradora é inválido.");
+                RuleFor(x => x).Custom(DeleteBlock);
             });
         }
 
@@ -52,6 +53,15 @@ namespace GrupoSelect.Services.FluentValidation
             if (result.Any())
             {
                 context.AddFailure("Já existe uma administradora com mesmo nome cadastrada.");
+            }
+        }
+        private void DeleteBlock(Domain.Entity.FinancialAdmin model, ValidationContext<Domain.Entity.FinancialAdmin> context)
+        {
+            var result = _unitOfWork.Credits.GetAll(filter => filter.FinancialAdminId == model.Id);
+
+            if (result.Any())
+            {
+                context.AddFailure("Não é possível deletar este registro que está em uso na tabela de Crédito.");
             }
         }
     }

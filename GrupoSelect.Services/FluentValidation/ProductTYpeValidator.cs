@@ -30,7 +30,7 @@ namespace GrupoSelect.Services.FluentValidation
             RuleSet(Constants.FLUENT_DELETE, () =>
             {
                 RuleFor(x => x.Id).GreaterThan(0).WithMessage("O id do produto é inválido.");
-                //todo-lucas validacao de exclusao se o registro estiver sendo usado na tabela de credito
+                RuleFor(x => x).Custom(DeleteBlock);
             });
         }
 
@@ -51,6 +51,15 @@ namespace GrupoSelect.Services.FluentValidation
             if (result.Any())
             {
                 context.AddFailure("Já existe um produto com mesmo nome cadastrado.");
+            }
+        }
+        private void DeleteBlock(Domain.Entity.ProductType model, ValidationContext<Domain.Entity.ProductType> context)
+        {
+            var result = _unitOfWork.Credits.GetAll(filter => filter.ProductTypeId == model.Id);
+
+            if (result.Any())
+            {
+                context.AddFailure("Não é possível deletar este registro que está em uso na tabela de Crédito.");
             }
         }
     }

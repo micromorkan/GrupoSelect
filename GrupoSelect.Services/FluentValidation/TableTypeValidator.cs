@@ -38,6 +38,7 @@ namespace GrupoSelect.Services.FluentValidation
             RuleSet(Constants.FLUENT_DELETE, () =>
             {
                 RuleFor(x => x.Id).GreaterThan(0).WithMessage("O id Tipo Tabela é inválido.");
+                RuleFor(x => x).Custom(DeleteBlock);
             });
         }
 
@@ -82,6 +83,15 @@ namespace GrupoSelect.Services.FluentValidation
             else if (result2 < 0)
             {
                 context.AddFailure("Taxa Restante inválida.");
+            }
+        }
+        private void DeleteBlock(Domain.Entity.TableType model, ValidationContext<Domain.Entity.TableType> context)
+        {
+            var result = _unitOfWork.Credits.GetAll(filter => filter.TableTypeId == model.Id);
+
+            if (result.Any())
+            {
+                context.AddFailure("Não é possível deletar este registro que está em uso na tabela de Crédito.");
             }
         }
     }
