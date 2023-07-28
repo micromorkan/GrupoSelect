@@ -121,7 +121,7 @@
         $(document).ready(function () {
             FillSelect("@Url.Action("GetProductTypeList", "Credit")", null, "#ddlProductType", "@Model.ProductTypeId", true);
             FillSelect("@Url.Action("GetTableTypeList", "Credit")", null, "#ddlTableType", "@Model.TableTypeId", true);
-            FillSelect("@Url.Action("GetFinancialAdminList", "Credit")", null, "#ddlFinancialAdmin", "@Model.FinancialAdminId", true);
+            FillSelect("@Url.Action("GetFinancialAdminList", "Credit")", { Active: true }, "#ddlFinancialAdmin", "@Model.FinancialAdminId", true);
             $('select').select2();
             InputMaskNumber("#Months", "2");
             MaskMoney();

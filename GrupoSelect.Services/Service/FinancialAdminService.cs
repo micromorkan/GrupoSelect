@@ -23,7 +23,7 @@ namespace GrupoSelect.Services.Service
             return new Result<IEnumerable<FinancialAdmin>>
             {
                 Success = true,
-                Object = _unitOfWork.FinancialAdmins.GetAll(f => (string.IsNullOrEmpty(filter.Name) || f.Name.Contains(filter.Name))),
+                Object = _unitOfWork.FinancialAdmins.GetAll(f => (string.IsNullOrEmpty(filter.Name) || f.Name.Contains(filter.Name)) && (filter.Active == null || f.Active == filter.Active)),
             };
         }
 
