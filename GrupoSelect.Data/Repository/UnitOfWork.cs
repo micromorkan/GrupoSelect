@@ -15,6 +15,7 @@ namespace GrupoSelect.Data.Repository
         private IBaseRepository<ProductType> _productTypes;
         private IBaseRepository<TableType> _tableTypes;
         private IBaseRepository<Credit> _credits;
+        private IBaseRepository<Client> _clients;
 
         public UnitOfWork(GSDbContext context)
         {
@@ -29,6 +30,8 @@ namespace GrupoSelect.Data.Repository
         public IBaseRepository<ProductType> ProductTypes => _productTypes ??= new BaseRepository<ProductType>(_context);
         public IBaseRepository<TableType> TableTypes => _tableTypes ??= new BaseRepository<TableType>(_context);
         public IBaseRepository<Credit> Credits => _credits ??= new BaseRepository<Credit>(_context);
+        public IBaseRepository<Client> Clients => _clients ??= new BaseRepository<Client>(_context);
+
 
         public void SaveAllChanges()
         {

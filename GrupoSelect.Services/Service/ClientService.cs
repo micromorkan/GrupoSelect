@@ -1,0 +1,141 @@
+﻿using FluentValidation;
+using GrupoSelect.Domain.Entity;
+using GrupoSelect.Domain.Interface;
+using GrupoSelect.Domain.Models;
+using GrupoSelect.Domain.Util;
+using GrupoSelect.Services.Interface;
+
+namespace GrupoSelect.Services.Service
+{
+    public class ClientService : IClientService
+    {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IValidator<Client> _validator;
+
+        public ClientService(IUnitOfWork unitOfWork, IValidator<Client> validator)
+        {
+            _unitOfWork = unitOfWork;
+            _validator = validator;
+        }
+
+        public async Task<Result<IEnumerable<Client>>> GetAll(Client filter)
+        {
+            return new Result<IEnumerable<Client>>
+            {
+                Success = true,
+                Object = _unitOfWork.Clients.GetAll(f => (string.IsNullOrEmpty(filter.Name) || f.Name == filter.Name) &&
+                                                         (string.IsNullOrEmpty(filter.CPF) || f.CPF == filter.CPF) &&
+                                                         (filter.UserId == 0 || f.UserId == filter.UserId)),
+            };
+        }
+
+        public async Task<PaginateResult<IEnumerable<Client>>> GetAllPaginate(Client filter, int page, int qtPage)
+        {
+            return _unitOfWork.Clients.GetAllPaginate(f => (string.IsNullOrEmpty(filter.Name) || f.Name == filter.Name) &&
+                                                         (string.IsNullOrEmpty(filter.CPF) || f.CPF == filter.CPF) &&
+                                                         (filter.UserId == 0 || f.UserId == filter.UserId), null, page, qtPage);
+        }
+
+        public async Task<Result<Client>> GetById(int id)
+        {
+            Client model = _unitOfWork.Clients.GetAll(f => f.Id == id).FirstOrDefault();
+
+            if (model != null)
+            {
+                return new Result<Client>
+                {
+                    Success = true,
+                    Object = model
+                };
+            }
+            else
+            {
+                return new Result<Client>
+                {
+                    Success = false,
+                    Message = Constants.SYSTEM_ERROR_ID
+                };
+            }
+        }
+
+        public Result<Client> Insert(Client model)
+        {
+            var resultValidation = _validator.Validate(model, options => options.IncludeRuleSets(Constants.FLUENT_INSERT));
+
+            if (!resultValidation.IsValid)
+            {
+                return new Result<Client>
+                {
+                    Success = false,
+                    Object = model,
+                    Errors = resultValidation.Errors
+                };
+            }
+
+            model.DateCreate = DateTime.Now;
+
+            _unitOfWork.Clients.Insert(model);
+            _unitOfWork.Clients.Save();
+
+            return new Result<Client>
+            {
+                Success = true,
+                Object = model,
+                Message = Constants.SYSTEM_SUCCESS_MSG
+            };
+        }
+
+        public Result<Client> Update(Client model)
+        {
+            var resultValidation = _validator.Validate(model, options => options.IncludeRuleSets(Constants.FLUENT_UPDATE));
+
+            if (!resultValidation.IsValid)
+            {
+                return new Result<Client>
+                {
+                    Success = false,
+                    Object = model,
+                    Errors = resultValidation.Errors
+                };
+            }
+
+            model.DateUpdate = DateTime.Now;
+
+            _unitOfWork.Clients.Update(model);
+            _unitOfWork.Clients.Save();
+
+            return new Result<Client>
+            {
+                Success = true,
+                Object = model,
+                Message = Constants.SYSTEM_SUCCESS_MSG
+            };
+        }
+
+        public Result<Client> Delete(int id)
+        {
+            Client model = new Client { Id = id };
+            var resultValidation = _validator.Validate(model, options => options.IncludeRuleSets(Constants.FLUENT_DELETE));
+
+            if (!resultValidation.IsValid)
+            {
+                return new Result<Client>
+                {
+                    Success = false,
+                    Object = model,
+                    Errors = resultValidation.Errors
+                };
+            }
+
+            _unitOfWork.Clients.Delete(model);
+            _unitOfWork.Clients.Save();
+
+            return new Result<Client>
+            {
+                Success = true,
+                Object = model,
+                Message = Constants.SYSTEM_SUCCESS_MSG
+            };
+        }
+    }
+}

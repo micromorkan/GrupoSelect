@@ -23,6 +23,7 @@ namespace GrupoSelect.Data.Context
         public DbSet<ProductType> ProductType { get; set; }
         public DbSet<TableType> TableType { get; set; }
         public DbSet<Credit> Credit { get; set; }
+        public DbSet<Client> Client { get; set; }
 
         public GSDbContext(IConfiguration configuration)
         {
@@ -47,7 +48,7 @@ namespace GrupoSelect.Data.Context
             modelBuilder.ApplyConfiguration(new ProductTypeMap());
             modelBuilder.ApplyConfiguration(new TableTypeMap());
             modelBuilder.ApplyConfiguration(new CreditMap());
-
+            modelBuilder.ApplyConfiguration(new ClientMap());
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
