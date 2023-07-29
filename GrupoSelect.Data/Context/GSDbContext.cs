@@ -20,9 +20,9 @@ namespace GrupoSelect.Data.Context
         public DbSet<SystemLog> SystemLogs { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<FinancialAdmin> FinancialAdmins { get; set; }
-        public DbSet<ProductType> ProductTypeAdmins { get; set; }
-        public DbSet<TableType> TableTypeAdmins { get; set; }
-        public DbSet<Credit> CreditAdmins { get; set; }
+        public DbSet<ProductType> ProductType { get; set; }
+        public DbSet<TableType> TableType { get; set; }
+        public DbSet<Credit> Credit { get; set; }
 
         public GSDbContext(IConfiguration configuration)
         {
