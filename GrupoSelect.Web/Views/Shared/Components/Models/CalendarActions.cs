@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Web.Views.Shared.Componentes.ComponentModels
+namespace GrupoSelect.Web.Views.Shared.Components.Models
 {
     public class CalendarActions
     {

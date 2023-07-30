@@ -1,4 +1,4 @@
-﻿namespace Web.Views.Shared.Componentes.ComponentModels
+﻿namespace GrupoSelect.Web.Views.Shared.Components.Models
 {
     public class Chart
     {

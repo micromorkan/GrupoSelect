@@ -58,7 +58,7 @@ namespace GrupoSelect.Web.Helpers
                 //log.Object = JsonSerializer.Serialize(ex.Data[Constants.SYSTEM_EXCEPTION_OBJ]);
                 log.Object = stringBuilder.ToString();
                 log.Method = ex.TargetSite.DeclaringType?.FullName;
-                log.Message = ex.Message;
+                log.Message = ex.Message.Length > 2000 ? ex.Message.Substring(0, 2000) : ex.Message;
 
                 if (_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
                 {
