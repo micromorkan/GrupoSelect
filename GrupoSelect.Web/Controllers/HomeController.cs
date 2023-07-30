@@ -28,7 +28,7 @@ namespace GrupoSelect.Web.Controllers
 
         public IActionResult FichaCadastral()
         {
-            RegistrationForm registrationForm = new RegistrationForm(new Client(), new Proposal(), new Domain.Entity.User());
+            RegistrationForm registrationForm = new RegistrationForm(new Client { Nome = "DIEGO ANDRADE SAMPAIO" }, new Proposal { TipoProduto = "CARRO" }, new Domain.Entity.User { Cnpj = "99.999.999/0001-99" });
             // Carregue o conteúdo do arquivo CSHTML
             string cshtmlContent = System.IO.File.ReadAllText("Views\\Shared\\Components\\_RegistrationForm.cshtml");
 
