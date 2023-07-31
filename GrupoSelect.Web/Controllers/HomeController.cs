@@ -39,6 +39,18 @@ namespace GrupoSelect.Web.Controllers
             return Content(renderedContent, "text/html");
         }
 
+        public IActionResult Contrato()
+        {
+            ContractForm registrationForm = new ContractForm(new Client { Nome = "DIEGO ANDRADE SAMPAIO" }, new Proposal { TipoProduto = "CARRO" }, new Domain.Entity.User { Cnpj = "99.999.999/0001-99" });
+            // Carregue o conteúdo do arquivo CSHTML
+            string cshtmlContent = System.IO.File.ReadAllText("Views\\Shared\\Reports\\ContractForm.cshtml");
+
+            // Renderize o CSHTML com os dados fornecidos
+            string renderedContent = Engine.Razor.RunCompile(cshtmlContent, "templateKey", typeof(ContractForm), registrationForm);
+
+            return Content(renderedContent, "text/html");
+        }
+
         public async Task<IActionResult> Components()
         {
             ComponentsVM index = new ComponentsVM();
