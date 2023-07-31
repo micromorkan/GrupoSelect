@@ -49,7 +49,7 @@ namespace GrupoSelect.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE)]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_ADMINISTRATIVO)]
         [TypeFilter(typeof(ExceptionLog))]
         public async Task<IActionResult> Index(ProposalVM proposalVM, int page, int qtPage)
         {
@@ -58,6 +58,11 @@ namespace GrupoSelect.Web.Controllers
             try
             {
                 var filter = _mapper.Map<Proposal>(proposalVM);
+
+                if (HttpContext.User.IsInRole(Constants.PROFILE_REPRESENTANTE))
+                {
+                    filter.UserId = Convert.ToInt32(HttpContext.User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value);
+                }
 
                 result = await _proposalService.GetAllPaginate(filter, page, qtPage);
 
@@ -69,12 +74,14 @@ namespace GrupoSelect.Web.Controllers
             }
         }
 
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE)]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE)]
         [TypeFilter(typeof(ExceptionLog))]
         public async Task<IActionResult> Create(ProposalVM proposalVM)
         {
