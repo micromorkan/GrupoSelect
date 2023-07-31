@@ -103,6 +103,9 @@ namespace GrupoSelect.Web.Controllers
                     proposalVM.ProductTypeName = credit.ProductType.ProductName;
                 }
 
+                //TODO - PARA FINS DE TESTES
+                proposalVM.ClientId = 1;
+
                 var proposal = _mapper.Map<Proposal>(proposalVM);
 
                 proposal.UserId = Convert.ToInt32(HttpContext.User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value);
