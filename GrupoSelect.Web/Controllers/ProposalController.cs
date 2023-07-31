@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Globalization;
+using System.Security.Claims;
 
 namespace GrupoSelect.Web.Controllers
 {
@@ -79,7 +80,25 @@ namespace GrupoSelect.Web.Controllers
         {
             try
             {
+                var resultCredit = await _creditService.GetById(proposalVM.CreditId);
+
+                if (resultCredit.Success)
+                {
+                    Credit credit = resultCredit.Object;
+
+                    proposalVM.CreditMembershipValue = credit.MembershipValue;
+                    proposalVM.CreditValue = credit.CreditValue;
+                    proposalVM.CreditPortionValue = credit.PortionValue;
+                    proposalVM.FinancialAdminName = credit.FinancialAdmin.Name;
+                    proposalVM.TableTypeFee = credit.TableType.MembershipFee;
+                    proposalVM.TableTypeRate = credit.TableType.RemainingRate;
+                    proposalVM.TableTypeTax = credit.TableType.TableTax;
+                    proposalVM.ProductTypeName = credit.ProductType.ProductName;
+                }
+
                 var proposal = _mapper.Map<Proposal>(proposalVM);
+
+                proposal.UserId = Convert.ToInt32(HttpContext.User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value);
 
                 var result = _proposalService.Insert(proposal);
 

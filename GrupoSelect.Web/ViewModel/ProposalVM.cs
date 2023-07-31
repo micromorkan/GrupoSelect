@@ -10,35 +10,41 @@ namespace GrupoSelect.Web.ViewModel
         [Required(ErrorMessage = "O campo {0} é obrigatório!")]
         public int ClientId { get; set; }
 
+        [Display(Name = "Crédito")]
+        [Required(ErrorMessage = "O campo {0} é obrigatório!")]
+        public int CreditId { get; set; }
+
         [Display(Name = "Tipo Produto")]
         [Required(ErrorMessage = "O campo {0} é obrigatório!")]
-        public string ProductTypeName { get; set; }
+        public int ProductTypeId { get; set; }
 
         [Display(Name = "Tipo Tabela")]
         [Required(ErrorMessage = "O campo {0} é obrigatório!")]
-        public string TableTypeTax { get; set; }
-
-        [Display(Name = "Taxa Adesão")]
-        [Required(ErrorMessage = "O campo {0} é obrigatório!")]
-        public string TableTypeFee { get; set; }
-
-        [Display(Name = "Taxa Restante")]
-        [Required(ErrorMessage = "O campo {0} é obrigatório!")]
-        public string TableTypeRate { get; set; }
+        public int TableTypeId { get; set; }
 
         [Display(Name = "Administradora")]
         [Required(ErrorMessage = "O campo {0} é obrigatório!")]
+        public int FinancialAdminId { get; set; }
+
+        public string ProductTypeName { get; set; }
+
+        public string TableTypeTax { get; set; }
+
+        public string TableTypeFee { get; set; }
+
+        public string TableTypeRate { get; set; }
+
         public string FinancialAdminName { get; set; }
 
-        [Display(Name = "Crédito")]
+        [Display(Name = "Valor do Crédito")]
         [Required(ErrorMessage = "O campo {0} é obrigatório!")]
         public string CreditValue { get; set; }
 
-        [Display(Name = "Valor Parcela")]
+        [Display(Name = "Valor da Parcela")]
         [Required(ErrorMessage = "O campo {0} é obrigatório!")]
         public string CreditPortionValue { get; set; }
 
-        [Display(Name = "Valor Adesão")]
+        [Display(Name = "Valor da Adesão")]
         [Required(ErrorMessage = "O campo {0} é obrigatório!")]
         public string CreditMembershipValue { get; set; }
 

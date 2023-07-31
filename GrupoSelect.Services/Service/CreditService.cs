@@ -38,7 +38,7 @@ namespace GrupoSelect.Services.Service
 
         public async Task<Result<Credit>> GetById(int id)
         {
-            Credit model = _unitOfWork.Credits.GetAll(f => f.Id == id).FirstOrDefault();
+            Credit model = _unitOfWork.Credits.GetAll(f => f.Id == id, null, i => i.TableType, i => i.FinancialAdmin, i => i.ProductType).FirstOrDefault();
 
             if (model != null)
             {
