@@ -20,9 +20,10 @@ namespace GrupoSelect.Data.Context
         public DbSet<SystemLog> SystemLogs { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<FinancialAdmin> FinancialAdmins { get; set; }
-        public DbSet<ProductType> ProductTypeAdmins { get; set; }
-        public DbSet<TableType> TableTypeAdmins { get; set; }
-        public DbSet<Credit> CreditAdmins { get; set; }
+        public DbSet<ProductType> ProductTypes { get; set; }
+        public DbSet<TableType> TableTypes { get; set; }
+        public DbSet<Credit> Credits { get; set; }
+        public DbSet<Proposal> Proposals { get; set; }
 
         public GSDbContext(IConfiguration configuration)
         {
@@ -47,6 +48,7 @@ namespace GrupoSelect.Data.Context
             modelBuilder.ApplyConfiguration(new ProductTypeMap());
             modelBuilder.ApplyConfiguration(new TableTypeMap());
             modelBuilder.ApplyConfiguration(new CreditMap());
+            modelBuilder.ApplyConfiguration(new ProposalMap());
 
         }
 

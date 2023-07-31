@@ -17,6 +17,7 @@ namespace GrupoSelect.Domain.Interface
         IBaseRepository<ProductType> ProductTypes { get; }
         IBaseRepository<TableType> TableTypes { get; }
         IBaseRepository<Credit> Credits { get; }
+        IBaseRepository<Proposal> Proposals { get; }
         void SaveAllChanges();
     }
 }

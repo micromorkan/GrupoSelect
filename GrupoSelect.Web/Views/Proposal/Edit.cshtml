@@ -1,0 +1,134 @@
+﻿@model GrupoSelect.Web.ViewModel.CreditVM
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="clearfix"></div>
+<div class="row">
+    <div class="col-md-12 col-sm-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>
+                    Crédito <i class="fa fa-chevron-right"></i> Editar
+                </h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <br>
+                @using (Html.BeginForm("Edit", "Credit", FormMethod.Post, new { @id = "edit", @class = "form-horizontal form-label-left" }))
+                {
+                    @Html.HiddenFor(model => model.DateCreate)
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.ProductTypeId) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            <select asp-for="ProductTypeId" id="ddlProductType" class="form-control js-example-responsive" style="width: 100%">
+                                <option value="">-- Selecione --</option>
+                            </select>
+                            @Html.ValidationMessageFor(model => model.ProductTypeId, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.TableTypeId) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            <select asp-for="TableTypeId" id="ddlTableType" class="form-control js-example-responsive" style="width: 100%">
+                                <option value="">-- Selecione --</option>
+                            </select>
+                            @Html.ValidationMessageFor(model => model.TableTypeId, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.FinancialAdminId) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            <select asp-for="FinancialAdminId" id="ddlFinancialAdmin" class="form-control js-example-responsive" style="width: 100%">
+                                <option value="">-- Selecione --</option>
+                            </select>
+                            @Html.ValidationMessageFor(model => model.FinancialAdminId, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.Months) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.Months, new {@class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Months, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.CreditValue) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.CreditValue, new {@class = "form-control money" })
+                            @Html.ValidationMessageFor(model => model.CreditValue, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.PortionValue) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.PortionValue, new {@class = "form-control money" })
+                            @Html.ValidationMessageFor(model => model.PortionValue, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.MembershipValue) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.MembershipValue, new {@class = "form-control money" })
+                            @Html.ValidationMessageFor(model => model.MembershipValue, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.TotalValue) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.TotalValue, new {@class = "form-control money" })
+                            @Html.ValidationMessageFor(model => model.TotalValue, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="item form-group">
+                        <div class="col-md-6 col-sm-6 offset-md-3">
+                            <button type="button" class="btn btn-success submit">Salvar</button>
+                            <a asp-action="Index" class="btn btn-danger">Cancelar</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="~/js/jquery.mask.min.js"></script>
+    <script src="~/js/jquery.inputmask.bundle.min.js"></script>
+    <script src="~/js/jquery.maskmoney.min.js"></script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+            FillSelect("@Url.Action("GetProductTypeList", "Credit")", null, "#ddlProductType", "@Model.ProductTypeId", true);
+            FillSelect("@Url.Action("GetTableTypeList", "Credit")", null, "#ddlTableType", "@Model.TableTypeId", true);
+            FillSelect("@Url.Action("GetFinancialAdminList", "Credit")", null, "#ddlFinancialAdmin", "@Model.FinancialAdminId", true);
+            $('select').select2();
+            InputMaskNumber("#Months", "2");
+            MaskMoney();
+        });
+        $(".submit").click(function (event) {
+            Edit("@Url.Action("Index", "Credit")", false, false);
+        });
+    </script>
+}
+
