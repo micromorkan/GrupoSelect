@@ -19,7 +19,7 @@
                 <br>
                 @using (Html.BeginForm("Create", "Proposal", FormMethod.Post, new { @id = "create", @class = "form-horizontal form-label-left" }))
                 {
-                    <div class="item form-group">
+                   @* <div class="item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align">
                             @Html.LabelFor(model => model.ClientId) <span class="required">*</span>
                         </label>
@@ -29,13 +29,13 @@
                             </select>
                             @Html.ValidationMessageFor(model => model.ClientId, null, new { @class = "text-danger" })
                         </div>
-                    </div>
+                    </div>*@
                     <div class="item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align">
                             @Html.LabelFor(model => model.ProductTypeName) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            <select asp-for="ProductTypeName" id="ddlProductType" class="form-control js-example-responsive" style="width: 100%">
+                            <select asp-for="ProductTypeName" id="ddlProductType" class="form-control js-example-responsive filterCredit" style="width: 100%">
                                 <option value="">-- Selecione --</option>
                             </select>
                             @Html.ValidationMessageFor(model => model.ProductTypeName, null, new { @class = "text-danger" })
@@ -46,7 +46,7 @@
                             @Html.LabelFor(model => model.FinancialAdminName) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            <select asp-for="FinancialAdminName" id="ddlFinancialAdmin" class="form-control js-example-responsive" style="width: 100%">
+                            <select asp-for="FinancialAdminName" id="ddlFinancialAdmin" class="form-control js-example-responsive filterCredit" style="width: 100%">
                                 <option value="">-- Selecione --</option>
                             </select>
                             @Html.ValidationMessageFor(model => model.FinancialAdminName, null, new { @class = "text-danger" })
@@ -57,7 +57,7 @@
                             @Html.LabelFor(model => model.TableTypeTax) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            <select asp-for="TableTypeTax" id="ddlTableType" class="form-control js-example-responsive" style="width: 100%">
+                            <select asp-for="TableTypeTax" id="ddlTableType" class="form-control js-example-responsive filterCredit" style="width: 100%">
                                 <option value="">-- Selecione --</option>
                             </select>
                             @Html.ValidationMessageFor(model => model.TableTypeTax, null, new { @class = "text-danger" })
@@ -68,8 +68,7 @@
                             @Html.LabelFor(model => model.CreditValue) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            <select asp-for="CreditValue" id="ddlCredit" class="form-control js-example-responsive" style="width: 100%">
-                                <option value="">-- Selecione --</option>
+                            <select asp-for="CreditValue" id="ddlCredit" class="form-control js-example-responsive" disabled="disabled" style="width: 100%">
                             </select>
                             @Html.ValidationMessageFor(model => model.CreditValue, null, new { @class = "text-danger" })
                         </div>
@@ -94,20 +93,20 @@
                     </div>
                     <div class="item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align">
-                            @Html.LabelFor(model => model.CreditPortionValue) <span class="required">*</span>
-                        </label>
-                        <div class="col-md-6 col-sm-6 ">
-                            @Html.TextBoxFor(model => model.CreditPortionValue, new {@class = "form-control money", @disabled="disabled" })
-                            @Html.ValidationMessageFor(model => model.CreditPortionValue, null, new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <div class="item form-group">
-                        <label class="col-form-label col-md-3 col-sm-3 label-align">
                             @Html.LabelFor(model => model.CreditMembershipValue) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
                             @Html.TextBoxFor(model => model.CreditMembershipValue, new {@class = "form-control money", @disabled="disabled" })
                             @Html.ValidationMessageFor(model => model.CreditMembershipValue, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.CreditPortionValue) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.CreditPortionValue, new {@class = "form-control money", @disabled="disabled" })
+                            @Html.ValidationMessageFor(model => model.CreditPortionValue, null, new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="item form-group">
@@ -145,12 +144,80 @@
             FillSelect("@Url.Action("GetProductTypeList", "Proposal")", null, "#ddlProductType");
             FillSelect("@Url.Action("GetTableTypeList", "Proposal")", null, "#ddlTableType");
             FillSelect("@Url.Action("GetFinancialAdminList", "Proposal")", null, "#ddlFinancialAdmin");
+
             $('select').select2();
             MaskMoney();
+
+            $('.filterCredit').on('select2:select', function (e) {
+                LoadCredit();
+            });
+
+            $('#ddlCredit').on('select2:select', function (e) {
+                SetValuesCredit();
+            });
         });
+
         $(".submit").click(function (event) {
             Create(false, false);
         });
+
+        function LoadCredit() {
+            var productTypeId = $('#ddlProductType').val();
+            var tableTypeId = $('#ddlTableType').val();
+            var financialAdminId = $('#ddlFinancialAdmin').val();
+
+            if (productTypeId !== "" && tableTypeId !== "" && financialAdminId !== "") {
+                $('#ddlCredit').removeAttr('disabled');
+                $('#ddlCredit').empty().trigger("change");
+                FillSelect("@Url.Action("GetCreditList", "Proposal")", { ProductTypeId: productTypeId, TableTypeId: tableTypeId, FinancialAdminId: financialAdminId }, "#ddlCredit");
+            } else {
+                $('#ddlCredit').empty().trigger("change");
+                $('#ddlCredit').attr('disabled', 'disabled');
+            }
+            
+            emptyCreditFields();
+        }
+
+        function SetValuesCredit() {
+            var productCreditId = $('#ddlCredit').val();
+
+            if (productCreditId !== "") {
+                var productCreditText = $('#ddlCredit option:selected').text();
+                var arrayValues = productCreditText.split("/");
+
+                $('#CreditValue').val(arrayValues[0].replace("R$", "").trim());
+                $('#CreditMembershipValue').val(arrayValues[1].replace("R$", "").trim());
+                $('#CreditPortionValue').val(arrayValues[2].replace("R$", "").trim());
+
+                var valorTotal = converteMoedaFloat(arrayValues[1]) + converteMoedaFloat(arrayValues[2]);
+                //$('#CreditTotalValue').val(valorTotal.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }));
+                $('#CreditTotalValue').val(valorTotal.toLocaleString('pt-br', { minimumFractionDigits: 2 }));
+            } else {
+                emptyCreditFields();
+            }
+        }
+
+        function emptyCreditFields() {
+            $('#CreditValue').val("0,00");
+            $('#CreditMembershipValue').val("0,00");
+            $('#CreditPortionValue').val("0,00");
+            $('#CreditTotalValue').val("0,00");
+        }
+
+        function converteMoedaFloat(valor) {
+            
+            if (valor === "") {
+                valor = 0;
+            } else {
+                valor = valor.replace("R$", "");
+                valor = valor.replace(".", "");
+                valor = valor.replace(",", ".");
+                valor = valor.trim();
+                valor = parseFloat(valor);
+            }
+         
+            return valor;
+        }
 
     </script>
 }

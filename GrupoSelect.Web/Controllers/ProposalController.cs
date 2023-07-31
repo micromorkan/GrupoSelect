@@ -250,16 +250,19 @@ namespace GrupoSelect.Web.Controllers
             {
                 IList<SelectListItem> items = new List<SelectListItem>();
 
+                items.Add(new SelectListItem()
+                {
+                    Value = "",
+                    Text = "--- Selecione ---",
+                    Selected = filter.Id == 0 ? true : false
+                });
+
                 foreach (Credit item in result.Object)
                 {
-                    string formatedtotalvalue = string.Format(CultureInfo.GetCultureInfo("pt-BR"), "{0:C}", item.TotalValue);
-                    string formatedMembershipValue = string.Format(CultureInfo.GetCultureInfo("pt-BR"), "{0:C}", item.MembershipValue);
-                    string formatedPortionValue = string.Format(CultureInfo.GetCultureInfo("pt-BR"), "{0:C}", item.PortionValue);
-
                     items.Add(new SelectListItem()
                     {
                         Value = item.Id.ToString(),
-                        Text = formatedtotalvalue + " - " + formatedMembershipValue + " - " + formatedPortionValue,
+                        Text = "R$ " + item.TotalValue + " / R$ " + item.MembershipValue + " / R$ " + item.PortionValue,
                         Selected = filter.Id == item.Id ? true : false
                     });
                 }
