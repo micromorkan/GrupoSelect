@@ -34,7 +34,7 @@ namespace GrupoSelect.Web.Helpers
 
         public void OnActionExecuting(ActionExecutingContext context)
         {
-            this.ControllerName = context.Controller.ToString().Split(".").Last();
+            this.ControllerName = context.Controller?.ToString().Split(".").Last();
         }
 
         public override void OnException(ExceptionContext context)

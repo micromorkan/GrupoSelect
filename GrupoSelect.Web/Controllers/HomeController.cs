@@ -34,7 +34,7 @@ namespace GrupoSelect.Web.Controllers
             string cshtmlContent = System.IO.File.ReadAllText("Views\\Shared\\Reports\\RegistrationForm.cshtml");
 
             // Renderize o CSHTML com os dados fornecidos
-            string renderedContent = Engine.Razor.RunCompile(cshtmlContent, "templateKey", typeof(RegistrationForm), registrationForm);
+            string renderedContent = Engine.Razor.RunCompile(cshtmlContent, "FICHACADASTRAL", typeof(RegistrationForm), registrationForm);
 
             return Content(renderedContent, "text/html");
         }
@@ -46,7 +46,7 @@ namespace GrupoSelect.Web.Controllers
             string cshtmlContent = System.IO.File.ReadAllText("Views\\Shared\\Reports\\ContractForm.cshtml");
 
             // Renderize o CSHTML com os dados fornecidos
-            string renderedContent = Engine.Razor.RunCompile(cshtmlContent, "templateKey", typeof(ContractForm), registrationForm);
+            string renderedContent = Engine.Razor.RunCompile(cshtmlContent, "CONTRATO", typeof(ContractForm), registrationForm);
 
             return Content(renderedContent, "text/html");
         }
