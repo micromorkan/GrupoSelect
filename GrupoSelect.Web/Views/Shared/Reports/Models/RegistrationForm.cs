@@ -1,6 +1,6 @@
 ﻿using GrupoSelect.Domain.Entity;
 
-namespace GrupoSelect.Web.Views.Shared.Components.Models
+namespace GrupoSelect.Web.Views.Shared.Reports.Models
 {
     public class RegistrationForm
     {

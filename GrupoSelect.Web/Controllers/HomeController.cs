@@ -1,6 +1,7 @@
 ﻿using GrupoSelect.Web.Util;
 using GrupoSelect.Web.ViewModel;
 using GrupoSelect.Web.Views.Shared.Components.Models;
+using GrupoSelect.Web.Views.Shared.Reports.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -30,7 +31,7 @@ namespace GrupoSelect.Web.Controllers
         {
             RegistrationForm registrationForm = new RegistrationForm(new Client { Nome = "DIEGO ANDRADE SAMPAIO" }, new Proposal { TipoProduto = "CARRO" }, new Domain.Entity.User { Cnpj = "99.999.999/0001-99" });
             // Carregue o conteúdo do arquivo CSHTML
-            string cshtmlContent = System.IO.File.ReadAllText("Views\\Shared\\Components\\_RegistrationForm.cshtml");
+            string cshtmlContent = System.IO.File.ReadAllText("Views\\Shared\\Reports\\RegistrationForm.cshtml");
 
             // Renderize o CSHTML com os dados fornecidos
             string renderedContent = Engine.Razor.RunCompile(cshtmlContent, "templateKey", typeof(RegistrationForm), registrationForm);
