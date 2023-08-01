@@ -142,7 +142,7 @@
             //FillSelect("@Url.Action("GetClientList", "Proposal")", null, "#ddlClient");
             FillSelect("@Url.Action("GetProductTypeList", "Proposal")", null, "#ddlProductType");
             FillSelect("@Url.Action("GetTableTypeList", "Proposal")", null, "#ddlTableType");
-            FillSelect("@Url.Action("GetFinancialAdminList", "Proposal")", null, "#ddlFinancialAdmin");
+            FillSelect("@Url.Action("GetFinancialAdminList", "Proposal")", {Active: true}, "#ddlFinancialAdmin");
 
             $('select').select2();
             MaskMoney();

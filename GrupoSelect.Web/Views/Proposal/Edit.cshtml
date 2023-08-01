@@ -1,4 +1,4 @@
-﻿@model GrupoSelect.Web.ViewModel.CreditVM
+﻿@model GrupoSelect.Web.ViewModel.ProposalVM
 
 @{
     ViewData["Title"] = "Edit";
@@ -11,21 +11,32 @@
         <div class="x_panel">
             <div class="x_title">
                 <h2>
-                    Crédito <i class="fa fa-chevron-right"></i> Editar
+                    Proposta <i class="fa fa-chevron-right"></i> Editar
                 </h2>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
                 <br>
-                @using (Html.BeginForm("Edit", "Credit", FormMethod.Post, new { @id = "edit", @class = "form-horizontal form-label-left" }))
+                @using (Html.BeginForm("Edit", "Proposal", FormMethod.Post, new { @id = "edit", @class = "form-horizontal form-label-left" }))
                 {
                     @Html.HiddenFor(model => model.DateCreate)
+                    @* <div class="item form-group">
+                <label class="col-form-label col-md-3 col-sm-3 label-align">
+                @Html.LabelFor(model => model.ClientId) <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 ">
+                <select asp-for="ClientId" id="ddlClient" class="form-control js-example-responsive" style="width: 100%">
+                <option value="">-- Selecione --</option>
+                </select>
+                @Html.ValidationMessageFor(model => model.ClientId, null, new { @class = "text-danger" })
+                </div>
+                </div>*@
                     <div class="item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align">
                             @Html.LabelFor(model => model.ProductTypeId) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            <select asp-for="ProductTypeId" id="ddlProductType" class="form-control js-example-responsive" style="width: 100%">
+                            <select asp-for="ProductTypeId" id="ddlProductType" class="form-control js-example-responsive filterCredit" style="width: 100%">
                                 <option value="">-- Selecione --</option>
                             </select>
                             @Html.ValidationMessageFor(model => model.ProductTypeId, null, new { @class = "text-danger" })
@@ -33,21 +44,10 @@
                     </div>
                     <div class="item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align">
-                            @Html.LabelFor(model => model.TableTypeId) <span class="required">*</span>
-                        </label>
-                        <div class="col-md-6 col-sm-6 ">
-                            <select asp-for="TableTypeId" id="ddlTableType" class="form-control js-example-responsive" style="width: 100%">
-                                <option value="">-- Selecione --</option>
-                            </select>
-                            @Html.ValidationMessageFor(model => model.TableTypeId, null, new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <div class="item form-group">
-                        <label class="col-form-label col-md-3 col-sm-3 label-align">
                             @Html.LabelFor(model => model.FinancialAdminId) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            <select asp-for="FinancialAdminId" id="ddlFinancialAdmin" class="form-control js-example-responsive" style="width: 100%">
+                            <select asp-for="FinancialAdminId" id="ddlFinancialAdmin" class="form-control js-example-responsive filterCredit" style="width: 100%">
                                 <option value="">-- Selecione --</option>
                             </select>
                             @Html.ValidationMessageFor(model => model.FinancialAdminId, null, new { @class = "text-danger" })
@@ -55,47 +55,68 @@
                     </div>
                     <div class="item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align">
-                            @Html.LabelFor(model => model.Months) <span class="required">*</span>
+                            @Html.LabelFor(model => model.TableTypeId) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            @Html.TextBoxFor(model => model.Months, new {@class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.Months, null, new { @class = "text-danger" })
+                            <select asp-for="TableTypeId" id="ddlTableType" class="form-control js-example-responsive filterCredit" style="width: 100%">
+                                <option value="">-- Selecione --</option>
+                            </select>
+                            @Html.ValidationMessageFor(model => model.TableTypeId, null, new { @class = "text-danger" })
                         </div>
                     </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.CreditId) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            <select asp-for="CreditId" id="ddlCredit" class="form-control js-example-responsive" style="width: 100%">
+                            </select>
+                            @Html.ValidationMessageFor(model => model.CreditId, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    @*<div class="item form-group">
+                <label class="col-form-label col-md-3 col-sm-3 label-align">
+                @Html.LabelFor(model => model.Months) <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 ">
+                @Html.TextBoxFor(model => model.Months, new { required = "required", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Months, null, new { @class = "text-danger" })
+                </div>
+                </div>*@
                     <div class="item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align">
                             @Html.LabelFor(model => model.CreditValue) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            @Html.TextBoxFor(model => model.CreditValue, new {@class = "form-control money" })
+                            @Html.TextBoxFor(model => model.CreditValue, new {@class = "form-control money", @disabled="disabled" })
                             @Html.ValidationMessageFor(model => model.CreditValue, null, new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align">
-                            @Html.LabelFor(model => model.PortionValue) <span class="required">*</span>
+                            @Html.LabelFor(model => model.CreditMembershipValue) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            @Html.TextBoxFor(model => model.PortionValue, new {@class = "form-control money" })
-                            @Html.ValidationMessageFor(model => model.PortionValue, null, new { @class = "text-danger" })
+                            @Html.TextBoxFor(model => model.CreditMembershipValue, new {@class = "form-control money", @disabled="disabled" })
+                            @Html.ValidationMessageFor(model => model.CreditMembershipValue, null, new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align">
-                            @Html.LabelFor(model => model.MembershipValue) <span class="required">*</span>
+                            @Html.LabelFor(model => model.CreditPortionValue) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            @Html.TextBoxFor(model => model.MembershipValue, new {@class = "form-control money" })
-                            @Html.ValidationMessageFor(model => model.MembershipValue, null, new { @class = "text-danger" })
+                            @Html.TextBoxFor(model => model.CreditPortionValue, new {@class = "form-control money", @disabled="disabled" })
+                            @Html.ValidationMessageFor(model => model.CreditPortionValue, null, new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align">
-                            @Html.LabelFor(model => model.TotalValue) <span class="required">*</span>
+                            @Html.LabelFor(model => model.CreditTotalValue) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            @Html.TextBoxFor(model => model.TotalValue, new {@class = "form-control money" })
-                            @Html.ValidationMessageFor(model => model.TotalValue, null, new { @class = "text-danger" })
+                            @Html.TextBoxFor(model => model.CreditTotalValue, new {@class = "form-control money" })
+                            @Html.ValidationMessageFor(model => model.CreditTotalValue, null, new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="ln_solid"></div>
@@ -119,16 +140,92 @@
     }
     <script>
         $(document).ready(function () {
-            FillSelect("@Url.Action("GetProductTypeList", "Credit")", null, "#ddlProductType", "@Model.ProductTypeId", true);
-            FillSelect("@Url.Action("GetTableTypeList", "Credit")", null, "#ddlTableType", "@Model.TableTypeId", true);
-            FillSelect("@Url.Action("GetFinancialAdminList", "Credit")", null, "#ddlFinancialAdmin", "@Model.FinancialAdminId", true);
+            //FillSelect("@Url.Action("GetClientList", "Proposal")", null, "#ddlClient");
+            FillSelect("@Url.Action("GetProductTypeList", "Proposal")", null, "#ddlProductType", "@Model.ProductTypeId", true);
+            FillSelect("@Url.Action("GetTableTypeList", "Proposal")", null, "#ddlTableType", "@Model.TableTypeId", true);
+            FillSelect("@Url.Action("GetFinancialAdminList", "Proposal")", null, "#ddlFinancialAdmin", "@Model.FinancialAdminId", true);
+
             $('select').select2();
-            InputMaskNumber("#Months", "2");
             MaskMoney();
+            LoadFirstCredit();
+
+            $('.filterCredit').on('select2:select', function (e) {
+                LoadCredit();
+            });
+
+            $('#ddlCredit').on('select2:select', function (e) {
+                SetValuesCredit();
+            });
         });
         $(".submit").click(function (event) {
-            Edit("@Url.Action("Index", "Credit")", false, false);
+            Edit("@Url.Action("Index", "Proposal")", false, false);
         });
+
+        function LoadCredit() {
+            var productTypeId = $('#ddlProductType').val();
+            var tableTypeId = $('#ddlTableType').val();
+            var financialAdminId = $('#ddlFinancialAdmin').val();
+
+            if (productTypeId !== "" && tableTypeId !== "" && financialAdminId !== "") {
+                $('#ddlCredit').removeAttr('disabled');
+                $('#ddlCredit').empty().trigger("change");
+                FillSelect("@Url.Action("GetCreditList", "Proposal")", { ProductTypeId: productTypeId, TableTypeId: tableTypeId, FinancialAdminId: financialAdminId }, "#ddlCredit");
+            } else {
+                $('#ddlCredit').empty().trigger("change");
+                $('#ddlCredit').attr('disabled', 'disabled');
+            }
+
+            emptyCreditFields();
+        }
+
+        function LoadFirstCredit() {
+            var productTypeId = '@Model.ProductTypeId';
+            var tableTypeId = '@Model.TableTypeId';
+            var financialAdminId = '@Model.FinancialAdminId';
+
+            FillSelect("@Url.Action("GetCreditList", "Proposal")", { ProductTypeId: productTypeId, TableTypeId: tableTypeId, FinancialAdminId: financialAdminId }, "#ddlCredit", "@Model.CreditId", true);
+        }
+
+        function SetValuesCredit() {
+            var productCreditId = $('#ddlCredit').val();
+
+            if (productCreditId !== "") {
+                var productCreditText = $('#ddlCredit option:selected').text();
+                var arrayValues = productCreditText.split("/");
+
+                $('#CreditValue').val(arrayValues[0].replace("R$", "").trim());
+                $('#CreditMembershipValue').val(arrayValues[1].replace("R$", "").trim());
+                $('#CreditPortionValue').val(arrayValues[2].replace("R$", "").trim());
+
+                var valorTotal = converteMoedaFloat(arrayValues[1]) + converteMoedaFloat(arrayValues[2]);
+                //$('#CreditTotalValue').val(valorTotal.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }));
+                $('#CreditTotalValue').val(valorTotal.toLocaleString('pt-br', { minimumFractionDigits: 2 }));
+            } else {
+                emptyCreditFields();
+            }
+        }
+
+        function emptyCreditFields() {
+            $('#CreditValue').val("0,00");
+            $('#CreditMembershipValue').val("0,00");
+            $('#CreditPortionValue').val("0,00");
+            $('#CreditTotalValue').val("0,00");
+        }
+
+        function converteMoedaFloat(valor) {
+
+            if (valor === "") {
+                valor = 0;
+            } else {
+                valor = valor.replace("R$", "");
+                valor = valor.replace(".", "");
+                valor = valor.replace(",", ".");
+                valor = valor.trim();
+                valor = parseFloat(valor);
+            }
+
+            return valor;
+        }
     </script>
 }
 

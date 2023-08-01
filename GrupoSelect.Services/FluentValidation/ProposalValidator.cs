@@ -84,12 +84,12 @@ namespace GrupoSelect.Services.FluentValidation
                 if (creditTotalValue < valueMinimalRequired)
                 {
                     string formatedValue = string.Format(CultureInfo.GetCultureInfo("pt-BR"), "{0:C}", valueMinimalRequired);
-                    context.AddFailure("Valor Total Crédito deve ser igual ou superior a " + formatedValue);
+                    context.AddFailure("Valor Total deve ser igual ou superior a " + formatedValue);
                 }
             }
             else
             {
-                context.AddFailure("Valor total de Crédito inválido.");
+                context.AddFailure("Valor Total inválido.");
             }
         }
     }

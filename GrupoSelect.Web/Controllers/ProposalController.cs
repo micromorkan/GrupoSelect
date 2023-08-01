@@ -128,7 +128,20 @@ namespace GrupoSelect.Web.Controllers
 
                 if (result.Success)
                 {
-                    return View(_mapper.Map<ProposalVM>(result.Object));
+                    var proposalVM = _mapper.Map<ProposalVM>(result.Object);
+                    var resultFinancialAdmin = await _financialAdminService.GetAll(new FinancialAdmin { Name = proposalVM.FinancialAdminName });
+                    proposalVM.FinancialAdminId = resultFinancialAdmin.Object.First().Id;
+
+                    var resultTableType = await _tableTypeService.GetAll(new TableType { TableTax = proposalVM.TableTypeTax, MembershipFee = proposalVM.TableTypeFee, RemainingRate = proposalVM.TableTypeRate });
+                    proposalVM.TableTypeId = resultTableType.Object.First().Id;
+
+                    var resultProductType = await _productTypeService.GetAll(new ProductType { ProductName = proposalVM.ProductTypeName });
+                    proposalVM.ProductTypeId = resultProductType.Object.First().Id;
+
+                    var resultCredit = await _creditService.GetAll(new Credit { FinancialAdminId = proposalVM.FinancialAdminId, TableTypeId = proposalVM.TableTypeId, ProductTypeId = proposalVM.ProductTypeId });
+                    proposalVM.CreditId = resultCredit.Object.First().Id;
+
+                    return View(proposalVM);
                 }
                 else
                 {
@@ -150,7 +163,28 @@ namespace GrupoSelect.Web.Controllers
         {
             try
             {
+                var resultCredit = await _creditService.GetById(proposalVM.CreditId);
+
+                if (resultCredit.Success)
+                {
+                    Credit credit = resultCredit.Object;
+
+                    proposalVM.CreditMembershipValue = credit.MembershipValue;
+                    proposalVM.CreditValue = credit.CreditValue;
+                    proposalVM.CreditPortionValue = credit.PortionValue;
+                    proposalVM.FinancialAdminName = credit.FinancialAdmin.Name;
+                    proposalVM.TableTypeFee = credit.TableType.MembershipFee;
+                    proposalVM.TableTypeRate = credit.TableType.RemainingRate;
+                    proposalVM.TableTypeTax = credit.TableType.TableTax;
+                    proposalVM.ProductTypeName = credit.ProductType.ProductName;
+                }
+
+                //TODO - PARA FINS DE TESTES
+                proposalVM.ClientId = 1;
+
                 var proposal = _mapper.Map<Proposal>(proposalVM);
+
+                proposal.UserId = Convert.ToInt32(HttpContext.User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value);
 
                 var result = _proposalService.Update(proposal);
 
