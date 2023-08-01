@@ -71,7 +71,7 @@
                                     <a><i class="fa fa-suitcase"></i> Propostas <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
                                         <li><a href="@Url.Action("Index", "Proposal")">Pesquisar</a></li>
-                                        @if (User.GetProfile() == Constants.PROFILE_REPRESENTANTE)
+                                        @if (User.GetProfile() == Constants.PROFILE_REPRESENTANTE || User.GetProfile() == Constants.PROFILE_TI || User.GetProfile() == Constants.PROFILE_GERENTE || User.GetProfile() == Constants.PROFILE_DIRETOR)
                                         {
                                             <li><a href="@Url.Action("Create", "Proposal")">Cadastrar</a></li>
                                         }
@@ -84,18 +84,23 @@
                                     </ul>
                                 </li>
                             </ul>
-                            <br />
-                            <h3>Financeiro</h3>
-                            <ul class="nav side-menu">
-                                <li>
-                                    <a><i class="fa fa-money"></i> Borderô <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li><a href="index.html">Consultar</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
                             @{
-                                if (User.GetProfile() == Constants.PROFILE_DIRETOR || User.GetProfile() == Constants.PROFILE_REPRESENTANTE)
+                                if (User.GetProfile() == Constants.PROFILE_DIRETOR || User.GetProfile() == Constants.PROFILE_TI || User.GetProfile() == Constants.PROFILE_GERENTE)
+                                {
+                                    <br />
+                                    <h3>Financeiro</h3>
+                                    <ul class="nav side-menu">
+                                        <li>
+                                            <a><i class="fa fa-money"></i> Borderô <span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu">
+                                                <li><a href="index.html">Consultar</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                }
+                            }
+                            @{
+                                if (User.GetProfile() == Constants.PROFILE_DIRETOR || User.GetProfile() == Constants.PROFILE_REPRESENTANTE || User.GetProfile() == Constants.PROFILE_TI || User.GetProfile() == Constants.PROFILE_GERENTE)
                                 {
                                     <br />
                                     <h3>Configuração</h3>
@@ -132,7 +137,8 @@
                                 }
                             }
                             @{
-                                if (User.GetProfile() == Constants.PROFILE_REPRESENTANTE)
+                                //TODO - REMOVER REPRESENTANTE POIS NAO TERA ACESSO AOS USUARIOS
+                                if (User.GetProfile() == Constants.PROFILE_REPRESENTANTE || User.GetProfile() == Constants.PROFILE_TI)
                                 {
                                     <br />
                                     <h3>Gerenciamento</h3>
@@ -176,7 +182,7 @@
                     <nav class="nav navbar-nav">
                         <ul class=" navbar-right">
                             <li class="nav-item dropdown open" style="padding-left: 15px;">
-                                <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
+                                <a class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
                                     @User.Identity.Name
                                 </a>
                                 <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
@@ -208,7 +214,7 @@
     <script src="~/js/popper.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap-toolkit.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
     <script src="~/js/fastclick.js"></script>
     <script src="~/js/nprogress.js"></script>
     <script src="~/js/jquery.datatables.min.js"></script>

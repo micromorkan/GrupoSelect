@@ -41,15 +41,4 @@ namespace GrupoSelect.Web.Views.Shared.Reports.Models
         public bool Ativo { get; set; }
 
     }
-
-    public class Proposal
-    {
-        public string TipoProduto { get; set; }
-        public string TipoTabela { get; set; }
-        public string Administradora { get; set; }
-        public string VlCredito { get; set; }
-        public string VlParcela { get; set; }
-        public string VlAdesao { get; set; }
-        public string VlTotal { get; set; }
-    }
 }

@@ -188,7 +188,7 @@
                 $('#CreditMembershipValue').val(arrayValues[1].replace("R$", "").trim());
                 $('#CreditPortionValue').val(arrayValues[2].replace("R$", "").trim());
 
-                var valorTotal = converteMoedaFloat(arrayValues[1]) + converteMoedaFloat(arrayValues[2]);
+                var valorTotal = ConvertMoneyFloat(arrayValues[1]) + ConvertMoneyFloat(arrayValues[2]);
                 //$('#CreditTotalValue').val(valorTotal.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }));
                 $('#CreditTotalValue').val(valorTotal.toLocaleString('pt-br', { minimumFractionDigits: 2 }));
             } else {
@@ -201,21 +201,6 @@
             $('#CreditMembershipValue').val("0,00");
             $('#CreditPortionValue').val("0,00");
             $('#CreditTotalValue').val("0,00");
-        }
-
-        function converteMoedaFloat(valor) {
-            
-            if (valor === "") {
-                valor = 0;
-            } else {
-                valor = valor.replace("R$", "");
-                valor = valor.replace(".", "");
-                valor = valor.replace(",", ".");
-                valor = valor.trim();
-                valor = parseFloat(valor);
-            }
-         
-            return valor;
         }
 
     </script>

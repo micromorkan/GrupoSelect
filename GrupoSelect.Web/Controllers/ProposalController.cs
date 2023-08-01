@@ -7,9 +7,12 @@ using GrupoSelect.Services.Interface;
 using GrupoSelect.Services.Service;
 using GrupoSelect.Web.Helpers;
 using GrupoSelect.Web.ViewModel;
+using GrupoSelect.Web.Views.Shared.Reports.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using RazorEngine;
+using RazorEngine.Templating;
 using System.Globalization;
 using System.Security.Claims;
 
@@ -45,7 +48,7 @@ namespace GrupoSelect.Web.Controllers
         [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_ADMINISTRATIVO)]
         public async Task<IActionResult> Index()
         {
-            return View(new CreditVM());
+            return View(new ProposalVM());
         }
 
         [HttpPost]
@@ -53,18 +56,24 @@ namespace GrupoSelect.Web.Controllers
         [TypeFilter(typeof(ExceptionLog))]
         public async Task<IActionResult> Index(ProposalVM proposalVM, int page, int qtPage)
         {
-            var result = new PaginateResult<IEnumerable<Proposal>>();
-
             try
             {
                 var filter = _mapper.Map<Proposal>(proposalVM);
 
                 if (HttpContext.User.IsInRole(Constants.PROFILE_REPRESENTANTE))
                 {
-                    filter.UserId = Convert.ToInt32(HttpContext.User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value);
+                    filter.UserId = Convert.ToInt32(User.GetId());
+                }
+                else if (HttpContext.User.IsInRole(Constants.PROFILE_ADMINISTRATIVO))
+                {
+                    filter.UserChecked = null;
                 }
 
-                result = await _proposalService.GetAllPaginate(filter, page, qtPage);
+                filter.FinancialAdminName = proposalVM.FinancialAdminId > 0 ? (await _financialAdminService.GetById(proposalVM.FinancialAdminId)).Object.Name : string.Empty;
+                filter.TableTypeTax = proposalVM.TableTypeId > 0 ? (await _tableTypeService.GetById(proposalVM.TableTypeId)).Object.TableTax : string.Empty;
+                filter.ProductTypeName = proposalVM.ProductTypeId > 0 ? (await _productTypeService.GetById(proposalVM.ProductTypeId)).Object.ProductName : string.Empty;
+
+                var result = await _proposalService.GetAllPaginate(filter, page, qtPage, proposalVM.StartDate, proposalVM.EndDate);
 
                 return Json(result);
             }
@@ -74,14 +83,14 @@ namespace GrupoSelect.Web.Controllers
             }
         }
 
-        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE)]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_TI + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE)]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_TI + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
         [TypeFilter(typeof(ExceptionLog))]
         public async Task<IActionResult> Create(ProposalVM proposalVM)
         {
@@ -108,7 +117,7 @@ namespace GrupoSelect.Web.Controllers
 
                 var proposal = _mapper.Map<Proposal>(proposalVM);
 
-                proposal.UserId = Convert.ToInt32(HttpContext.User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value);
+                proposal.UserId = Convert.ToInt32(User.GetId());
 
                 var result = _proposalService.Insert(proposal);
 
@@ -120,6 +129,7 @@ namespace GrupoSelect.Web.Controllers
             }
         }
 
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_TI + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
         public async Task<IActionResult> Edit(int id)
         {
             try
@@ -159,6 +169,7 @@ namespace GrupoSelect.Web.Controllers
         [HttpPost]
         [TypeFilter(typeof(ExceptionLog))]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_TI + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
         public async Task<IActionResult> Edit(int id, ProposalVM proposalVM)
         {
             try
@@ -184,7 +195,7 @@ namespace GrupoSelect.Web.Controllers
 
                 var proposal = _mapper.Map<Proposal>(proposalVM);
 
-                proposal.UserId = Convert.ToInt32(HttpContext.User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value);
+                proposal.UserId = Convert.ToInt32(User.GetId());
 
                 var result = _proposalService.Update(proposal);
 
@@ -197,6 +208,7 @@ namespace GrupoSelect.Web.Controllers
         }
 
         [TypeFilter(typeof(ExceptionLog))]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_TI + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
         public async Task<IActionResult> Delete(int id)
         {
             try
@@ -335,6 +347,49 @@ namespace GrupoSelect.Web.Controllers
             else
             {
                 return new List<SelectListItem>();
+            }
+        }
+
+        [HttpPost]
+        [TypeFilter(typeof(ExceptionLog))]
+        [Authorize(Roles = Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_TI + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
+        public async Task<IActionResult> ConfirmProposal(int id)
+        {
+            try
+            {
+                Proposal proposal = (await _proposalService.GetById(id)).Object;
+
+                proposal.DateChecked = DateTime.Now;
+                proposal.UserChecked = Convert.ToInt32(User.GetId());
+
+                var result = _proposalService.Update(proposal);
+                //TODO - INCLUIR LOGICA PARA INSERIR NOVO REGISTRO DE CONTRATO
+
+                return Json(result);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [TypeFilter(typeof(ExceptionLog))]
+        public async Task<IActionResult> PrintProposal(int id)
+        {
+            try
+            {
+                Proposal proposal = (await _proposalService.GetById(id)).Object;
+                //proposal.Client
+                RegistrationForm registrationForm = new RegistrationForm(new Client { Nome = "DIEGO ANDRADE SAMPAIO" }, proposal, proposal.User);
+
+                string cshtmlContent = System.IO.File.ReadAllText("Views\\Shared\\Reports\\RegistrationForm.cshtml");
+                string renderedContent = Engine.Razor.RunCompile(cshtmlContent, "FICHACADASTRAL", typeof(RegistrationForm), registrationForm);
+
+                return Content(renderedContent, "text/html");
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
     }

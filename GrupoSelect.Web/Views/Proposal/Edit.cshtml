@@ -20,6 +20,7 @@
                 @using (Html.BeginForm("Edit", "Proposal", FormMethod.Post, new { @id = "edit", @class = "form-horizontal form-label-left" }))
                 {
                     @Html.HiddenFor(model => model.DateCreate)
+                    @Html.HiddenFor(model => model.Aproved)
                     @* <div class="item form-group">
                 <label class="col-form-label col-md-3 col-sm-3 label-align">
                 @Html.LabelFor(model => model.ClientId) <span class="required">*</span>
@@ -197,7 +198,7 @@
                 $('#CreditMembershipValue').val(arrayValues[1].replace("R$", "").trim());
                 $('#CreditPortionValue').val(arrayValues[2].replace("R$", "").trim());
 
-                var valorTotal = converteMoedaFloat(arrayValues[1]) + converteMoedaFloat(arrayValues[2]);
+                var valorTotal = ConvertMoneyFloat(arrayValues[1]) + ConvertMoneyFloat(arrayValues[2]);
                 //$('#CreditTotalValue').val(valorTotal.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }));
                 $('#CreditTotalValue').val(valorTotal.toLocaleString('pt-br', { minimumFractionDigits: 2 }));
             } else {
@@ -212,20 +213,6 @@
             $('#CreditTotalValue').val("0,00");
         }
 
-        function converteMoedaFloat(valor) {
-
-            if (valor === "") {
-                valor = 0;
-            } else {
-                valor = valor.replace("R$", "");
-                valor = valor.replace(".", "");
-                valor = valor.replace(",", ".");
-                valor = valor.trim();
-                valor = parseFloat(valor);
-            }
-
-            return valor;
-        }
     </script>
 }
 

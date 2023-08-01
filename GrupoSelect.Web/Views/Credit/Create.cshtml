@@ -75,7 +75,7 @@
                             @Html.LabelFor(model => model.PortionValue) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            @Html.TextBoxFor(model => model.PortionValue, new {@class = "form-control money" })
+                            @Html.TextBoxFor(model => model.PortionValue, new {@class = "form-control money partialValue" })
                             @Html.ValidationMessageFor(model => model.PortionValue, null, new { @class = "text-danger" })
                         </div>
                     </div>
@@ -84,7 +84,7 @@
                             @Html.LabelFor(model => model.MembershipValue) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            @Html.TextBoxFor(model => model.MembershipValue, new {@class = "form-control money" })
+                            @Html.TextBoxFor(model => model.MembershipValue, new {@class = "form-control money partialValue" })
                             @Html.ValidationMessageFor(model => model.MembershipValue, null, new { @class = "text-danger" })
                         </div>
                     </div>
@@ -123,24 +123,19 @@
             FillSelect("@Url.Action("GetFinancialAdminList", "Credit")", { Active: true }, "#ddlFinancialAdmin");
             $('select').select2();
             InputMaskNumber("#Months", "2");
-            MaskMoney();
+            MaskMoney();            
         });
+        
         $(".submit").click(function (event) {
             Create(false, false);
         });
 
-        //$.validator.methods.range = function (value, element, param) {
-        //    var globalizedValue = value.replace(",", ".");
-        //    return this.optional(element) || (globalizedValue >= param[0] && globalizedValue <= param[1]);
-        //}
-
-        //$.validator.methods.number = function (value, element) {
-        //    return this.optional(element) || /-?(?:\d+|\d{1,3}(?:[\s\.,]\d{3})+)(?:[\.,]\d+)?$/.test(value);
-        //}
-        ////Date dd/MM/yyyy
-        //$.validator.methods.date = function (value, element) {
-        //    var date = value.split("/");
-        //    return this.optional(element) || !/Invalid|NaN/.test(new Date(date[2], date[1], date[0]).toString());
-        //}
+        $('.partialValue').on('keyup', function (e) {
+            var PortionValue = $('#PortionValue').val();
+            var MembershipValue = $('#MembershipValue').val();
+            var valorTotal = ConvertMoneyFloat(PortionValue) + ConvertMoneyFloat(MembershipValue);
+            $('#TotalValue').val(valorTotal.toLocaleString('pt-br', { minimumFractionDigits: 2 }));
+        });
+       
     </script>
 }

@@ -57,5 +57,9 @@ namespace GrupoSelect.Web.ViewModel
         public DateTime? UserChecked { get; set; }
         public bool Aproved { get; set; }
 
+        public DateTime StartDate { get; set; }
+
+        public DateTime EndDate { get; set; }
+
     }
 }

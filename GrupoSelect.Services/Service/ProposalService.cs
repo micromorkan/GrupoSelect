@@ -31,18 +31,20 @@ namespace GrupoSelect.Services.Service
             };
         }
 
-        public async Task<PaginateResult<IEnumerable<Proposal>>> GetAllPaginate(Proposal filter, int page, int qtPage)
+        public async Task<PaginateResult<IEnumerable<Proposal>>> GetAllPaginate(Proposal filter, int page, int qtPage, DateTime startDate, DateTime endDate)
         {
             return _unitOfWork.Proposals.GetAllPaginate(f => (filter.UserId == 0 || f.UserId == filter.UserId) &&
                                                          (filter.ClientId == 0 || f.ClientId == filter.ClientId) &&
                                                          (string.IsNullOrEmpty(filter.ProductTypeName) || f.ProductTypeName == filter.ProductTypeName) &&
                                                          (string.IsNullOrEmpty(filter.TableTypeTax) || f.TableTypeTax == filter.TableTypeTax) &&
-                                                         (string.IsNullOrEmpty(filter.FinancialAdminName) || f.FinancialAdminName == filter.FinancialAdminName), null, page, qtPage);
+                                                         (string.IsNullOrEmpty(filter.FinancialAdminName) || f.FinancialAdminName == filter.FinancialAdminName) &&
+                                                         (filter.UserChecked == null || f.UserChecked == filter.UserChecked) &&
+                                                         (f.DateCreate.Date >= startDate.Date && f.DateCreate.Date <= endDate.Date), o => o.OrderByDescending(x => x.DateCreate), page, qtPage);
         }
 
         public async Task<Result<Proposal>> GetById(int id)
         {
-            Proposal model = _unitOfWork.Proposals.GetAll(f => f.Id == id).FirstOrDefault();
+            Proposal model = _unitOfWork.Proposals.GetAll(f => f.Id == id, null, i => i.User).FirstOrDefault();
 
             if (model != null)
             {
@@ -77,6 +79,7 @@ namespace GrupoSelect.Services.Service
             }
 
             model.DateCreate = DateTime.Now;
+            model.Aproved = false;
 
             _unitOfWork.Proposals.Insert(model);
             _unitOfWork.Proposals.Save();

@@ -1,4 +1,4 @@
-﻿function RenderPagination(paginaatual, totalregistros, qtdpage = 10) {
+﻿function RenderPagination(paginaatual, totalregistros, qtdpage = 20) {
 
     var qtdpaginas = Math.ceil(totalregistros / qtdpage);
 
