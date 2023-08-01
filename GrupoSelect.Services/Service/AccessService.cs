@@ -41,11 +41,22 @@ namespace GrupoSelect.Services.Service
 
                 if (login != null)
                 {
-                    return new Result<User>
+                    if (login.Active)
                     {
-                        Success = true,
-                        Object = await _userRepository.Authenticate(user)
-                    };
+                        return new Result<User>
+                        {
+                            Success = true,
+                            Object = await _userRepository.Authenticate(user)
+                        };
+                    }
+                    else
+                    {
+                        return new Result<User>
+                        {
+                            Success = false,
+                            Message = "Seu acesso foi bloqueado!"
+                        };
+                    }
                 }
                 else
                 {

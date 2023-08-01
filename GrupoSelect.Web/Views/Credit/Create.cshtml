@@ -120,7 +120,7 @@
         $(document).ready(function () {
             FillSelect("@Url.Action("GetProductTypeList", "Credit")", null, "#ddlProductType");
             FillSelect("@Url.Action("GetTableTypeList", "Credit")", null, "#ddlTableType");
-            FillSelect("@Url.Action("GetFinancialAdminList", "Credit")", null, "#ddlFinancialAdmin");
+            FillSelect("@Url.Action("GetFinancialAdminList", "Credit")", { Active: true }, "#ddlFinancialAdmin");
             $('select').select2();
             InputMaskNumber("#Months", "2");
             MaskMoney();
