@@ -52,6 +52,9 @@ namespace GrupoSelect.Web.ViewModel
         [Required(ErrorMessage = "O campo {0} é obrigatório!")]
         public string CreditTotalValue { get; set; }
 
+        [Display(Name = "Status")]
+        public string Status { get; set; }
+
         public DateTime DateCreate { get; set; }
         public DateTime? DateChecked { get; set; }
         public DateTime? UserChecked { get; set; }

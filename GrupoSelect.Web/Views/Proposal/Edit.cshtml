@@ -21,6 +21,7 @@
                 {
                     @Html.HiddenFor(model => model.DateCreate)
                     @Html.HiddenFor(model => model.Aproved)
+                    @Html.HiddenFor(model => model.Status)
                     @* <div class="item form-group">
                 <label class="col-form-label col-md-3 col-sm-3 label-align">
                 @Html.LabelFor(model => model.ClientId) <span class="required">*</span>
@@ -144,7 +145,7 @@
             //FillSelect("@Url.Action("GetClientList", "Proposal")", null, "#ddlClient");
             FillSelect("@Url.Action("GetProductTypeList", "Proposal")", null, "#ddlProductType", "@Model.ProductTypeId", true);
             FillSelect("@Url.Action("GetTableTypeList", "Proposal")", null, "#ddlTableType", "@Model.TableTypeId", true);
-            FillSelect("@Url.Action("GetFinancialAdminList", "Proposal")", null, "#ddlFinancialAdmin", "@Model.FinancialAdminId", true);
+            FillSelect("@Url.Action("GetFinancialAdminList", "Proposal")", { Active: true }, "#ddlFinancialAdmin", "@Model.FinancialAdminId", true);
 
             $('select').select2();
             MaskMoney();

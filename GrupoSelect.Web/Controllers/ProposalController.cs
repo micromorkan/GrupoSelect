@@ -48,7 +48,14 @@ namespace GrupoSelect.Web.Controllers
         [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_ADMINISTRATIVO)]
         public async Task<IActionResult> Index()
         {
-            return View(new ProposalVM());
+            var proposal = new ProposalVM();
+
+            if (HttpContext.User.IsInRole(Constants.PROFILE_ADMINISTRATIVO))
+            {
+                proposal.Status = Constants.PROPOSAL_STATUS_AC;
+            }
+
+            return View(proposal);
         }
 
         [HttpPost]
@@ -63,10 +70,6 @@ namespace GrupoSelect.Web.Controllers
                 if (HttpContext.User.IsInRole(Constants.PROFILE_REPRESENTANTE))
                 {
                     filter.UserId = Convert.ToInt32(User.GetId());
-                }
-                else if (HttpContext.User.IsInRole(Constants.PROFILE_ADMINISTRATIVO))
-                {
-                    filter.UserChecked = null;
                 }
 
                 filter.FinancialAdminName = proposalVM.FinancialAdminId > 0 ? (await _financialAdminService.GetById(proposalVM.FinancialAdminId)).Object.Name : string.Empty;
@@ -114,6 +117,8 @@ namespace GrupoSelect.Web.Controllers
 
                 //TODO - PARA FINS DE TESTES
                 proposalVM.ClientId = 1;
+
+                proposalVM.Status = Constants.PROPOSAL_STATUS_AC;
 
                 var proposal = _mapper.Map<Proposal>(proposalVM);
 
@@ -337,7 +342,7 @@ namespace GrupoSelect.Web.Controllers
                     items.Add(new SelectListItem()
                     {
                         Value = item.Id.ToString(),
-                        Text = "R$ " + item.TotalValue + " / R$ " + item.MembershipValue + " / R$ " + item.PortionValue,
+                        Text = "R$ " + item.CreditValue + " / R$ " + item.MembershipValue + " / R$ " + item.PortionValue,
                         Selected = filter.Id == item.Id ? true : false
                     });
                 }
@@ -361,6 +366,7 @@ namespace GrupoSelect.Web.Controllers
 
                 proposal.DateChecked = DateTime.Now;
                 proposal.UserChecked = Convert.ToInt32(User.GetId());
+                proposal.Status = Constants.PROPOSAL_STATUS_PC;
 
                 var result = _proposalService.Update(proposal);
                 //TODO - INCLUIR LOGICA PARA INSERIR NOVO REGISTRO DE CONTRATO

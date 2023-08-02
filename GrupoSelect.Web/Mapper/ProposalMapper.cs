@@ -22,7 +22,8 @@ namespace GrupoSelect.Web.Mapper
                 .ForMember(dest => dest.DateCreate, opt => opt.MapFrom(src => $"{src.DateCreate}")).ReverseMap().ForMember(dest => dest.DateCreate, opt => opt.Ignore())
                 .ForMember(dest => dest.DateChecked, opt => opt.MapFrom(src => $"{src.DateChecked}")).ReverseMap().ForMember(dest => dest.DateChecked, opt => opt.Ignore())
                 .ForMember(dest => dest.UserChecked, opt => opt.MapFrom(src => $"{src.UserChecked}")).ReverseMap().ForMember(dest => dest.UserChecked, opt => opt.Ignore())
-                .ForMember(dest => dest.Aproved, opt => opt.MapFrom(src => $"{src.Aproved}")).ReverseMap().ForMember(dest => dest.Aproved, opt => opt.Ignore());
+                .ForMember(dest => dest.Aproved, opt => opt.MapFrom(src => $"{src.Aproved}")).ReverseMap().ForMember(dest => dest.Aproved, opt => opt.Ignore())
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => $"{src.Status}")).ReverseMap().ForMember(dest => dest.Status, opt => opt.Ignore());
         }
     }
 }

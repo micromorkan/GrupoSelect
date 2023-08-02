@@ -18,6 +18,7 @@
         public DateTime? DateChecked { get; set; }
         public int? UserChecked { get; set; }
         public bool Aproved { get; set; }
+        public string Status { get; set; }
         //public virtual Client Client { get; set; }
         public virtual User User { get; set; }
     }

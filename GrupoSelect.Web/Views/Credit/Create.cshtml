@@ -93,7 +93,7 @@
                             @Html.LabelFor(model => model.TotalValue) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            @Html.TextBoxFor(model => model.TotalValue, new {@class = "form-control money" })
+                            @Html.TextBoxFor(model => model.TotalValue, new {@class = "form-control money", @disabled="disabled" })
                             @Html.ValidationMessageFor(model => model.TotalValue, null, new { @class = "text-danger" })
                         </div>
                     </div>
