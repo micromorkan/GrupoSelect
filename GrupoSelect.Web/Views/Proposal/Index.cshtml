@@ -24,25 +24,25 @@
                 {
                     <div class="form-group col-md-4 col-xs-12">
                         @Html.LabelFor(model => model.ClientId)
-                        <select asp-for="ClientId" id="ddlClient" class="form-control js-example-responsive" style="width: 100%">
+                        <select asp-for="ClientId" id="ddlClient" class="form-control js-example-responsive component-select" style="width: 100%">
                             <option value="">-- Selecione --</option>
                         </select>
                     </div>
                     <div class="form-group col-md-4 col-xs-12">
                         @Html.LabelFor(model => model.ProductTypeId)
-                        <select asp-for="ProductTypeId" id="ddlProductType" class="form-control js-example-responsive" style="width: 100%">
+                        <select asp-for="ProductTypeId" id="ddlProductType" class="form-control js-example-responsive component-select" style="width: 100%">
                             <option value="">-- Selecione --</option>
                         </select>
                     </div>
                     <div class="form-group col-md-4 col-xs-12">
                         @Html.LabelFor(model => model.TableTypeId)
-                        <select asp-for="TableTypeId" id="ddlTableType" class="form-control js-example-responsive" style="width: 100%">
+                        <select asp-for="TableTypeId" id="ddlTableType" class="form-control js-example-responsive component-select" style="width: 100%">
                             <option value="">-- Selecione --</option>
                         </select>
                     </div>
                     <div class="form-group col-md-4 col-xs-12">
                         @Html.LabelFor(model => model.FinancialAdminId)
-                        <select asp-for="FinancialAdminId" id="ddlFinancialAdmin" class="form-control js-example-responsive" style="width: 100%">
+                        <select asp-for="FinancialAdminId" id="ddlFinancialAdmin" class="form-control js-example-responsive component-select" style="width: 100%">
                             <option value="">-- Selecione --</option>
                         </select>
                     </div>
@@ -75,7 +75,7 @@
                                         }
                                     }
 
-                                    <th class="column text-center" data-prefix="" data-sufix="" data-column="clientId" data-css="text-center">Cliente</th>
+                                    <th class="column text-center" data-prefix="" data-sufix="" data-column="client.name" data-css="text-center">Cliente</th>
                                     <th class="column text-center" data-prefix="" data-sufix="" data-column="productTypeName" data-css="text-center">Produto</th>
                                     <th class="column text-center" data-prefix="" data-sufix="" data-column="financialAdminName" data-css="text-center">Administradora</th>
                                     <th class="column text-center" data-prefix="" data-sufix="" data-column="creditValue" data-css="text-right">Crédito</th>
@@ -103,10 +103,11 @@
     <script src="~/js/daterangepicker.js"></script>
     <script>
         $(document).ready(function () {
+            FillSelect("@Url.Action("GetClientList", "Proposal")", { Active: true }, "#ddlClient");
             FillSelect("@Url.Action("GetProductTypeList", "Credit")", null, "#ddlProductType");
             FillSelect("@Url.Action("GetTableTypeList", "Credit")", null, "#ddlTableType");
             FillSelect("@Url.Action("GetFinancialAdminList", "Credit")", { Active: true }, "#ddlFinancialAdmin");
-            $('select').select2();
+            $('.component-select').select2();
             moment.locale('pt-br');
             void 0 !== $.fn.daterangepicker && $("#dateFilter").daterangepicker({
                 startDate: '@DateTime.Now.Date.AddDays(-7).ToShortDateString()',

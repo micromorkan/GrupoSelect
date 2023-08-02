@@ -26,7 +26,7 @@ namespace GrupoSelect.Web.Controllers
         private ITableTypeService _tableTypeService;
         private IFinancialAdminService _financialAdminService;
         private IProposalService _proposalService;
-        //private IClientService _clientService;
+        private IClientService _clientService;
 
         public readonly IMapper _mapper;
 
@@ -35,6 +35,7 @@ namespace GrupoSelect.Web.Controllers
                                                      ITableTypeService tableTypeService,
                                                      IFinancialAdminService financialAdminService,
                                                      IProposalService proposalService,
+                                                     IClientService clientService,
                                                      IMapper mapper)
         {
             _creditService = creditService;
@@ -42,6 +43,7 @@ namespace GrupoSelect.Web.Controllers
             _tableTypeService = tableTypeService;
             _financialAdminService = financialAdminService;
             _proposalService = proposalService;
+            _clientService = clientService;
             _mapper = mapper;
         }
 
@@ -115,9 +117,6 @@ namespace GrupoSelect.Web.Controllers
                     proposalVM.ProductTypeName = credit.ProductType.ProductName;
                 }
 
-                //TODO - PARA FINS DE TESTES
-                proposalVM.ClientId = 1;
-
                 proposalVM.Status = Constants.PROPOSAL_STATUS_AC;
 
                 var proposal = _mapper.Map<Proposal>(proposalVM);
@@ -143,6 +142,12 @@ namespace GrupoSelect.Web.Controllers
 
                 if (result.Success)
                 {
+                    if (result.Object.Status != Constants.PROPOSAL_STATUS_AC)
+                    {
+                        TempData[Constants.SYSTEM_ERROR_KEY] = "Esse registro não pode ser editado pois possui o status de " + result.Object.Status;
+                        return RedirectToAction(nameof(Index));
+                    }
+
                     var proposalVM = _mapper.Map<ProposalVM>(result.Object);
                     var resultFinancialAdmin = await _financialAdminService.GetAll(new FinancialAdmin { Name = proposalVM.FinancialAdminName });
                     proposalVM.FinancialAdminId = resultFinancialAdmin.Object.First().Id;
@@ -179,6 +184,16 @@ namespace GrupoSelect.Web.Controllers
         {
             try
             {
+                var resultProposal = await _proposalService.GetById(id);
+
+                if (resultProposal.Success)
+                {
+                    if (resultProposal.Object.Status != Constants.PROPOSAL_STATUS_AC)
+                    {
+                        return Json(new Result<Proposal> { Success = false, Message = "Esse registro não pode ser editado pois possui o status de " + resultProposal.Object.Status });
+                    }
+                }
+                
                 var resultCredit = await _creditService.GetById(proposalVM.CreditId);
 
                 if (resultCredit.Success)
@@ -194,9 +209,6 @@ namespace GrupoSelect.Web.Controllers
                     proposalVM.TableTypeTax = credit.TableType.TableTax;
                     proposalVM.ProductTypeName = credit.ProductType.ProductName;
                 }
-
-                //TODO - PARA FINS DE TESTES
-                proposalVM.ClientId = 1;
 
                 var proposal = _mapper.Map<Proposal>(proposalVM);
 
@@ -299,27 +311,27 @@ namespace GrupoSelect.Web.Controllers
             }
         }
 
-        //[HttpPost]
-        //public async Task<IEnumerable<SelectListItem>> GetClientList(Client filter)
-        //{
-        //    var result = await _clientService.GetAll(filter);
+        [HttpPost]
+        public async Task<IEnumerable<SelectListItem>> GetClientList(Client filter)
+        {
+            var result = await _clientService.GetAll(filter);
 
-        //    if (result.Success)
-        //    {
-        //        IList<SelectListItem> items = new List<SelectListItem>();
+            if (result.Success)
+            {
+                IList<SelectListItem> items = new List<SelectListItem>();
 
-        //        foreach (Client item in result.Object)
-        //        {
-        //            items.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Name, Selected = filter.Id == item.Id ? true : false });
-        //        }
+                foreach (Client item in result.Object)
+                {
+                    items.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Name, Selected = filter.Id == item.Id ? true : false });
+                }
 
-        //        return items;
-        //    }
-        //    else
-        //    {
-        //        return new List<SelectListItem>();
-        //    }
-        //}
+                return items;
+            }
+            else
+            {
+                return new List<SelectListItem>();
+            }
+        }
 
         [HttpPost]
         public async Task<IEnumerable<SelectListItem>> GetCreditList(Credit filter)
@@ -333,7 +345,7 @@ namespace GrupoSelect.Web.Controllers
                 items.Add(new SelectListItem()
                 {
                     Value = "",
-                    Text = "--- Selecione ---",
+                    Text = "-- Selecione --",
                     Selected = filter.Id == 0 ? true : false
                 });
 

@@ -24,7 +24,7 @@
                     </div>
                     <div class="form-group col-md-6 col-xs-12">
                         @Html.Label("Ativo")
-                        @Html.DropDownListFor(model => model.Active, GrupoSelect.Web.Util.UtilWeb.GetBooleanList(true, true), new { @class = "form-control js-example-responsive", @style = "width: 100%;" })
+                        @Html.DropDownListFor(model => model.Active, GrupoSelect.Web.Util.UtilWeb.GetBooleanList(true, true), new { @class = "form-control js-example-responsive component-select", @style = "width: 100%;" })
                     </div>
                 }
             </div>
@@ -60,7 +60,7 @@
     <script src="~/js/jquery.inputmask.bundle.min.js"></script>
     <script>
         $(document).ready(function () {
-            $('select').select2();
+            $('.component-select').select2();
             GetData();
         });
 

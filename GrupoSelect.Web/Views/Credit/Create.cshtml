@@ -24,7 +24,7 @@
                             @Html.LabelFor(model => model.ProductTypeId) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            <select asp-for="ProductTypeId" id="ddlProductType" class="form-control js-example-responsive" style="width: 100%">
+                            <select asp-for="ProductTypeId" id="ddlProductType" class="form-control js-example-responsive component-select" style="width: 100%">
                                 <option value="">-- Selecione --</option>
                             </select>
                             @Html.ValidationMessageFor(model => model.ProductTypeId, null, new { @class = "text-danger" })
@@ -35,7 +35,7 @@
                             @Html.LabelFor(model => model.TableTypeId) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            <select asp-for="TableTypeId" id="ddlTableType" class="form-control js-example-responsive" style="width: 100%">
+                            <select asp-for="TableTypeId" id="ddlTableType" class="form-control js-example-responsive component-select" style="width: 100%">
                                 <option value="">-- Selecione --</option>
                             </select>
                             @Html.ValidationMessageFor(model => model.TableTypeId, null, new { @class = "text-danger" })
@@ -46,7 +46,7 @@
                             @Html.LabelFor(model => model.FinancialAdminId) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            <select asp-for="FinancialAdminId" id="ddlFinancialAdmin" class="form-control js-example-responsive" style="width: 100%">
+                            <select asp-for="FinancialAdminId" id="ddlFinancialAdmin" class="form-control js-example-responsive component-select" style="width: 100%">
                                 <option value="">-- Selecione --</option>
                             </select>
                             @Html.ValidationMessageFor(model => model.FinancialAdminId, null, new { @class = "text-danger" })
@@ -121,7 +121,7 @@
             FillSelect("@Url.Action("GetProductTypeList", "Credit")", null, "#ddlProductType");
             FillSelect("@Url.Action("GetTableTypeList", "Credit")", null, "#ddlTableType");
             FillSelect("@Url.Action("GetFinancialAdminList", "Credit")", { Active: true }, "#ddlFinancialAdmin");
-            $('select').select2();
+            $('.component-select').select2();
             InputMaskNumber("#Months", "2");
             MaskMoney();            
         });

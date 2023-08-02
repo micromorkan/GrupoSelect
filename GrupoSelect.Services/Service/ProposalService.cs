@@ -40,7 +40,7 @@ namespace GrupoSelect.Services.Service
                                                          (string.IsNullOrEmpty(filter.FinancialAdminName) || f.FinancialAdminName == filter.FinancialAdminName) &&
                                                          (filter.UserChecked == null || f.UserChecked == filter.UserChecked) &&
                                                          (filter.Status == null || f.Status == filter.Status) &&
-                                                         (f.DateCreate.Date >= startDate.Date && f.DateCreate.Date <= endDate.Date), o => o.OrderByDescending(x => x.DateCreate), page, qtPage);
+                                                         (f.DateCreate.Date >= startDate.Date && f.DateCreate.Date <= endDate.Date), o => o.OrderByDescending(x => x.DateCreate), page, qtPage, i => i.User, i => i.Client);
         }
 
         public async Task<Result<Proposal>> GetById(int id)

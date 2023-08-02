@@ -22,23 +22,23 @@
                     @Html.HiddenFor(model => model.DateCreate)
                     @Html.HiddenFor(model => model.Aproved)
                     @Html.HiddenFor(model => model.Status)
-                    @* <div class="item form-group">
-                <label class="col-form-label col-md-3 col-sm-3 label-align">
-                @Html.LabelFor(model => model.ClientId) <span class="required">*</span>
-                </label>
-                <div class="col-md-6 col-sm-6 ">
-                <select asp-for="ClientId" id="ddlClient" class="form-control js-example-responsive" style="width: 100%">
-                <option value="">-- Selecione --</option>
-                </select>
-                @Html.ValidationMessageFor(model => model.ClientId, null, new { @class = "text-danger" })
-                </div>
-                </div>*@
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.ClientId) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            <select asp-for="ClientId" id="ddlClient" class="form-control js-example-responsive component-select" style="width: 100%">
+                                <option value="">-- Selecione --</option>
+                            </select>
+                            @Html.ValidationMessageFor(model => model.ClientId, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
                     <div class="item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align">
                             @Html.LabelFor(model => model.ProductTypeId) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            <select asp-for="ProductTypeId" id="ddlProductType" class="form-control js-example-responsive filterCredit" style="width: 100%">
+                            <select asp-for="ProductTypeId" id="ddlProductType" class="form-control js-example-responsive filterCredit component-select" style="width: 100%">
                                 <option value="">-- Selecione --</option>
                             </select>
                             @Html.ValidationMessageFor(model => model.ProductTypeId, null, new { @class = "text-danger" })
@@ -49,7 +49,7 @@
                             @Html.LabelFor(model => model.FinancialAdminId) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            <select asp-for="FinancialAdminId" id="ddlFinancialAdmin" class="form-control js-example-responsive filterCredit" style="width: 100%">
+                            <select asp-for="FinancialAdminId" id="ddlFinancialAdmin" class="form-control js-example-responsive filterCredit component-select" style="width: 100%">
                                 <option value="">-- Selecione --</option>
                             </select>
                             @Html.ValidationMessageFor(model => model.FinancialAdminId, null, new { @class = "text-danger" })
@@ -60,7 +60,7 @@
                             @Html.LabelFor(model => model.TableTypeId) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            <select asp-for="TableTypeId" id="ddlTableType" class="form-control js-example-responsive filterCredit" style="width: 100%">
+                            <select asp-for="TableTypeId" id="ddlTableType" class="form-control js-example-responsive filterCredit component-select" style="width: 100%">
                                 <option value="">-- Selecione --</option>
                             </select>
                             @Html.ValidationMessageFor(model => model.TableTypeId, null, new { @class = "text-danger" })
@@ -71,7 +71,7 @@
                             @Html.LabelFor(model => model.CreditId) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            <select asp-for="CreditId" id="ddlCredit" class="form-control js-example-responsive" style="width: 100%">
+                            <select asp-for="CreditId" id="ddlCredit" class="form-control js-example-responsive component-select" style="width: 100%">
                             </select>
                             @Html.ValidationMessageFor(model => model.CreditId, null, new { @class = "text-danger" })
                         </div>
@@ -142,12 +142,12 @@
     }
     <script>
         $(document).ready(function () {
-            //FillSelect("@Url.Action("GetClientList", "Proposal")", null, "#ddlClient");
+            FillSelect("@Url.Action("GetClientList", "Proposal")", { Active: true }, "#ddlClient", "@Model.ClientId", true);
             FillSelect("@Url.Action("GetProductTypeList", "Proposal")", null, "#ddlProductType", "@Model.ProductTypeId", true);
             FillSelect("@Url.Action("GetTableTypeList", "Proposal")", null, "#ddlTableType", "@Model.TableTypeId", true);
             FillSelect("@Url.Action("GetFinancialAdminList", "Proposal")", { Active: true }, "#ddlFinancialAdmin", "@Model.FinancialAdminId", true);
 
-            $('select').select2();
+            $('.component-select').select2();
             MaskMoney();
             LoadFirstCredit();
 

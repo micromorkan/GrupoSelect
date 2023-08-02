@@ -24,14 +24,16 @@ namespace GrupoSelect.Services.Service
             {
                 Success = true,
                 Object = _unitOfWork.Clients.GetAll(f => (string.IsNullOrEmpty(filter.Name) || f.Name == filter.Name) &&
-                                                         (string.IsNullOrEmpty(filter.CPF) || f.CPF == filter.CPF)),
+                                                         (string.IsNullOrEmpty(filter.CPF) || f.CPF == filter.CPF) &&
+                                                         (filter.Active == null || f.Active == filter.Active)),
             };
         }
 
         public async Task<PaginateResult<IEnumerable<Client>>> GetAllPaginate(Client filter, int page, int qtPage)
         {
             return _unitOfWork.Clients.GetAllPaginate(f => (string.IsNullOrEmpty(filter.Name) || f.Name == filter.Name) &&
-                                                         (string.IsNullOrEmpty(filter.CPF) || f.CPF == filter.CPF), null, page, qtPage);
+                                                         (string.IsNullOrEmpty(filter.CPF) || f.CPF == filter.CPF) &&
+                                                         (filter.Active == null || f.Active == filter.Active), null, page, qtPage);
         }
 
         public async Task<Result<Client>> GetById(int id)

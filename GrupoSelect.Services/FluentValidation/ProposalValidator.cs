@@ -22,7 +22,6 @@ namespace GrupoSelect.Services.FluentValidation
                 RuleFor(x => x.FinancialAdminName).NotEmpty().WithMessage("Selecione a Administradora.");
                 RuleFor(x => x.CreditValue).NotEmpty().WithMessage("Selecione o Crédito.");
                 RuleFor(x => x.CreditTotalValue).NotEmpty().WithMessage("Valor Total inválido.");
-                //RuleFor(x => x).Custom(InsertUniqueCredit);
                 RuleFor(x => x).Custom(CreditTotalValue);
             });
 
@@ -36,7 +35,6 @@ namespace GrupoSelect.Services.FluentValidation
                 RuleFor(x => x.FinancialAdminName).NotEmpty().WithMessage("Selecione a Administradora.");
                 RuleFor(x => x.CreditValue).NotEmpty().WithMessage("Selecione o Crédito.");
                 RuleFor(x => x.CreditTotalValue).NotEmpty().WithMessage("Valor Total inválido.");
-                //RuleFor(x => x).Custom(InsertUniqueCredit);
                 RuleFor(x => x).Custom(CreditTotalValue);
             });
 
@@ -45,33 +43,7 @@ namespace GrupoSelect.Services.FluentValidation
                 RuleFor(x => x.Id).GreaterThan(0).WithMessage("O id da Proposta é inválido.");
             });
         }
-
-        private void InsertUniqueCredit(Domain.Entity.Credit model, ValidationContext<Domain.Entity.Credit> context)
-        {
-            var result = _unitOfWork.Credits.GetAll(filter => filter.ProductTypeId == model.ProductTypeId &&
-                                                            filter.TableTypeId == model.TableTypeId &&
-                                                            filter.FinancialAdminId == model.FinancialAdminId &&
-                                                            filter.Months == model.Months);
-
-            if (result.Any())
-            {
-                context.AddFailure("Já existe Crédito com os mesmos parâmetros cadastrado.");
-            }
-        }
-
-        private void EditUniqueCredit(Domain.Entity.Credit model, ValidationContext<Domain.Entity.Credit> context)
-        {
-            var result = _unitOfWork.Credits.GetAll(filter => filter.ProductTypeId == model.ProductTypeId &&
-                                                            filter.TableTypeId == model.TableTypeId &&
-                                                            filter.FinancialAdminId == model.FinancialAdminId &&
-                                                            filter.Months == model.Months &&
-                                                            filter.Id != model.Id);
-
-            if (result.Any())
-            {
-                context.AddFailure("Já existe Crédito com os mesmos parâmetros cadastrado.");
-            }
-        }
+        
         private void CreditTotalValue(Domain.Entity.Proposal model, ValidationContext<Domain.Entity.Proposal> context)
         {
             decimal creditTotalValue = 0;

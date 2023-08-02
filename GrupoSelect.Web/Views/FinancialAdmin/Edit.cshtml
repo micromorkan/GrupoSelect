@@ -33,7 +33,7 @@
                             @Html.LabelFor(model => model.Active) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            @Html.DropDownListFor(model => model.Active, GrupoSelect.Web.Util.UtilWeb.GetBooleanList(Model.Active.Value), new { @class = "form-control js-example-responsive", @style = "width: 100%;" })
+                            @Html.DropDownListFor(model => model.Active, GrupoSelect.Web.Util.UtilWeb.GetBooleanList(Model.Active.Value), new { @class = "form-control js-example-responsive component-select", @style = "width: 100%;" })
                         </div>
                     </div>
                     <div class="ln_solid"></div>
@@ -56,7 +56,7 @@
     }
     <script>
         $(document).ready(function () {
-            $('select').select2();
+            $('.component-select').select2();
             MaskCnpj();
         });
         $(".submit").click(function (event) {
