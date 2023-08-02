@@ -640,15 +640,15 @@ function ConvertMoneyFloat(valor) {
     return valor;
 }
 
-function InputMaskCep() {
+function MaskCep() {
     $(".cep").mask("99999-999");
 }
-function InputMaskRG() {
+function MaskRG() {
     $(".rg").mask("99.999.999-99");
 }
-function InputMaskPhone() {
+function MaskPhone() {
     $(".phone").mask("(99) 99999-9999");
 }
-function InputMaskDate() {
+function MaskDate() {
     $(".dateFormat").mask("99/99/9999");
 }
