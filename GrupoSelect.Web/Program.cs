@@ -17,7 +17,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(option => {
+    .AddCookie(option =>
+    {
         option.LoginPath = "/Access/Login";
         option.AccessDeniedPath = "/Access/AccessDenied";
         option.ExpireTimeSpan = TimeSpan.FromHours(24);

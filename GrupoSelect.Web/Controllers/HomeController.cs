@@ -1,11 +1,15 @@
-﻿using GrupoSelect.Web.ViewModel;
-using Microsoft.AspNetCore.Authorization;
+﻿using GrupoSelect.Domain.Entity;
+using GrupoSelect.Web.Util;
+using GrupoSelect.Web.ViewModel;
+using GrupoSelect.Web.Views.Shared.Components.Models;
+using GrupoSelect.Web.Views.Shared.Reports.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RazorEngine;
+using RazorEngine.Templating;
 using System.Diagnostics;
-using GrupoSelect.Web.Util;
-using Web.Views.Shared.Componentes.ComponentModels;
 
 namespace GrupoSelect.Web.Controllers
 {
@@ -24,9 +28,28 @@ namespace GrupoSelect.Web.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult FichaCadastral()
         {
-            return View();
+            RegistrationForm registrationForm = new RegistrationForm(new Client { Nome = "DIEGO ANDRADE SAMPAIO" }, new Proposal { ProductTypeName = "CARRO" }, new Domain.Entity.User { Cnpj = "99.999.999/0001-99" });
+            // Carregue o conteúdo do arquivo CSHTML
+            string cshtmlContent = System.IO.File.ReadAllText("Views\\Shared\\Reports\\RegistrationForm.cshtml");
+
+            // Renderize o CSHTML com os dados fornecidos
+            string renderedContent = Engine.Razor.RunCompile(cshtmlContent, "FICHACADASTRAL", typeof(RegistrationForm), registrationForm);
+
+            return Content(renderedContent, "text/html");
+        }
+
+        public IActionResult Contrato()
+        {
+            ContractForm registrationForm = new ContractForm(new Client { Nome = "DIEGO ANDRADE SAMPAIO" }, new Proposal { ProductTypeName = "CARRO" }, new Domain.Entity.User { Cnpj = "99.999.999/0001-99" });
+            // Carregue o conteúdo do arquivo CSHTML
+            string cshtmlContent = System.IO.File.ReadAllText("Views\\Shared\\Reports\\ContractForm.cshtml");
+
+            // Renderize o CSHTML com os dados fornecidos
+            string renderedContent = Engine.Razor.RunCompile(cshtmlContent, "CONTRATO", typeof(ContractForm), registrationForm);
+
+            return Content(renderedContent, "text/html");
         }
 
         public async Task<IActionResult> Components()
@@ -97,7 +120,7 @@ namespace GrupoSelect.Web.Controllers
 
             #region CHART
 
-            Chart chart = new Chart
+            GrupoSelect.Web.Views.Shared.Components.Models.Chart chart = new GrupoSelect.Web.Views.Shared.Components.Models.Chart
             {
                 Id = 1,
                 Titulo = "Usuários Ativos",
@@ -114,7 +137,7 @@ namespace GrupoSelect.Web.Controllers
 
             index.LstChart.Add(chart);
 
-            Chart chart2 = new Chart
+            GrupoSelect.Web.Views.Shared.Components.Models.Chart chart2 = new GrupoSelect.Web.Views.Shared.Components.Models.Chart
             {
                 Id = 2,
                 Titulo = "Perfis Cadastrados",
@@ -131,7 +154,7 @@ namespace GrupoSelect.Web.Controllers
 
             index.LstChart.Add(chart2);
 
-            Chart chart3 = new Chart
+            GrupoSelect.Web.Views.Shared.Components.Models.Chart chart3 = new GrupoSelect.Web.Views.Shared.Components.Models.Chart
             {
                 Id = 3,
                 Titulo = "Usuários Ativos",
@@ -195,7 +218,7 @@ namespace GrupoSelect.Web.Controllers
 
             #region CALENDAR
 
-            Calendar calendario = new Calendar();
+            Views.Shared.Components.Models.Calendar calendario = new Views.Shared.Components.Models.Calendar();
 
             calendario.IdUsuario = 1;
             calendario.NomeUsuario = "Diego Andrade Sampaio";
@@ -304,7 +327,7 @@ namespace GrupoSelect.Web.Controllers
             var b = new Random().Next(11, 20);
             var c = new Random().Next(21, 30);
 
-            Chart chart = new Chart
+            GrupoSelect.Web.Views.Shared.Components.Models.Chart chart = new GrupoSelect.Web.Views.Shared.Components.Models.Chart
             {
                 Id = 1,
                 Titulo = "Usuários Cadastrados",
@@ -325,7 +348,7 @@ namespace GrupoSelect.Web.Controllers
             var b = new Random().Next(11, 20);
             var c = new Random().Next(21, 30);
 
-            Chart chart = new Chart
+            GrupoSelect.Web.Views.Shared.Components.Models.Chart chart = new GrupoSelect.Web.Views.Shared.Components.Models.Chart
             {
                 Titulo = "Usuários Cadastrados",
                 Cores = new string[3] { "rgba(255, 99, 132, 1)", "rgba(255, 206, 86, 1)", "rgba(54, 162, 235, 1)" },
@@ -345,7 +368,7 @@ namespace GrupoSelect.Web.Controllers
             var b = new Random().Next(11, 20);
             var c = new Random().Next(21, 30);
 
-            Chart chart = new Chart
+            GrupoSelect.Web.Views.Shared.Components.Models.Chart chart = new GrupoSelect.Web.Views.Shared.Components.Models.Chart
             {
                 Titulo = "Propostas Preenchidas",
                 Cores = new string[3] { "rgba(255, 99, 132, 1)", "rgba(255, 206, 86, 1)", "rgba(54, 162, 235, 1)" },

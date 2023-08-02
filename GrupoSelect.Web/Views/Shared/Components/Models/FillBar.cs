@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace Web.Views.Shared.Componentes.ComponentModels
+﻿namespace GrupoSelect.Web.Views.Shared.Components.Models
 {
     public class FillBar
     {

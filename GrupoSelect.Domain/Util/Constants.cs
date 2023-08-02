@@ -39,7 +39,6 @@
         public const string SYSTEM_SUCCESS_MSG = "Operação realizada com sucesso!";
         public const string SYSTEM_ERROR_MSG = "Não foi possível executar esta ação. Contate a equipe de TI.";
         public const string SYSTEM_ERROR_ID = "O id informado não foi encontrado.";
-        
 
         public const string SYSTEM_ERROR_KEY = "GS_ERROR";
         public const string SYSTEM_EXCEPTION_OBJ = "EXOBJECT";
@@ -48,7 +47,13 @@
         public const string SYSTEM_LOG_UPDATE = "UPDATE";
         public const string SYSTEM_LOG_DELETE = "DELETE";
 
-      
+        #endregion
+
+        #region PROPOSAL CONSTANTS
+
+        public const string PROPOSAL_STATUS_AC= "AGUARDANDO CONFERÊNCIA";
+        public const string PROPOSAL_STATUS_PC= "PROPOSTA CONFERIDA";
+        public const string PROPOSAL_STATUS_PF = "PROPOSTA FINALIZADA";
 
         #endregion
     }

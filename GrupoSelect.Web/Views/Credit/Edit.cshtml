@@ -76,7 +76,7 @@
                             @Html.LabelFor(model => model.PortionValue) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            @Html.TextBoxFor(model => model.PortionValue, new {@class = "form-control money" })
+                            @Html.TextBoxFor(model => model.PortionValue, new {@class = "form-control money partialValue" })
                             @Html.ValidationMessageFor(model => model.PortionValue, null, new { @class = "text-danger" })
                         </div>
                     </div>
@@ -85,7 +85,7 @@
                             @Html.LabelFor(model => model.MembershipValue) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            @Html.TextBoxFor(model => model.MembershipValue, new {@class = "form-control money" })
+                            @Html.TextBoxFor(model => model.MembershipValue, new {@class = "form-control money partialValue" })
                             @Html.ValidationMessageFor(model => model.MembershipValue, null, new { @class = "text-danger" })
                         </div>
                     </div>
@@ -94,7 +94,7 @@
                             @Html.LabelFor(model => model.TotalValue) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            @Html.TextBoxFor(model => model.TotalValue, new {@class = "form-control money" })
+                            @Html.TextBoxFor(model => model.TotalValue, new {@class = "form-control money", @disabled="disabled" })
                             @Html.ValidationMessageFor(model => model.TotalValue, null, new { @class = "text-danger" })
                         </div>
                     </div>
@@ -128,6 +128,13 @@
         });
         $(".submit").click(function (event) {
             Edit("@Url.Action("Index", "Credit")", false, false);
+        });
+
+        $('.partialValue').on('keyup', function (e) {
+            var PortionValue = $('#PortionValue').val();
+            var MembershipValue = $('#MembershipValue').val();
+            var valorTotal = ConvertMoneyFloat(PortionValue) + ConvertMoneyFloat(MembershipValue);
+            $('#TotalValue').val(valorTotal.toLocaleString('pt-br', { minimumFractionDigits: 2 }));
         });
     </script>
 }

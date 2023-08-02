@@ -382,7 +382,7 @@ function Search(editar, urlEditar, excluir, urlExlcuir, pagina) {
                             if (cols.length == 1) {
                                 if (typeof (item[coluna]) === "boolean") {
                                     row.push(item[coluna] ? 'Sim' : 'Não');
-                                } else if (item[coluna] !== null && item[coluna] !== undefined && item[coluna].toString().indexOf("/Date(") !== -1) {
+                                } else if (item[coluna] !== null && item[coluna] !== undefined && moment(item[coluna], moment.ISO_8601, true).isValid()) {
                                     row.push(moment(item[coluna]).format("DD/MM/YYYY HH:mm:ss"));
                                 } else {
                                     row.push(prefix + item[coluna] + sufix);
@@ -396,7 +396,7 @@ function Search(editar, urlEditar, excluir, urlExlcuir, pagina) {
 
                                 if (typeof (value) === "boolean") {
                                     row.push(value ? 'Sim' : 'Não');
-                                } else if (item[coluna] !== null && item[coluna] !== undefined && item[coluna].toString().indexOf("/Date(") !== -1) {
+                                } else if (item[coluna] !== null && item[coluna] !== undefined && moment(item[coluna], moment.ISO_8601, true).isValid()) {
                                     row.push(moment(item[coluna]).format("DD/MM/YYYY HH:mm:ss"));
                                 } else {
                                     row.push(prefix + value + sufix);
@@ -623,6 +623,22 @@ function InputMaskTax(inputName) {
 }
 function InputMaskNumber(inputName, maxDigits) {
     $(inputName).inputmask('Regex', { regex: "^[0-9]{1,"+maxDigits+"}$" });
+}
+
+function ConvertMoneyFloat(valor) {
+
+    if (valor === "") {
+        valor = 0;
+    } else {
+        valor = valor.replace("R$", "");
+        valor = valor.replace(".", "");
+        valor = valor.replace(",", ".");
+        valor = valor.trim();
+        valor = parseFloat(valor);
+    }
+
+    return valor;
+}
 }
 function InputMaskCep() {
     $(".cep").mask("99999-999");

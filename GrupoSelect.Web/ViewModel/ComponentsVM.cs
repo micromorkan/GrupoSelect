@@ -1,4 +1,4 @@
-﻿using Web.Views.Shared.Componentes.ComponentModels;
+﻿using GrupoSelect.Web.Views.Shared.Components.Models;
 
 namespace GrupoSelect.Web.ViewModel
 {

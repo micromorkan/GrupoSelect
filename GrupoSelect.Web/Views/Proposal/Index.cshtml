@@ -1,0 +1,420 @@
+﻿@using System.Security.Claims;
+@using GrupoSelect.Domain.Util;
+@using GrupoSelect.Web.Helpers;
+@using System.Globalization;
+@model GrupoSelect.Web.ViewModel.ProposalVM
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/css/daterangepicker.css" rel="stylesheet" />
+<div class="clearfix"></div>
+<div class="col-md-12 col-sm-12 ">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>
+                Proposta <i class="fa fa-chevron-right"></i> Pesquisar
+            </h2>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="row">
+                @using (Html.BeginForm("Index", "Proposal", FormMethod.Post, new { @id = "search", @class = "form-horizontal col-md-12 col-xs-12" }))
+                {
+                    <div class="form-group col-md-4 col-xs-12">
+                        @Html.LabelFor(model => model.ClientId)
+                        <select asp-for="ClientId" id="ddlClient" class="form-control js-example-responsive" style="width: 100%">
+                            <option value="">-- Selecione --</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4 col-xs-12">
+                        @Html.LabelFor(model => model.ProductTypeId)
+                        <select asp-for="ProductTypeId" id="ddlProductType" class="form-control js-example-responsive" style="width: 100%">
+                            <option value="">-- Selecione --</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4 col-xs-12">
+                        @Html.LabelFor(model => model.TableTypeId)
+                        <select asp-for="TableTypeId" id="ddlTableType" class="form-control js-example-responsive" style="width: 100%">
+                            <option value="">-- Selecione --</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4 col-xs-12">
+                        @Html.LabelFor(model => model.FinancialAdminId)
+                        <select asp-for="FinancialAdminId" id="ddlFinancialAdmin" class="form-control js-example-responsive" style="width: 100%">
+                            <option value="">-- Selecione --</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4 col-xs-12">
+                        @Html.Label("Período")
+                        <input type="text" id="dateFilter" class="form-control" value="">
+                    </div>
+                    <div class="form-group col-md-4 col-xs-12">
+                        @Html.LabelFor(model => model.Status)
+                        @Html.DropDownListFor(model => model.Status, GrupoSelect.Web.Util.UtilWeb.GetProposalStatusList(Model.Status), new { @class = "form-control js-example-responsive", @style = "width: 100%;" })
+                    </div>
+                }
+            </div>
+            <div class="row">
+                <div class="form-group col-md-12 col-xs-12 text-right">
+                    <button type="button" onclick="GetProposalData(1);" class="btn btn-primary">Pesquisar</button>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card-box table-responsive">
+                        <table id="search" class="table table-striped table-bordered" style="width:100%" data-page-length='2'>
+                            <thead>
+                                <tr>
+                                    @{
+                                        if (User.GetProfile() == Constants.PROFILE_ADMINISTRATIVO)
+                                        {
+                                            <th class="column text-center" data-prefix="" data-sufix="" data-column="user.representation" data-css="text-center">Representação</th>
+                                        }
+                                    }
+
+                                    <th class="column text-center" data-prefix="" data-sufix="" data-column="clientId" data-css="text-center">Cliente</th>
+                                    <th class="column text-center" data-prefix="" data-sufix="" data-column="productTypeName" data-css="text-center">Produto</th>
+                                    <th class="column text-center" data-prefix="" data-sufix="" data-column="financialAdminName" data-css="text-center">Administradora</th>
+                                    <th class="column text-center" data-prefix="" data-sufix="" data-column="creditValue" data-css="text-right">Crédito</th>
+                                    <th class="column text-center" data-prefix="R$ " data-sufix="" data-column="creditMembershipValue" data-css="text-right">Adesão</th>
+                                    <th class="column text-center" data-prefix="R$ " data-sufix="" data-column="creditPortionValue" data-css="text-right">Parcela</th>
+                                    <th class="column text-center" data-prefix="R$ " data-sufix="" data-column="creditTotalValue" data-css="text-right">Total</th>
+                                    <th class="column text-center" data-prefix="" data-sufix="" data-column="status" data-css="text-center">Status</th>
+                                    <th class="column text-center" data-prefix="" data-sufix="" data-column="dateCreate" data-css="text-center">Data</th>
+                                    <th class="column text-center" style="width:10%;" data-column="" data-css="text-center">Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                        <div id="pagination"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/jquery.mask.min.js"></script>
+    <script src="~/js/jquery.inputmask.bundle.min.js"></script>
+    <script src="~/js/daterangepicker.js"></script>
+    <script>
+        $(document).ready(function () {
+            FillSelect("@Url.Action("GetProductTypeList", "Credit")", null, "#ddlProductType");
+            FillSelect("@Url.Action("GetTableTypeList", "Credit")", null, "#ddlTableType");
+            FillSelect("@Url.Action("GetFinancialAdminList", "Credit")", { Active: true }, "#ddlFinancialAdmin");
+            $('select').select2();
+            moment.locale('pt-br');
+            void 0 !== $.fn.daterangepicker && $("#dateFilter").daterangepicker({
+                startDate: '@DateTime.Now.Date.AddDays(-7).ToShortDateString()',
+                endDate: '@DateTime.Now.Date.ToShortDateString()',
+                locale: {
+                    format: "DD/MM/YYYY",
+                    "applyLabel": "Selecionar",
+                    "cancelLabel": "Cancelar",
+                }
+            });
+
+            GetProposalData();
+        });
+
+        function GetProposalData(pagina) {
+            SearchProposal(pagina);
+        }
+
+        function SearchProposal(pagina) {
+            var form = $("#search");
+            var model = form.serializeObject();
+
+            model.StartDate = moment($('#dateFilter').data('daterangepicker').startDate._d).format('LL');
+            model.EndDate = moment($('#dateFilter').data('daterangepicker').endDate._d).format('LL');
+
+            var qtdPagina = 20;
+
+            if (pagina == null) {
+                pagina = 1;
+            }
+
+            $('#loading').show();
+
+            $.ajax({
+                url: form[0].action + "?page=" + pagina + "&qtPage=" + qtdPagina,
+                type: 'POST',
+                dataType: 'json',
+                data: model,
+                success: function (data) {
+
+                    if (data.success) {
+                        if (!$.fn.DataTable.isDataTable($('table'))) {
+                            $('table').DataTable({
+                                paging: false,
+                                searching: true,
+                                lengthChange: false,
+                                dom: "Blfrtip",
+                                buttons: [{
+                                    extend: "excel",
+                                    className: "btn btn-primary btn-sm",
+                                    exportOptions: {
+                                        columns: 'th:not(:last-child)'
+                                    }
+                                }, {
+                                    extend: "pdfHtml5",
+                                    orientation: 'landscape',
+                                    pageSize: 'A4',
+                                    className: "btn btn-primary btn-sm",
+                                    exportOptions: {
+                                        columns: 'th:not(:last-child)'
+                                    },
+                                    customize: function (doc) {
+                                        doc.content[1].margin = [100, 0, 100, 0];
+                                        //doc.styles.tableBodyOdd.alignment = 'center';
+                                        //doc.styles.tableBodyEven.alignment = 'center';
+                                    }
+                                }, {
+                                    extend: "print",
+                                    className: "btn btn-primary btn-sm",
+                                    exportOptions: {
+                                        columns: 'th:not(:last-child)'
+                                    }
+                                }],
+                                "responsive": true,
+                                "bAutoWidth": false,
+                                "info": false,
+                                "drawCallback": function (settings) {
+                                    AplicarCSSDTT();
+                                }
+                            });
+                        }
+
+                        var dt = $('table').DataTable().clear().draw();
+
+                        $.each(data.object, function (i, item) {
+                            var row = [];
+
+                            $('.column').each(function () {
+                                var coluna = $(this).data('column');
+                                var prefix = $(this).data('prefix');
+                                var sufix = $(this).data('sufix');
+
+                                if (coluna) {
+
+                                    var cols = coluna.split(".");
+
+                                    if (cols.length == 1) {
+                                        if (typeof (item[coluna]) === "boolean") {
+                                            row.push(item[coluna] ? 'Sim' : 'Não');
+                                        } else if (item[coluna] !== null && item[coluna] !== undefined && moment(item[coluna], moment.ISO_8601, true).isValid()) {
+                                            row.push(moment(item[coluna]).format("DD/MM/YYYY"));
+                                        } else {
+                                            row.push(prefix + item[coluna] + sufix);
+                                        }
+                                    } else if (cols.length > 1) {
+                                        var value = item[cols[0]];
+
+                                        for (var i = 1; i < cols.length; i++) {
+                                            value = value[cols[i]];
+                                        }
+
+                                        if (typeof (value) === "boolean") {
+                                            row.push(value ? 'Sim' : 'Não');
+                                        } else if (item[coluna] !== null && item[coluna] !== undefined && moment(item[coluna], moment.ISO_8601, true).isValid()) {
+                                            row.push(moment(item[coluna]).format("DD/MM/YYYY"));
+                                        } else {
+                                            row.push(prefix + value + sufix);
+                                        }
+                                    }
+                                }
+                            });
+
+                            var actionButtons = "";
+
+                            actionButtons += "<a title='Visualizar Ficha Cadastral' class='btn btn-xs btn-info' target = '_blank' href='" + '@Url.Action("PrintProposal", "Proposal")' + "\/" + item.id + "'><span class='glyphicon glyphicon-print' aria-hidden='true'></span></a>";
+
+                            if ('@User.GetProfile()' === '@Constants.PROFILE_REPRESENTANTE') {
+                                if (item['aproved'] === false && item['userChecked'] === null) {
+                                    actionButtons += "<a title='Editar' class='btn btn-xs btn-warning' href='" + '@Url.Action("Edit", "Proposal")' + "\/" + item.id + "'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></a>";
+                                    actionButtons += "<a title='Excluir' class='btn btn-xs btn-danger' onclick='DeleteProposalConfirm(" + item.id + ", " + pagina + ");'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></a>"
+                                }
+                            } else if ('@User.GetProfile()' === '@Constants.PROFILE_ADMINISTRATIVO') {
+                                if (item['aproved'] === false && item['userChecked'] === null) {
+                                    actionButtons += "<a title='Aceitar Proposta' class='btn btn-xs btn-success' onclick='ConfirmProposal(" + item.id + ", " + pagina + ");'><span class='glyphicon glyphicon-ok' style='color:white; cursor: pointer;' aria-hidden='true'></span></a>";
+                                }
+                            } else if ('@User.GetProfile()' !== '@Constants.PROFILE_ADMINISTRATIVO' && '@User.GetProfile()' !== '@Constants.PROFILE_REPRESENTANTE' && '@User.GetProfile()' !== '@Constants.PROFILE_ADVOGADO') {
+                                if (item['aproved'] === false) {
+                                    actionButtons += "<a title='Editar' class='btn btn-xs btn-warning' href='" + '@Url.Action("Edit", "Proposal")' + "\/" + item.id + "'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></a>";
+
+                                    if (item['userChecked'] === null) {
+                                        actionButtons += "<a title='Aceitar Proposta' class='btn btn-xs btn-success' onclick='ConfirmProposal(" + item.id + ", " + pagina + ");'><span class='glyphicon glyphicon-ok' style='color:white; cursor: pointer;' aria-hidden='true'></span></a>";
+                                        actionButtons += "<a title='Excluir' class='btn btn-xs btn-danger' onclick='DeleteProposalConfirm(" + item.id + ", " + pagina + ");'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></a>"
+                                    } else {
+                                        actionButtons += "<a title='Excluir' class='btn btn-xs btn-danger' onclick='DeleteProposalContractConfirm(" + item.id + ", " + pagina + ");'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></a>"
+                                    }
+                                }
+                            }
+
+                            row.push(actionButtons)
+
+                            dt.row.add(row).draw(false);
+                        });
+
+                        AplicarCSSDTT();
+                        AplicarDTT();
+
+                        RenderProposalPagination(data.page, data.total, qtdPagina);
+                    } else {
+                        AplicarCSSDTT();
+                        AplicarDTT();
+
+                        if (data.errors) {
+                            ShowModalListWarning(data.errors);
+                        } else {
+                            ShowModalError(data.message);
+                        }
+                    }
+
+
+                },
+                error: function (xhr, status, error) {
+                    ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador.');
+                }
+            });
+        }
+
+        function DeleteProposalConfirm(idExclusao, pagina) {
+            swal({
+                title: 'Deseja continuar a exclusão?',
+                text: "Após confirmação, não será possível reverter!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#286090',
+                cancelButtonColor: '#d9534f',
+                confirmButtonText: 'Sim, deletar!',
+                cancelButtonText: 'Não, cancelar!',
+                confirmButtonClass: 'btn btn-primary',
+                cancelButtonClass: 'btn btn-danger',
+                buttonsStyling: false
+            }).then(function () {
+                $('#loading').show();
+                $.ajax({
+                    url: '@Url.Action("Delete", "Proposal")',
+                    type: 'POST',
+                    data: { 'id': idExclusao },
+                    success: function (data) {
+                        if (data.success) {
+                            swal('Sucesso!', data.message, 'success');
+                        } else {
+                            if (data.errors) {
+                                ShowModalListWarning(data.errors);
+                            } else {
+                                ShowModalError(data.message);
+                            }
+                        }
+
+                        SearchProposal(pagina);
+                    },
+                    error: function (xhr, status, error) {
+                        ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador.');
+                    }
+                });
+            }, function (dismiss) {
+                if (dismiss === 'cancel') {
+                    swal('Cancelado', 'A exclusão foi cancelada pelo usuário!', 'error');
+                }
+            });
+        }
+
+        function ConfirmProposal(idProposal, pagina) {
+            swal({
+                title: 'Deseja conferir a proposta?',
+                text: "Após confirmação, não será possível reverter!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#286090',
+                cancelButtonColor: '#d9534f',
+                confirmButtonText: 'Sim, confirmar!',
+                cancelButtonText: 'Não, cancelar!',
+                confirmButtonClass: 'btn btn-primary',
+                cancelButtonClass: 'btn btn-danger',
+                buttonsStyling: false
+            }).then(function () {
+                $('#loading').show();
+                $.ajax({
+                    url: '@Url.Action("ConfirmProposal", "Proposal")',
+                    type: 'POST',
+                    data: { 'id': idProposal },
+                    success: function (data) {
+                        if (data.success) {
+                            swal('Sucesso!', data.message, 'success');
+                        } else {
+                            if (data.errors) {
+                                ShowModalListWarning(data.errors);
+                            } else {
+                                ShowModalError(data.message);
+                            }
+                        }
+
+                        SearchProposal(pagina);
+                    },
+                    error: function (xhr, status, error) {
+                        ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador.');
+                    }
+                });
+            }, function (dismiss) {
+                if (dismiss === 'cancel') {
+                    swal('Cancelado', 'A ação foi cancelada pelo usuário!', 'error');
+                }
+            });
+        }
+
+        function RenderProposalPagination(paginaatual, totalregistros, qtdpage = 20) {
+
+            var qtdpaginas = Math.ceil(totalregistros / qtdpage);
+
+            var html = '<div class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">' +
+                '<div class="row">' +
+                '<div class="col-sm-12 col-md-5">';
+
+            if (totalregistros === 0) {
+                //html = html + '<div class="dataTables_info">Não há registros</div>';
+                html = html + '<div class="dataTables_info"></div>';
+            } else if ((paginaatual * qtdpage) >= totalregistros) {
+                html = html + '<div class="dataTables_info">Exibindo ' + ((paginaatual * qtdpage) - (qtdpage - 1)) + ' a ' + totalregistros + ' de um total de ' + totalregistros + ' registros</div>';
+            } else {
+                html = html + '<div class="dataTables_info">Exibindo ' + ((paginaatual * qtdpage) - (qtdpage - 1)) + ' a ' + (paginaatual * qtdpage) + ' de um total de ' + totalregistros + ' registros</div>';
+            }
+
+            html = html + '</div>' +
+                '<div class="col-sm-12 col-md-7">' +
+                '<div class="dataTables_paginate paging_simple_numbers">' +
+                '<ul class="pagination">';
+
+            if (paginaatual === 1) {
+                html = html + '<li class="paginate_button page-item previous disabled"><a href="#" class="page-link">Anterior</a></li>';
+            } else {
+                html = html + '<li class="paginate_button page-item previous"><a href="#" onclick="GetProposalData(' + (paginaatual - 1) + ');" class="page-link">Anterior</a></li>';
+            }
+
+            for (var i = 1; i <= qtdpaginas; i++) {
+                if (paginaatual === i) {
+                    html = html + '<li class="paginate_button page-item active"><a href="#" onclick="GetProposalData(' + i + ');" class="page-link">' + i + '</a></li>';
+                } else {
+                    html = html + '<li class="paginate_button page-item"><a href="#" onclick="GetProposalData(' + i + ');" class="page-link">' + i + '</a></li>';
+                }
+            }
+
+            if (qtdpaginas === paginaatual || qtdpaginas === 0) {
+                html = html + '<li class="paginate_button page-item next disabled"><a href="#" class="page-link">Próximo</a></li>';
+            } else {
+                html = html + '<li class="paginate_button page-item next"><a href="#" onclick="GetProposalData(' + (paginaatual + 1) + ');" class="page-link">Próximo</a></li>';
+            }
+
+            html = html + '</ul></div></div></div></div>';
+
+            $('#pagination').html(html);
+        }
+
+    </script>
+}

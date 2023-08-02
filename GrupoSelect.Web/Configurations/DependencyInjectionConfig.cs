@@ -20,6 +20,7 @@ namespace GrupoSelect.Web.Configurations
             services.AddScoped<IProductTypeService, ProductTypeService>();
             services.AddScoped<ITableTypeService, TableTypeService>();
             services.AddScoped<ICreditService, CreditService>();
+            services.AddScoped<IProposalService, ProposalService>();
             services.AddScoped<IClientService, ClientService>();
 
 

@@ -1,4 +1,5 @@
 ﻿using GrupoSelect.Domain.Entity;
+using GrupoSelect.Domain.Util;
 using GrupoSelect.Services.Interface;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel;
@@ -25,6 +26,18 @@ namespace GrupoSelect.Web.Util
                 items.Add(new SelectListItem() { Value = "true", Text = "Sim", Selected = filter });
                 items.Add(new SelectListItem() { Value = "false", Text = "Não", Selected = !filter });
             }
+
+            return items;
+        }
+
+        public static IEnumerable<SelectListItem> GetProposalStatusList(string filter)
+        {
+            IList<SelectListItem> items = new List<SelectListItem>();
+
+            items.Add(new SelectListItem() { Value = "", Text = "-- Selecione --", Selected = (string.IsNullOrEmpty(filter) ? true : false) });
+            items.Add(new SelectListItem() { Value = Constants.PROPOSAL_STATUS_AC, Text = Constants.PROPOSAL_STATUS_AC, Selected = (filter == Constants.PROPOSAL_STATUS_AC ? true : false) });
+            items.Add(new SelectListItem() { Value = Constants.PROPOSAL_STATUS_PC, Text = Constants.PROPOSAL_STATUS_PC, Selected = (filter == Constants.PROPOSAL_STATUS_PC ? true : false) });
+            items.Add(new SelectListItem() { Value = Constants.PROPOSAL_STATUS_PF, Text = Constants.PROPOSAL_STATUS_PF, Selected = (filter == Constants.PROPOSAL_STATUS_PF ? true : false) });
 
             return items;
         }
