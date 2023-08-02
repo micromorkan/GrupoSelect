@@ -23,6 +23,7 @@ namespace GrupoSelect.Data.Context
         public DbSet<ProductType> ProductTypes { get; set; }
         public DbSet<TableType> TableTypes { get; set; }
         public DbSet<Credit> Credits { get; set; }
+        public DbSet<Client> Clients { get; set; }
         public DbSet<Proposal> Proposals { get; set; }
 
         public GSDbContext(IConfiguration configuration)

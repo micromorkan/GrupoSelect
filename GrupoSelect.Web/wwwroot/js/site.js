@@ -639,7 +639,7 @@ function ConvertMoneyFloat(valor) {
 
     return valor;
 }
-}
+
 function InputMaskCep() {
     $(".cep").mask("99999-999");
 }

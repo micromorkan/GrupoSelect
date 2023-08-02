@@ -30,7 +30,7 @@ namespace GrupoSelect.Web.Controllers
 
         public IActionResult FichaCadastral()
         {
-            RegistrationForm registrationForm = new RegistrationForm(new Client { Nome = "DIEGO ANDRADE SAMPAIO" }, new Proposal { ProductTypeName = "CARRO" }, new Domain.Entity.User { Cnpj = "99.999.999/0001-99" });
+            RegistrationForm registrationForm = new RegistrationForm(new Client { Name = "DIEGO ANDRADE SAMPAIO" }, new Proposal { ProductTypeName = "CARRO" }, new Domain.Entity.User { Cnpj = "99.999.999/0001-99" });
             // Carregue o conteúdo do arquivo CSHTML
             string cshtmlContent = System.IO.File.ReadAllText("Views\\Shared\\Reports\\RegistrationForm.cshtml");
 
@@ -42,7 +42,7 @@ namespace GrupoSelect.Web.Controllers
 
         public IActionResult Contrato()
         {
-            ContractForm registrationForm = new ContractForm(new Client { Nome = "DIEGO ANDRADE SAMPAIO" }, new Proposal { ProductTypeName = "CARRO" }, new Domain.Entity.User { Cnpj = "99.999.999/0001-99" });
+            ContractForm registrationForm = new ContractForm(new Client { Name = "DIEGO ANDRADE SAMPAIO" }, new Proposal { ProductTypeName = "CARRO" }, new Domain.Entity.User { Cnpj = "99.999.999/0001-99" });
             // Carregue o conteúdo do arquivo CSHTML
             string cshtmlContent = System.IO.File.ReadAllText("Views\\Shared\\Reports\\ContractForm.cshtml");
 
