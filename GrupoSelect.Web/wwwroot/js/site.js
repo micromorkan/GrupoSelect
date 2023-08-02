@@ -624,3 +624,15 @@ function InputMaskTax(inputName) {
 function InputMaskNumber(inputName, maxDigits) {
     $(inputName).inputmask('Regex', { regex: "^[0-9]{1,"+maxDigits+"}$" });
 }
+function InputMaskCep() {
+    $(".cep").mask("99999-999");
+}
+function InputMaskRG() {
+    $(".rg").mask("99.999.999-99");
+}
+function InputMaskPhone() {
+    $(".phone").mask("(99) 99999-9999");
+}
+function InputMaskDate() {
+    $(".date").mask("99/99/9999");
+}
