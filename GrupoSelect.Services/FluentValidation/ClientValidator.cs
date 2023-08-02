@@ -17,7 +17,7 @@ namespace GrupoSelect.Services.FluentValidation
             {
                 RuleFor(x => x.Name).NotEmpty().WithMessage("Informe o Nome do cliente");
                 RuleFor(x => x.CPF).NotEmpty().Length(14).WithMessage("Informe o CPF");
-                RuleFor(x => x.RG).NotEmpty().Length(11).WithMessage("Informe o RG");
+                RuleFor(x => x.RG).NotEmpty().Length(13).WithMessage("Informe o RG");
                 RuleFor(x => x.Sex).NotEmpty().WithMessage("Informe o Sexo");
                 RuleFor(x => x.NaturalFrom).NotEmpty().WithMessage("Informe o campo Natural");
                 RuleFor(x => x.Nationality).NotEmpty().WithMessage("Informe a Naturalidade");
@@ -111,14 +111,24 @@ namespace GrupoSelect.Services.FluentValidation
         }
         private void ValidateDateBirth(Domain.Entity.Client model, ValidationContext<Domain.Entity.Client> context)
         {
-            if (model.DateBirth == DateTime.MinValue)
+            DateTime datebirth = DateTime.Now;
+
+            if (DateTime.TryParse(model.DateBirth, out datebirth))
+            {
+                if (datebirth == DateTime.MinValue)
+                {
+                    context.AddFailure("Data de Nascimento inválido");
+                }
+                else if (datebirth.Date > DateTime.Now.AddYears(-18))
+                {
+                    context.AddFailure("O Cliente deve ser maior de idade");
+                }
+            }
+            else
             {
                 context.AddFailure("Data de Nascimento inválido");
             }
-            else if (model.DateBirth.Date > DateTime.Now.AddYears(-18))
-            {
-                context.AddFailure("O Cliente deve ser maior de idade");
-            }
+
         }
     }
 }

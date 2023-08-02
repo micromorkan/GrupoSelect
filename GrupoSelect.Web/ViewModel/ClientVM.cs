@@ -26,8 +26,7 @@ namespace GrupoSelect.Web.ViewModel
 
         [Display(Name = "Data de Nascimento")]
         [Required(ErrorMessage = "O campo {0} é obrigatório!")]
-        [DataType(DataType.Date, ErrorMessage = "Informe uma data válida.")]
-        public DateTime DateBirth { get; set; }
+        public string DateBirth { get; set; }
 
         [Display(Name = "Naturalidade")]
         [Required(ErrorMessage = "O campo {0} é obrigatório!")]
@@ -43,8 +42,7 @@ namespace GrupoSelect.Web.ViewModel
 
         [Display(Name = "Data de Expedição")]
         [Required(ErrorMessage = "O campo {0} é obrigatório!")]
-        [DataType(DataType.Date, ErrorMessage = "Informe uma data válida.")]
-        public DateTime DateExp { get; set; }
+        public string DateExp { get; set; }
 
         [Display(Name = "Orgão Expeditor")]
         [Required(ErrorMessage = "O campo {0} é obrigatório!")]

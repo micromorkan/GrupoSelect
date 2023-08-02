@@ -14,11 +14,11 @@ namespace GrupoSelect.Domain.Entity
         public string CPF { get; set; }
         public string RG { get; set; }
         public string Sex { get; set; }
-        public DateTime DateBirth { get; set; }
+        public string DateBirth { get; set; }
         public string NaturalFrom { get; set; }
         public string Nationality { get; set; }
         public string MaritalStatus { get; set; }
-        public DateTime DateExp { get; set; }
+        public string DateExp { get; set; }
         public string OrganExp { get; set; }
         public string Contact { get; set; }
         public string Email { get; set; }
