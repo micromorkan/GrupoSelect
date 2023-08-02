@@ -60,7 +60,7 @@
                             @Html.LabelFor(model => model.DateBirth) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            @Html.TextBoxFor(model => model.DateBirth, new {@class = "form-control date" })
+                            @Html.TextBoxFor(model => model.DateBirth, new {@class = "form-control dateFormat" })
                             @Html.ValidationMessageFor(model => model.DateBirth, null, new { @class = "text-danger" })
                         </div>
                     </div>
@@ -96,7 +96,7 @@
                             @Html.LabelFor(model => model.DateExp) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            @Html.TextBoxFor(model => model.DateExp, new {@class = "form-control date" })
+                            @Html.TextBoxFor(model => model.DateExp, new {@class = "form-control dateFormat" })
                             @Html.ValidationMessageFor(model => model.DateExp, null, new { @class = "text-danger" })
                         </div>
                     </div>

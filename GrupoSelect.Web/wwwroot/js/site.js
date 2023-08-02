@@ -650,5 +650,5 @@ function InputMaskPhone() {
     $(".phone").mask("(99) 99999-9999");
 }
 function InputMaskDate() {
-    $(".date").mask("99/99/9999");
+    $(".dateFormat").mask("99/99/9999");
 }
