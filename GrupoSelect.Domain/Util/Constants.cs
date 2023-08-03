@@ -56,5 +56,15 @@
         public const string PROPOSAL_STATUS_PF = "PROPOSTA FINALIZADA";
 
         #endregion
+
+        #region CONTRACT CONSTANTS
+
+        public const string CONTRACT_STATUS_AD = "AGUARDANDO DOCUMENTAÇÃO";
+        public const string CONTRACT_STATUS_PA = "PARA ANÁLISE";
+        public const string CONTRACT_STATUS_CA = "CONTRATO APROVADO";
+        public const string CONTRACT_STATUS_CR = "CONTRATO REPROVADO";
+        public const string CONTRACT_STATUS_CC = "CONTRATO CANCELADO";
+
+        #endregion
     }
 }

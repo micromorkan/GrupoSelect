@@ -134,6 +134,7 @@ namespace GrupoSelect.Services.Service
             }
 
             _unitOfWork.Proposals.Delete(model);
+
             _unitOfWork.Proposals.Save();
 
             return new Result<Proposal>

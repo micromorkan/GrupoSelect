@@ -19,6 +19,7 @@ namespace GrupoSelect.Domain.Interface
         IBaseRepository<Credit> Credits { get; }
         IBaseRepository<Client> Clients { get; }
         IBaseRepository<Proposal> Proposals { get; }
+        IBaseRepository<Contract> Contracts { get; }
         void SaveAllChanges();
     }
 }

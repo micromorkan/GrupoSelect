@@ -25,6 +25,7 @@ namespace GrupoSelect.Data.Context
         public DbSet<Credit> Credits { get; set; }
         public DbSet<Client> Clients { get; set; }
         public DbSet<Proposal> Proposals { get; set; }
+        public DbSet<Contract> Contracts { get; set; }
 
         public GSDbContext(IConfiguration configuration)
         {
@@ -51,6 +52,7 @@ namespace GrupoSelect.Data.Context
             modelBuilder.ApplyConfiguration(new CreditMap());
             modelBuilder.ApplyConfiguration(new ClientMap());
             modelBuilder.ApplyConfiguration(new ProposalMap());
+            modelBuilder.ApplyConfiguration(new ContractMap());
 
         }
 
