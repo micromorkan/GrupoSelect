@@ -52,7 +52,7 @@
                     </div>
                     <div class="form-group col-md-4 col-xs-12">
                         @Html.LabelFor(model => model.Status)
-                        @Html.DropDownListFor(model => model.Status, GrupoSelect.Web.Util.UtilWeb.GetProposalStatusList(Model.Status), new { @class = "form-control js-example-responsive", @style = "width: 100%;" })
+                        @Html.DropDownListFor(model => model.Status, GrupoSelect.Web.Util.UtilWeb.GetProposalStatusList(Model.Status), new { @class = "form-control js-example-responsive component-select", @style = "width: 100%;" })
                     </div>
                 }
             </div>
@@ -78,7 +78,7 @@
                                     <th class="column text-center" data-prefix="" data-sufix="" data-column="client.name" data-css="text-center">Cliente</th>
                                     <th class="column text-center" data-prefix="" data-sufix="" data-column="productTypeName" data-css="text-center">Produto</th>
                                     <th class="column text-center" data-prefix="" data-sufix="" data-column="financialAdminName" data-css="text-center">Administradora</th>
-                                    <th class="column text-center" data-prefix="" data-sufix="" data-column="creditValue" data-css="text-right">Crédito</th>
+                                    <th class="column text-center" data-prefix="R$ " data-sufix="" data-column="creditValue" data-css="text-right">Crédito</th>
                                     <th class="column text-center" data-prefix="R$ " data-sufix="" data-column="creditMembershipValue" data-css="text-right">Adesão</th>
                                     <th class="column text-center" data-prefix="R$ " data-sufix="" data-column="creditPortionValue" data-css="text-right">Parcela</th>
                                     <th class="column text-center" data-prefix="R$ " data-sufix="" data-column="creditTotalValue" data-css="text-right">Total</th>

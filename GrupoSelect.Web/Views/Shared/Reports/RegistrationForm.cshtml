@@ -62,7 +62,7 @@
             </thead>
             <tbody>
                 <tr>
-                    <td class="text-center">NOME DA REPRESENTAÇÃO</td>
+                    <td class="text-center">@Model.User.Representation</td>
                     <td class="text-center">@Model.User.Cnpj</td>
                 </tr>
             </tbody>
@@ -88,45 +88,45 @@
                 </tr>
                 <tr>
                     <td class="bold">CPF</td>
-                    <td>014.464.995-02</td>
+                    <td>@Model.Client.CPF</td>
                     <td class="bold">RG</td>
-                    <td>11632901-73</td>
+                    <td>@Model.Client.RG</td>
                 </tr>
                 <tr>
                     <td class="bold">SEXO</td>
-                    <td>MASCULINO</td>
+                    <td>@Model.Client.Sex</td>
                     <td class="bold">NASCIMENTO</td>
-                    <td>15/09/1987</td>
+                    <td>@Model.Client.DateBirth</td>
                 </tr>
                 <tr>
                     <td class="bold">NATURAL</td>
-                    <td>JEQUIÉ</td>
+                    <td>@Model.Client.NaturalFrom</td>
                     <td class="bold">NACIONALIDADE</td>
-                    <td>BRASILEIRO</td>
+                    <td>@Model.Client.Nationality</td>
                 </tr>
                 <tr>
                     <td class="bold">EST. CIVIL</td>
-                    <td>CASADO</td>
+                    <td>@Model.Client.MaritalStatus</td>
                     <td class="bold">DATA EXP.</td>
-                    <td>10/06/2012</td>
+                    <td>@Model.Client.DateExp</td>
                 </tr>
                 <tr>
                     <td class="bold">ORGÃO EXP.</td>
-                    <td>SSP-BA</td>
+                    <td>@Model.Client.OrganExp</td>
                     <td>xxxxxxxxxxxxx</td>
                     <td>xxxxxxxxxxxxx</td>
                 </tr>
                 <tr>
                     <td class="bold">CONTATO</td>
-                    <td>(71) 98174-5959</td>
+                    <td>@Model.Client.Contact</td>
                     <td class="bold">EMAIL</td>
-                    <td>MORKAN@GMAIL.COM</td>
+                    <td>@Model.Client.Email</td>
                 </tr>
                 <tr>
                     <td class="bold">PROFISSÃO</td>
-                    <td>ANALISTA DE SISTEMAS</td>
+                    <td>@Model.Client.Profession</td>
                     <td class="bold">RENDA</td>
-                    <td>R$ 3.000,00</td>
+                    <td>R$ @Model.Client.Income</td>
                 </tr>
             </tbody>
         </table>
@@ -147,21 +147,21 @@
             <tbody>
                 <tr>
                     <td class="bold">ENDEREÇO</td>
-                    <td>RUA NOSSA SENHORA DE BROTAS</td>
+                    <td>@Model.Client.Address</td>
                     <td class="bold">BAIRRO</td>
-                    <td>BROTAS</td>
+                    <td>@Model.Client.Neighborhood</td>
                 </tr>
                 <tr>
                     <td class="bold">COMPLEMENTO</td>
-                    <td>APT 402, EDF FLORA</td>
+                    <td>@Model.Client.Complement</td>
                     <td class="bold">CEP</td>
-                    <td>40283-170</td>
+                    <td>@Model.Client.Cep</td>
                 </tr>
                 <tr>
                     <td class="bold">CIDADE</td>
-                    <td>SALVADOR</td>
+                    <td>@Model.Client.City</td>
                     <td class="bold">ESTADO</td>
-                    <td>BA</td>
+                    <td>@Model.Client.State</td>
                 </tr>
             </tbody>
         </table>
@@ -184,25 +184,25 @@
                     <td class="bold">TIPO PRODUTO</td>
                     <td>@Model.Proposal.ProductTypeName</td>
                     <td class="bold">CRÉDITO R$</td>
-                    <td>R$ 60.000,00</td>
+                    <td>R$ @Model.Proposal.CreditValue</td>
                 </tr>
                 <tr>
                     <td class="bold">TABELA</td>
-                    <td>A</td>
+                    <td>@Model.Proposal.TableTypeTax</td>
                     <td class="bold">PARCELA R$</td>
-                    <td>R$ 932,27</td>
+                    <td>R$ @Model.Proposal.CreditPortionValue</td>
                 </tr>
                 <tr>
                     <td class="bold"></td>
                     <td></td>
                     <td class="bold">ADESÃO R$</td>
-                    <td>R$ 1.987,14</td>
+                    <td>R$ @Model.Proposal.CreditMembershipValue</td>
                 </tr>
                 <tr>
                     <td class="bold">VENDEDOR</td>
-                    <td>JOÃO DA SILVA</td>
+                    <td>@Model.User.Name</td>
                     <td class="bold">TOTAL PAGO R$</td>
-                    <td>R$ 2.919,41</td>
+                    <td>R$ @Model.Proposal.CreditTotalValue</td>
                 </tr>
             </tbody>
         </table>

@@ -397,8 +397,8 @@ namespace GrupoSelect.Web.Controllers
             try
             {
                 Proposal proposal = (await _proposalService.GetById(id)).Object;
-                //proposal.Client
-                RegistrationForm registrationForm = new RegistrationForm(new Client { Name = "DIEGO ANDRADE SAMPAIO" }, proposal, proposal.User);
+              
+                RegistrationForm registrationForm = new RegistrationForm(proposal.Client, proposal, proposal.User);
 
                 string cshtmlContent = System.IO.File.ReadAllText("Views\\Shared\\Reports\\RegistrationForm.cshtml");
                 string renderedContent = Engine.Razor.RunCompile(cshtmlContent, "FICHACADASTRAL", typeof(RegistrationForm), registrationForm);
