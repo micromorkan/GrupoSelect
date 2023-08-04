@@ -24,8 +24,8 @@ namespace GrupoSelect.Data.Mapping
 
             builder.Property(c => c.DateCreate).HasColumnName("DateCreate").IsRequired();
             builder.Property(c => c.DateStatus).HasColumnName("DateStatus");
-            builder.Property(c => c.DateAproved).HasColumnName("UserChecked");
-            builder.Property(c => c.UserIdAproved).HasColumnName("Aproved");
+            builder.Property(c => c.DateAproved).HasColumnName("DateAproved");
+            builder.Property(c => c.UserIdAproved).HasColumnName("UserIdAproved");
 
             builder.HasOne(s => s.Proposal).WithMany().HasForeignKey(s => s.ProposalId);
         }

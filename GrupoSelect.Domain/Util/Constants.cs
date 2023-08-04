@@ -22,10 +22,11 @@
 
         #region FLUENT VALIDATION CONSTANTS
 
-        public const string FLUENT_INSERT = "Insert";
-        public const string FLUENT_UPDATE = "Update";
-        public const string FLUENT_DELETE = "Delete";
-        public const string FLUENT_AUTHENTICATE = "Authenticate";
+        public const string FLUENT_INSERT = "INSERT";
+        public const string FLUENT_UPDATE = "UPDATE";
+        public const string FLUENT_DELETE = "DELETE";
+        public const string FLUENT_CHECK = "CHECK";
+        public const string FLUENT_AUTHENTICATE = "AUTHENTICATE";
 
         #endregion
 
@@ -54,13 +55,14 @@
         public const string PROPOSAL_STATUS_AC= "AGUARDANDO CONFERÊNCIA";
         public const string PROPOSAL_STATUS_PC= "PROPOSTA CONFERIDA";
         public const string PROPOSAL_STATUS_PF = "PROPOSTA FINALIZADA";
+        public const string PROPOSAL_STATUS_CA = "PROPOSTA CANCELADA";
 
         #endregion
 
         #region CONTRACT CONSTANTS
 
-        public const string CONTRACT_STATUS_AD = "AGUARDANDO DOCUMENTAÇÃO";
-        public const string CONTRACT_STATUS_PA = "PARA ANÁLISE";
+        public const string CONTRACT_STATUS_AD = "AGUARDANDO DOCUMENTOS";
+        public const string CONTRACT_STATUS_PA = "PARA ANALISE";
         public const string CONTRACT_STATUS_CA = "CONTRATO APROVADO";
         public const string CONTRACT_STATUS_CR = "CONTRATO REPROVADO";
         public const string CONTRACT_STATUS_CC = "CONTRATO CANCELADO";

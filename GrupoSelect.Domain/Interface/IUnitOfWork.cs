@@ -1,9 +1,4 @@
 ﻿using GrupoSelect.Domain.Entity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GrupoSelect.Domain.Interface
 {
@@ -20,6 +15,8 @@ namespace GrupoSelect.Domain.Interface
         IBaseRepository<Client> Clients { get; }
         IBaseRepository<Proposal> Proposals { get; }
         IBaseRepository<Contract> Contracts { get; }
+        IBaseRepository<ContractHistoric> ContractHistorics { get; }
+        IBaseRepository<ContractConfig> ContractConfigs { get; }
         void SaveAllChanges();
     }
 }

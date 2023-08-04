@@ -22,6 +22,7 @@ namespace GrupoSelect.Web.Configurations
             services.AddScoped<ICreditService, CreditService>();
             services.AddScoped<IProposalService, ProposalService>();
             services.AddScoped<IClientService, ClientService>();
+            services.AddScoped<IContractService, ContractService>();
 
 
             services.AddScoped<ISessionProvider, SessionProvider>();

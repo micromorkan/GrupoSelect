@@ -4,6 +4,8 @@ using GrupoSelect.Domain.Interface;
 using GrupoSelect.Domain.Models;
 using GrupoSelect.Domain.Util;
 using GrupoSelect.Services.Interface;
+using System.Runtime.CompilerServices;
+using System.Transactions;
 
 namespace GrupoSelect.Services.Service
 {
@@ -141,6 +143,47 @@ namespace GrupoSelect.Services.Service
             {
                 Success = true,
                 Object = model,
+                Message = Constants.SYSTEM_SUCCESS_MSG
+            };
+        }
+
+        public async Task<Result<Proposal>> CheckProposal(int id, int userId)
+        {
+            Proposal proposal = (await GetById(id)).Object;
+
+            proposal.DateChecked = DateTime.Now;
+            proposal.UserChecked = userId;
+            proposal.Status = Constants.PROPOSAL_STATUS_PC;
+
+            ContractConfig contractConfig = _unitOfWork.ContractConfigs.GetAll(f => f.Id == 1, null).First();
+            contractConfig = Functions.GetNextContractNum(contractConfig);
+
+            Contract contract = new Contract();
+
+            contract.ContractNum = contractConfig.ContractNum;
+            contract.ProposalId = proposal.Id;
+            contract.Status = Constants.CONTRACT_STATUS_AD;
+            contract.DateCreate = DateTime.Now;
+            contract.DateStatus = DateTime.Now;
+
+            ContractHistoric contractHistoric = new ContractHistoric();
+
+            contractHistoric.ContractNum = contractConfig.ContractNum;
+            contractHistoric.ProposalId = proposal.Id;
+            contractHistoric.Status = Constants.CONTRACT_STATUS_AD;
+            contractHistoric.DateRegister = contract.DateCreate;
+            contractHistoric.UserIdRegister = userId;
+
+            _unitOfWork.Contracts.Insert(contract);
+            _unitOfWork.ContractHistorics.Insert(contractHistoric);
+            _unitOfWork.ContractConfigs.Update(contractConfig);
+            _unitOfWork.Proposals.Update(proposal);
+            _unitOfWork.SaveAllChanges();
+
+            return new Result<Proposal>
+            {
+                Success = true,
+                Object = null,
                 Message = Constants.SYSTEM_SUCCESS_MSG
             };
         }

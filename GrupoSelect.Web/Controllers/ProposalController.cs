@@ -370,19 +370,12 @@ namespace GrupoSelect.Web.Controllers
         [HttpPost]
         [TypeFilter(typeof(ExceptionLog))]
         [Authorize(Roles = Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_TI + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
-        public async Task<IActionResult> ConfirmProposal(int id)
+        public async Task<IActionResult> CheckProposal(int id)
         {
             try
             {
-                Proposal proposal = (await _proposalService.GetById(id)).Object;
-
-                proposal.DateChecked = DateTime.Now;
-                proposal.UserChecked = Convert.ToInt32(User.GetId());
-                proposal.Status = Constants.PROPOSAL_STATUS_PC;
-
-                var result = _proposalService.Update(proposal);
-                //TODO - INCLUIR LOGICA PARA INSERIR NOVO REGISTRO DE CONTRATO
-
+                var result = await _proposalService.CheckProposal(id, Convert.ToInt32(User.GetId()));
+             
                 return Json(result);
             }
             catch (Exception)

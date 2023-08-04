@@ -1,4 +1,7 @@
-﻿namespace GrupoSelect.Domain.Util
+﻿using GrupoSelect.Domain.Entity;
+using System.IO;
+
+namespace GrupoSelect.Domain.Util
 {
     public static class Functions
     {
@@ -120,6 +123,33 @@
             digito = digito + resto.ToString();
 
             return cnpj.EndsWith(digito);
+        }
+
+        public static ContractConfig GetNextContractNum(ContractConfig contractConfig)
+        {
+            string contractSigla = contractConfig.ContractNum.Substring(0, 2);
+            int contractWeek = Convert.ToInt32(contractConfig.ContractNum.Substring(2, 3));
+            int contractCount = Convert.ToInt32(contractConfig.ContractNum.Substring(5, 2));
+
+            if (Enum.Parse<DayOfWeek>(contractConfig.DayWeekUpdate) == DateTime.Today.DayOfWeek && contractConfig.HasWeekUpdate == false)
+            {
+                contractConfig.HasWeekUpdate = true;
+                contractWeek++;
+                contractCount = 1;
+            }
+            else if (Enum.Parse<DayOfWeek>(contractConfig.DayWeekUpdate) == DateTime.Today.DayOfWeek && contractConfig.HasWeekUpdate)
+            {
+                contractCount++;
+            }
+            else if (Enum.Parse<DayOfWeek>(contractConfig.DayWeekUpdate) != DateTime.Today.DayOfWeek)
+            {
+                contractConfig.HasWeekUpdate = false;
+                contractCount++;
+            }
+
+            contractConfig.ContractNum = contractSigla + contractWeek.ToString().PadLeft(3, '0') + contractCount.ToString().PadLeft(2, '0');
+
+            return contractConfig;
         }
     }
 }

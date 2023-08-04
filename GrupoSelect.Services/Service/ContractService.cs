@@ -4,6 +4,7 @@ using GrupoSelect.Domain.Interface;
 using GrupoSelect.Domain.Models;
 using GrupoSelect.Domain.Util;
 using GrupoSelect.Services.Interface;
+using System.Reflection;
 
 namespace GrupoSelect.Services.Service
 {
@@ -60,34 +61,6 @@ namespace GrupoSelect.Services.Service
             }
         }
 
-        public Result<Contract> Insert(Contract model)
-        {
-            var resultValidation = _validator.Validate(model, options => options.IncludeRuleSets(Constants.FLUENT_INSERT));
-
-            if (!resultValidation.IsValid)
-            {
-                return new Result<Contract>
-                {
-                    Success = false,
-                    Object = model,
-                    Errors = resultValidation.Errors
-                };
-            }
-
-            model.DateCreate = DateTime.Now;
-            model.Status = Constants.CONTRACT_STATUS_AD;
-
-            _unitOfWork.Contracts.Insert(model);
-            _unitOfWork.Contracts.Save();
-
-            return new Result<Contract>
-            {
-                Success = true,
-                Object = model,
-                Message = Constants.SYSTEM_SUCCESS_MSG
-            };
-        }
-
         public Result<Contract> Update(Contract model)
         {
             var resultValidation = _validator.Validate(model, options => options.IncludeRuleSets(Constants.FLUENT_UPDATE));
@@ -102,13 +75,108 @@ namespace GrupoSelect.Services.Service
                 };
             }
 
+            model.Status = Constants.CONTRACT_STATUS_PA;
+            model.DateStatus = DateTime.Now;
+
+            ContractHistoric contractHistoric = new ContractHistoric();
+
+            contractHistoric.ContractNum = model.ContractNum;
+            contractHistoric.ProposalId = model.ProposalId;
+            contractHistoric.Status = model.Status;
+            contractHistoric.DateRegister = (DateTime)model.DateStatus;
+            contractHistoric.UserIdRegister = model.Proposal.UserId;
+            contractHistoric.ReprovedReason = model.ReprovedReason;
+            contractHistoric.ReprovedExplain = model.ReprovedExplain;
+
             _unitOfWork.Contracts.Update(model);
-            _unitOfWork.Contracts.Save();
+            _unitOfWork.ContractHistorics.Insert(contractHistoric);
+            _unitOfWork.SaveAllChanges();
 
             return new Result<Contract>
             {
                 Success = true,
                 Object = model,
+                Message = Constants.SYSTEM_SUCCESS_MSG
+            };
+        }
+
+        public Result<Contract> CheckContract(Contract model, int userId)
+        {
+            var resultValidation = _validator.Validate(model, options => options.IncludeRuleSets(Constants.FLUENT_CHECK));
+
+            if (!resultValidation.IsValid)
+            {
+                return new Result<Contract>
+                {
+                    Success = false,
+                    Object = model,
+                    Errors = resultValidation.Errors
+                };
+            }
+
+            Contract contract = _unitOfWork.Contracts.GetAll(f => f.Id == model.Id, null).First();
+
+            contract.Status = model.Status;
+            contract.ReprovedReason = model.ReprovedReason;
+            contract.ReprovedExplain = model.ReprovedExplain;
+
+            if (model.Status == Constants.CONTRACT_STATUS_CA)
+            {
+                contract.UserIdAproved = userId;
+                contract.DateAproved = DateTime.Now;
+                contract.DateStatus = DateTime.Now;
+            }
+            else if (model.Status == Constants.CONTRACT_STATUS_CR)
+            {
+                contract.DateStatus = DateTime.Now;
+            }
+
+            ContractHistoric contractHistoric = new ContractHistoric();
+
+            contractHistoric.ContractNum = contract.ContractNum;
+            contractHistoric.ProposalId = contract.ProposalId;
+            contractHistoric.Status = model.Status;
+            contractHistoric.DateRegister = (DateTime)contract.DateStatus;
+            contractHistoric.UserIdRegister = userId;
+            contractHistoric.ReprovedReason = model.ReprovedReason;
+            contractHistoric.ReprovedExplain = model.ReprovedExplain;
+
+            _unitOfWork.Contracts.Update(contract);
+            _unitOfWork.ContractHistorics.Insert(contractHistoric);
+            _unitOfWork.SaveAllChanges();
+
+            return new Result<Contract>
+            {
+                Success = true,
+                Object = contract,
+                Message = Constants.SYSTEM_SUCCESS_MSG
+            };
+        }
+
+        public Result<Contract> CancelContract(int id, int userId)
+        {
+            Contract contract = _unitOfWork.Contracts.GetAll(f => f.Id == id, null, i => i.Proposal).First();
+
+            contract.Status = Constants.CONTRACT_STATUS_CC;
+            contract.DateStatus = DateTime.Now;
+            contract.Proposal.Status = Constants.PROPOSAL_STATUS_CA; //TODO - VERIFICAR SE AO ATUALIZAR O CONTRATO O EF ATUALIZA A PROPOSTA VINCULADA A ELE
+
+            ContractHistoric contractHistoric = new ContractHistoric();
+
+            contractHistoric.ContractNum = contract.ContractNum;
+            contractHistoric.ProposalId = contract.ProposalId;
+            contractHistoric.Status = Constants.CONTRACT_STATUS_CC;
+            contractHistoric.DateRegister = (DateTime)contract.DateStatus;
+            contractHistoric.UserIdRegister = userId;
+
+            _unitOfWork.Contracts.Update(contract);//TODO - VERIFICAR SE AO ATUALIZAR O CONTRATO O EF ATUALIZA A PROPOSTA VINCULADA A ELE
+            _unitOfWork.ContractHistorics.Insert(contractHistoric);
+            _unitOfWork.SaveAllChanges();
+
+            return new Result<Contract>
+            {
+                Success = true,
+                Object = contract,
                 Message = Constants.SYSTEM_SUCCESS_MSG
             };
         }

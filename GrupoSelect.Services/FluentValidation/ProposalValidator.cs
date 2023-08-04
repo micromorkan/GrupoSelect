@@ -41,6 +41,7 @@ namespace GrupoSelect.Services.FluentValidation
             RuleSet(Constants.FLUENT_DELETE, () =>
             {
                 RuleFor(x => x.Id).GreaterThan(0).WithMessage("O id da Proposta é inválido.");
+                RuleFor(x => x.Id).Custom(BlockDelete);
             });
         }
         
@@ -62,6 +63,28 @@ namespace GrupoSelect.Services.FluentValidation
             else
             {
                 context.AddFailure("Valor Total inválido.");
+            }
+        }
+
+        private async void BlockDelete(int id, ValidationContext<Domain.Entity.Proposal> context)
+        {
+            var proposal = _unitOfWork.Proposals.GetAll(x => x.Id == id).FirstOrDefault();
+         
+            if (proposal == null) 
+            {
+                context.AddFailure("O id da Proposta é inválido.");
+            }
+            else
+            {
+                if (proposal.UserChecked > 0 || proposal.DateChecked != null)
+                {
+                    context.AddFailure("A proposta não pode ser excluida pois já foi conferida.");
+                }
+
+                if (proposal.Aproved)
+                {
+                    context.AddFailure("A proposta não pode ser excluida pois já foi aprovada.");
+                }
             }
         }
     }

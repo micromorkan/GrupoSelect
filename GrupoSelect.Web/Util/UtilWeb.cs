@@ -40,6 +40,23 @@ namespace GrupoSelect.Web.Util
             items.Add(new SelectListItem() { Value = Constants.PROPOSAL_STATUS_AC, Text = Constants.PROPOSAL_STATUS_AC, Selected = (filter == Constants.PROPOSAL_STATUS_AC ? true : false) });
             items.Add(new SelectListItem() { Value = Constants.PROPOSAL_STATUS_PC, Text = Constants.PROPOSAL_STATUS_PC, Selected = (filter == Constants.PROPOSAL_STATUS_PC ? true : false) });
             items.Add(new SelectListItem() { Value = Constants.PROPOSAL_STATUS_PF, Text = Constants.PROPOSAL_STATUS_PF, Selected = (filter == Constants.PROPOSAL_STATUS_PF ? true : false) });
+            items.Add(new SelectListItem() { Value = Constants.PROPOSAL_STATUS_CA, Text = Constants.PROPOSAL_STATUS_CA, Selected = (filter == Constants.PROPOSAL_STATUS_CA ? true : false) });
+
+
+            return items;
+        }
+
+        public static IEnumerable<SelectListItem> GetContractStatusList(string filter)
+        {
+            IList<SelectListItem> items = new List<SelectListItem>();
+
+            items.Add(new SelectListItem() { Value = "", Text = "-- Selecione --", Selected = (string.IsNullOrEmpty(filter) ? true : false) });
+            items.Add(new SelectListItem() { Value = Constants.CONTRACT_STATUS_AD, Text = Constants.CONTRACT_STATUS_AD, Selected = (filter == Constants.CONTRACT_STATUS_AD ? true : false) });
+            items.Add(new SelectListItem() { Value = Constants.CONTRACT_STATUS_PA, Text = Constants.CONTRACT_STATUS_PA, Selected = (filter == Constants.CONTRACT_STATUS_PA ? true : false) });
+            items.Add(new SelectListItem() { Value = Constants.CONTRACT_STATUS_CA, Text = Constants.CONTRACT_STATUS_CA, Selected = (filter == Constants.CONTRACT_STATUS_CA ? true : false) });
+            items.Add(new SelectListItem() { Value = Constants.CONTRACT_STATUS_CR, Text = Constants.CONTRACT_STATUS_CR, Selected = (filter == Constants.CONTRACT_STATUS_CR ? true : false) });
+            items.Add(new SelectListItem() { Value = Constants.CONTRACT_STATUS_CC, Text = Constants.CONTRACT_STATUS_CC, Selected = (filter == Constants.CONTRACT_STATUS_CC ? true : false) });
+
 
             return items;
         }

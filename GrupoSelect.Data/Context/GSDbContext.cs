@@ -26,6 +26,8 @@ namespace GrupoSelect.Data.Context
         public DbSet<Client> Clients { get; set; }
         public DbSet<Proposal> Proposals { get; set; }
         public DbSet<Contract> Contracts { get; set; }
+        public DbSet<ContractHistoric> ContractHistorics { get; set; }
+        public DbSet<ContractConfig> ContractConfigs { get; set; }
 
         public GSDbContext(IConfiguration configuration)
         {
@@ -53,7 +55,8 @@ namespace GrupoSelect.Data.Context
             modelBuilder.ApplyConfiguration(new ClientMap());
             modelBuilder.ApplyConfiguration(new ProposalMap());
             modelBuilder.ApplyConfiguration(new ContractMap());
-
+            modelBuilder.ApplyConfiguration(new ContractHistoricMap());
+            modelBuilder.ApplyConfiguration(new ContractConfigMap());
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
