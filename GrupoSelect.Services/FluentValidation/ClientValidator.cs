@@ -37,6 +37,7 @@ namespace GrupoSelect.Services.FluentValidation
                 RuleFor(x => x).Custom(InsertUniqueClient);
                 RuleFor(x => x).Custom(ValidateMoney);
                 RuleFor(x => x).Custom(ValidateDateBirth);
+                RuleFor(x => x).Custom(ValidateCpf);
             });
 
             RuleSet(Constants.FLUENT_UPDATE, () =>
@@ -64,6 +65,7 @@ namespace GrupoSelect.Services.FluentValidation
                 RuleFor(x => x).Custom(EditUniqueClient);
                 RuleFor(x => x).Custom(ValidateMoney);
                 RuleFor(x => x).Custom(ValidateDateBirth);
+                RuleFor(x => x).Custom(ValidateCpf);
             });
 
             RuleSet(Constants.FLUENT_DELETE, () =>
@@ -129,6 +131,13 @@ namespace GrupoSelect.Services.FluentValidation
                 context.AddFailure("Data de Nascimento inválido");
             }
 
+        }
+        private void ValidateCpf(Domain.Entity.Client model, ValidationContext<Domain.Entity.Client> context)
+        {
+            if (!Functions.IsCpf(model.CPF))
+            {
+                context.AddFailure("CPF Inválido");
+            }
         }
     }
 }
