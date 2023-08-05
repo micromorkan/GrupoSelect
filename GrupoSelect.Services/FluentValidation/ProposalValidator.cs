@@ -100,14 +100,9 @@ namespace GrupoSelect.Services.FluentValidation
 
             if (proposal == null)
             {
-                if (proposal.Status == Constants.PROPOSAL_STATUS_PC)
+                if (proposal.Status == Constants.PROPOSAL_STATUS_PC || proposal.Status == Constants.PROPOSAL_STATUS_CA)
                 {
-                    context.AddFailure("O Contrato não pode ser cancelado pois possui o status de " + Constants.PROPOSAL_STATUS_PC + ".");
-                }
-
-                if (proposal.Status == Constants.PROPOSAL_STATUS_CA)
-                {
-                    context.AddFailure("O Contrato não pode ser cancelado pois já possui o status de " + Constants.PROPOSAL_STATUS_CA + ".");
+                    context.AddFailure("O Contrato não pode ser cancelado pois possui o status de " + proposal.Status + ".");
                 }
             }
             else
