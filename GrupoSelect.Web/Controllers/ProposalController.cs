@@ -192,31 +192,35 @@ namespace GrupoSelect.Web.Controllers
                     {
                         return Json(new Result<Proposal> { Success = false, Message = "Esse registro não pode ser editado pois possui o status de " + resultProposal.Object.Status });
                     }
-                }
-                
-                var resultCredit = await _creditService.GetById(proposalVM.CreditId);
 
-                if (resultCredit.Success)
+                    var resultCredit = await _creditService.GetById(proposalVM.CreditId);
+
+                    if (resultCredit.Success)
+                    {
+                        Credit credit = resultCredit.Object;
+
+                        proposalVM.CreditMembershipValue = credit.MembershipValue;
+                        proposalVM.CreditValue = credit.CreditValue;
+                        proposalVM.CreditPortionValue = credit.PortionValue;
+                        proposalVM.FinancialAdminName = credit.FinancialAdmin.Name;
+                        proposalVM.TableTypeFee = credit.TableType.MembershipFee;
+                        proposalVM.TableTypeRate = credit.TableType.RemainingRate;
+                        proposalVM.TableTypeTax = credit.TableType.TableTax;
+                        proposalVM.ProductTypeName = credit.ProductType.ProductName;
+                    }
+
+                    var proposal = _mapper.Map<Proposal>(proposalVM);
+
+                    proposal.UserId = Convert.ToInt32(User.GetId());
+
+                    var result = _proposalService.Update(proposal);
+
+                    return Json(result);
+                }
+                else
                 {
-                    Credit credit = resultCredit.Object;
-
-                    proposalVM.CreditMembershipValue = credit.MembershipValue;
-                    proposalVM.CreditValue = credit.CreditValue;
-                    proposalVM.CreditPortionValue = credit.PortionValue;
-                    proposalVM.FinancialAdminName = credit.FinancialAdmin.Name;
-                    proposalVM.TableTypeFee = credit.TableType.MembershipFee;
-                    proposalVM.TableTypeRate = credit.TableType.RemainingRate;
-                    proposalVM.TableTypeTax = credit.TableType.TableTax;
-                    proposalVM.ProductTypeName = credit.ProductType.ProductName;
+                    return Json(new Result<Contract> { Success = false, Message = "Esse registro não foi encontrado!" });
                 }
-
-                var proposal = _mapper.Map<Proposal>(proposalVM);
-
-                proposal.UserId = Convert.ToInt32(User.GetId());
-
-                var result = _proposalService.Update(proposal);
-
-                return Json(result);
             }
             catch (Exception)
             {
@@ -375,7 +379,7 @@ namespace GrupoSelect.Web.Controllers
             try
             {
                 var result = await _proposalService.CheckProposal(id, Convert.ToInt32(User.GetId()));
-             
+
                 return Json(result);
             }
             catch (Exception)
@@ -390,7 +394,7 @@ namespace GrupoSelect.Web.Controllers
             try
             {
                 Proposal proposal = (await _proposalService.GetById(id)).Object;
-              
+
                 RegistrationForm registrationForm = new RegistrationForm(proposal.Client, proposal, proposal.User);
 
                 string cshtmlContent = System.IO.File.ReadAllText("Views\\Shared\\Reports\\RegistrationForm.cshtml");
