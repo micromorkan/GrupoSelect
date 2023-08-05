@@ -4,9 +4,6 @@ using GrupoSelect.Domain.Interface;
 using GrupoSelect.Domain.Models;
 using GrupoSelect.Domain.Util;
 using GrupoSelect.Services.Interface;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Transactions;
 
 namespace GrupoSelect.Services.Service
 {

@@ -60,7 +60,7 @@ namespace GrupoSelect.Services.FluentValidation
             {
                 var existUser = result.First();
 
-                if (existUser.Cnpj == model.Cnpj)
+                if (existUser.Cnpj == model.Cnpj && model.Profile != Constants.PROFILE_DIRETOR)
                 {
                     context.AddFailure("Já existe um Cnpj cadastrado");
                 }
@@ -94,7 +94,7 @@ namespace GrupoSelect.Services.FluentValidation
             {
                 var existUser = result.First();
 
-                if (existUser.Cnpj == model.Cnpj)
+                if (existUser.Cnpj == model.Cnpj && model.Profile != Constants.PROFILE_DIRETOR)
                 {
                     context.AddFailure("Já existe um Cnpj cadastrado");
                 }
