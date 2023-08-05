@@ -26,6 +26,7 @@
         public const string FLUENT_UPDATE = "UPDATE";
         public const string FLUENT_DELETE = "DELETE";
         public const string FLUENT_CHECK = "CHECK";
+        public const string FLUENT_CANCEL = "CANCEL";
         public const string FLUENT_AUTHENTICATE = "AUTHENTICATE";
 
         #endregion

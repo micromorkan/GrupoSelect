@@ -4,19 +4,13 @@ using GrupoSelect.Domain.Entity;
 using GrupoSelect.Domain.Models;
 using GrupoSelect.Domain.Util;
 using GrupoSelect.Services.Interface;
-using GrupoSelect.Services.Service;
 using GrupoSelect.Web.Helpers;
 using GrupoSelect.Web.ViewModel;
 using GrupoSelect.Web.Views.Shared.Reports.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using RazorEngine;
-using RazorEngine.Compilation.ImpromptuInterface;
 using RazorEngine.Templating;
-using System.Globalization;
-using System.Security.Claims;
 
 namespace GrupoSelect.Web.Controllers
 {
@@ -34,7 +28,7 @@ namespace GrupoSelect.Web.Controllers
             _mapper = mapper;
         }
 
-        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_ADMINISTRATIVO)]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_ADVOGADO)]
         public async Task<IActionResult> Index()
         {
             var proposal = new ContractVM();
@@ -48,7 +42,7 @@ namespace GrupoSelect.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_ADMINISTRATIVO)]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_ADVOGADO)]
         [TypeFilter(typeof(ExceptionLog))]
         public async Task<IActionResult> Index(ContractVM contractVM, int page, int qtPage)
         {
@@ -62,6 +56,8 @@ namespace GrupoSelect.Web.Controllers
                 {
                     filter.Proposal.UserId = Convert.ToInt32(User.GetId());
                 }
+
+                filter.ContractNum = string.IsNullOrEmpty(filter.ContractNum) ? string.Empty : filter.ContractNum.ToUpper();
 
                 var result = await _contractService.GetAllPaginate(filter, page, qtPage, contractVM.StartDate, contractVM.EndDate);
 
@@ -289,25 +285,6 @@ namespace GrupoSelect.Web.Controllers
         //    }
         //}
 
-
-        //[HttpPost]
-        //[TypeFilter(typeof(ExceptionLog))]
-        //[Authorize(Roles = Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_TI + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
-        //public IActionResult Check(ContractVM contractVM)
-        //{
-        //    try
-        //    {
-        //        var contract = _mapper.Map<Contract>(contractVM);
-        //        var result = _contractService.Check(contract, Convert.ToInt32(User.GetId()));
-
-        //        return Json(result);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-        //}
-
         [TypeFilter(typeof(ExceptionLog))]
         public async Task<IActionResult> PrintContract(int id)
         {
@@ -392,12 +369,12 @@ namespace GrupoSelect.Web.Controllers
         }
 
         [TypeFilter(typeof(ExceptionLog))]
-        [Authorize(Roles = Constants.PROFILE_TI + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
-        public async Task<IActionResult> CancelContract(int id)
+        [Authorize(Roles = Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
+        public async Task<IActionResult> Cancel(int id)
         {
             try
             {
-                var result = _contractService.CancelContract(id, Convert.ToInt32(User.GetId()));
+                var result = _contractService.Cancel(id, Convert.ToInt32(User.GetId()));
 
                 return Json(result);
             }

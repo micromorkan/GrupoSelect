@@ -35,7 +35,7 @@ namespace GrupoSelect.Services.Service
             return _unitOfWork.Contracts.GetAllPaginate(f => (filter.Proposal.UserId == 0 || f.Proposal.UserId == filter.Proposal.UserId) &&
                                                          (filter.Proposal.ClientId == 0 || f.Proposal.ClientId == filter.Proposal.ClientId) &&
                                                          (string.IsNullOrEmpty(filter.Status) || f.Status == filter.Status) &&
-                                                         (string.IsNullOrEmpty(filter.ContractNum) || f.ContractNum == filter.ContractNum) &&
+                                                         (string.IsNullOrEmpty(filter.ContractNum) || f.ContractNum.Contains(filter.ContractNum)) &&
                                                          (f.DateCreate.Date >= startDate.Date && f.DateCreate.Date <= endDate.Date), o => o.OrderByDescending(x => x.DateCreate), page, qtPage, i => i.Proposal.Client, i => i.Proposal.User);
         }
 
@@ -162,13 +162,25 @@ namespace GrupoSelect.Services.Service
             };
         }
 
-        public Result<Contract> CancelContract(int id, int userId)
+        public Result<Contract> Cancel(int id, int userId)
         {
+            var resultValidation = _validator.Validate(new Contract { Id = id }, options => options.IncludeRuleSets(Constants.FLUENT_CANCEL));
+
+            if (!resultValidation.IsValid)
+            {
+                return new Result<Contract>
+                {
+                    Success = false,
+                    Object = null,
+                    Errors = resultValidation.Errors
+                };
+            }
+
             Contract contract = _unitOfWork.Contracts.GetAll(f => f.Id == id, null, i => i.Proposal).First();
 
             contract.Status = Constants.CONTRACT_STATUS_CC;
             contract.DateStatus = DateTime.Now;
-            contract.Proposal.Status = Constants.PROPOSAL_STATUS_CA; //TODO - VERIFICAR SE AO ATUALIZAR O CONTRATO O EF ATUALIZA A PROPOSTA VINCULADA A ELE
+            contract.Proposal.Status = Constants.PROPOSAL_STATUS_CA;
 
             ContractHistoric contractHistoric = new ContractHistoric();
 
@@ -178,7 +190,7 @@ namespace GrupoSelect.Services.Service
             contractHistoric.DateRegister = (DateTime)contract.DateStatus;
             contractHistoric.UserIdRegister = userId;
 
-            _unitOfWork.Contracts.Update(contract);//TODO - VERIFICAR SE AO ATUALIZAR O CONTRATO O EF ATUALIZA A PROPOSTA VINCULADA A ELE
+            _unitOfWork.Contracts.Update(contract);
             _unitOfWork.ContractHistorics.Insert(contractHistoric);
             _unitOfWork.SaveAllChanges();
 

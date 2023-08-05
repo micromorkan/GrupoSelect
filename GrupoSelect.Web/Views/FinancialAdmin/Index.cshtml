@@ -19,11 +19,11 @@
                 @using (Html.BeginForm("Index", "FinancialAdmin", FormMethod.Post, new { @id = "search", @class = "form-horizontal col-md-12 col-xs-12" }))
                 {
                     <div class="form-group col-md-6 col-xs-12">
-                        @Html.Label("Nome")
+                        @Html.LabelFor(model => model.Name)
                         @Html.TextBoxFor(model => model.Name, new { @class = "form-control text-uppercase" })
                     </div>
                     <div class="form-group col-md-6 col-xs-12">
-                        @Html.Label("Ativo")
+                        @Html.LabelFor(model => model.Active)
                         @Html.DropDownListFor(model => model.Active, GrupoSelect.Web.Util.UtilWeb.GetBooleanList(true, true), new { @class = "form-control js-example-responsive component-select", @style = "width: 100%;" })
                     </div>
                 }

@@ -29,6 +29,10 @@
                         </select>
                     </div>*@
                     <div class="form-group col-md-4 col-xs-12">
+                        @Html.LabelFor(model => model.ContractNum)
+                        @Html.TextBoxFor(model => model.ContractNum, new { @class = "form-control text-uppercase" })
+                    </div>
+                    <div class="form-group col-md-4 col-xs-12">
                         @Html.Label("Período")
                         <input type="text" id="dateFilter" class="form-control" value="">
                     </div>
@@ -60,7 +64,7 @@
                                     <th class="column text-center" data-prefix="" data-sufix="" data-column="contractNum" data-css="text-center">Nº Contrato</th>
                                     <th class="column text-center" data-prefix="" data-sufix="" data-column="proposal.client.name" data-css="text-center">Cliente</th>
                                     <th class="column text-center" data-prefix="" data-sufix="" data-column="status" data-css="text-center">Status</th>
-                                    <th class="column text-center" data-prefix="" data-sufix="" data-column="dateStatus" data-css="text-center">Ultima Atualização</th>
+                                    <th class="column text-center" data-prefix="" data-sufix="" data-column="dateStatus" data-css="text-center">Última Atualização</th>
                                     <th class="column text-center" style="width:10%;" data-column="" data-css="text-center">Ação</th>
                                 </tr>
                             </thead>
@@ -216,7 +220,7 @@
                                 if (item['status'] === '@Constants.CONTRACT_STATUS_PA') {
                                     actionButtons += "<a title='Conferir Contrato' class='btn btn-xs btn-success' href='" + '@Url.Action("Check", "Contract")' + "\/" + item.id + "'><span class='glyphicon glyphicon-eye-open' style='color:white; cursor: pointer;' aria-hidden='true'></span></a>";
                                 }
-                            } else if ('@User.GetProfile()' !== '@Constants.PROFILE_ADMINISTRATIVO' && '@User.GetProfile()' !== '@Constants.PROFILE_REPRESENTANTE' && '@User.GetProfile()' !== '@Constants.PROFILE_ADVOGADO') {
+                            } else if ('@User.GetProfile()' === '@Constants.PROFILE_DIRETOR' || '@User.GetProfile()' === '@Constants.PROFILE_GERENTE') {
                                 if (item['status'] === '@Constants.CONTRACT_STATUS_AD') {
                                     actionButtons += "<a title='Editar' class='btn btn-xs btn-warning' href='" + '@Url.Action("Edit", "Contract")' + "\/" + item.id + "'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></a>";
                                 }
@@ -224,7 +228,7 @@
                                     actionButtons += "<a title='Conferir Contrato' class='btn btn-xs btn-success' href='" + '@Url.Action("Check", "Contract")' + "\/" + item.id + "'><span class='glyphicon glyphicon-eye-open' style='color:white; cursor: pointer;' aria-hidden='true'></span></a>";
                                 }
                                 if (item['status'] !== '@Constants.CONTRACT_STATUS_CC' && item['status'] !== '@Constants.CONTRACT_STATUS_CA') {
-                                    //actionButtons += "<a title='Cancelar Contrato' class='btn btn-xs btn-danger' onclick='DeleteProposalConfirm(" + item.id + ", " + pagina + ");'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></a>"
+                                    actionButtons += "<a title='Cancelar Contrato' class='btn btn-xs btn-danger' onclick='CancelContract(" + item.id + ", " + pagina + ");'><span class='glyphicon glyphicon-trash' style='cursor: pointer;' aria-hidden='true'></span></a>"
                                 } 
                             }
 
@@ -254,23 +258,23 @@
             });
         }
 
-        function DeleteProposalConfirm(idExclusao, pagina) {
+        function CancelContract(idExclusao, pagina) {
             swal({
-                title: 'Deseja continuar a exclusão?',
+                title: 'Deseja continuar o cancelamento?',
                 text: "Após confirmação, não será possível reverter!",
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#286090',
                 cancelButtonColor: '#d9534f',
-                confirmButtonText: 'Sim, deletar!',
-                cancelButtonText: 'Não, cancelar!',
+                confirmButtonText: 'Sim, cancelar!',
+                cancelButtonText: 'Não, voltar!',
                 confirmButtonClass: 'btn btn-primary',
                 cancelButtonClass: 'btn btn-danger',
                 buttonsStyling: false
             }).then(function () {
                 $('#loading').show();
                 $.ajax({
-                    url: '@Url.Action("Delete", "Proposal")',
+                    url: '@Url.Action("Cancel", "Contract")',
                     type: 'POST',
                     data: { 'id': idExclusao },
                     success: function (data) {
@@ -292,7 +296,7 @@
                 });
             }, function (dismiss) {
                 if (dismiss === 'cancel') {
-                    swal('Cancelado', 'A exclusão foi cancelada pelo usuário!', 'error');
+                    swal('Abortado', 'A ação foi abortada pelo usuário!', 'error');
                 }
             });
         }
