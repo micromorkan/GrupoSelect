@@ -43,6 +43,12 @@ namespace GrupoSelect.Services.FluentValidation
                 RuleFor(x => x.Id).GreaterThan(0).WithMessage("O id da Proposta é inválido.");
                 RuleFor(x => x.Id).Custom(BlockDelete);
             });
+
+            RuleSet(Constants.FLUENT_CHECK, () =>
+            {
+                RuleFor(x => x.Id).GreaterThan(0).WithMessage("O id da Proposta é inválido.");
+                RuleFor(x => x).Custom(ValidateStatus);
+            });
         }
         
         private void CreditTotalValue(Domain.Entity.Proposal model, ValidationContext<Domain.Entity.Proposal> context)
@@ -85,6 +91,28 @@ namespace GrupoSelect.Services.FluentValidation
                 {
                     context.AddFailure("A proposta não pode ser excluida pois já foi aprovada.");
                 }
+            }
+        }
+
+        private void ValidateStatus(Domain.Entity.Proposal model, ValidationContext<Domain.Entity.Proposal> context)
+        {
+            var proposal = _unitOfWork.Proposals.GetAll(x => x.Id == model.Id).FirstOrDefault();
+
+            if (proposal == null)
+            {
+                if (proposal.Status == Constants.PROPOSAL_STATUS_PC)
+                {
+                    context.AddFailure("O Contrato não pode ser cancelado pois possui o status de " + Constants.PROPOSAL_STATUS_PC + ".");
+                }
+
+                if (proposal.Status == Constants.PROPOSAL_STATUS_CA)
+                {
+                    context.AddFailure("O Contrato não pode ser cancelado pois já possui o status de " + Constants.PROPOSAL_STATUS_CA + ".");
+                }
+            }
+            else
+            {
+                context.AddFailure("O registro da Proposta não foi encontrado.");
             }
         }
     }

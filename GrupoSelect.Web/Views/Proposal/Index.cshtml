@@ -241,14 +241,14 @@
                                 }
                             } else if ('@User.GetProfile()' === '@Constants.PROFILE_ADMINISTRATIVO') {
                                 if (item['aproved'] === false && item['userChecked'] === null) {
-                                    actionButtons += "<a title='Aceitar Proposta' class='btn btn-xs btn-success' onclick='CheckProposal(" + item.id + ", " + pagina + ");'><span class='glyphicon glyphicon-ok' style='color:white; cursor: pointer;' aria-hidden='true'></span></a>";
+                                    actionButtons += "<a title='Aceitar Proposta' class='btn btn-xs btn-success' onclick='Check(" + item.id + ", " + pagina + ");'><span class='glyphicon glyphicon-ok' style='color:white; cursor: pointer;' aria-hidden='true'></span></a>";
                                 }
                             } else if ('@User.GetProfile()' !== '@Constants.PROFILE_ADMINISTRATIVO' && '@User.GetProfile()' !== '@Constants.PROFILE_REPRESENTANTE' && '@User.GetProfile()' !== '@Constants.PROFILE_ADVOGADO') {
                                 if (item['aproved'] === false) {
                                     actionButtons += "<a title='Editar' class='btn btn-xs btn-warning' href='" + '@Url.Action("Edit", "Proposal")' + "\/" + item.id + "'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></a>";
 
                                     if (item['userChecked'] === null) {
-                                        actionButtons += "<a title='Aceitar Proposta' class='btn btn-xs btn-success' onclick='CheckProposal(" + item.id + ", " + pagina + ");'><span class='glyphicon glyphicon-ok' style='color:white; cursor: pointer;' aria-hidden='true'></span></a>";
+                                        actionButtons += "<a title='Aceitar Proposta' class='btn btn-xs btn-success' onclick='Check(" + item.id + ", " + pagina + ");'><span class='glyphicon glyphicon-ok' style='color:white; cursor: pointer;' aria-hidden='true'></span></a>";
                                         actionButtons += "<a title='Excluir' class='btn btn-xs btn-danger' onclick='DeleteProposalConfirm(" + item.id + ", " + pagina + ");'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></a>"
                                     } 
                                 }
@@ -325,7 +325,7 @@
             });
         }
 
-        function CheckProposal(idProposal, pagina) {
+        function Check(idProposal, pagina) {
             swal({
                 title: 'Deseja conferir a proposta?',
                 text: "Após confirmação, não será possível reverter!",
@@ -341,7 +341,7 @@
             }).then(function () {
                 $('#loading').show();
                 $.ajax({
-                    url: '@Url.Action("CheckProposal", "Proposal")',
+                    url: '@Url.Action("Check", "Proposal")',
                     type: 'POST',
                     data: { 'id': idProposal },
                     success: function (data) {

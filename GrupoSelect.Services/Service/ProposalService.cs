@@ -4,6 +4,7 @@ using GrupoSelect.Domain.Interface;
 using GrupoSelect.Domain.Models;
 using GrupoSelect.Domain.Util;
 using GrupoSelect.Services.Interface;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Transactions;
 
@@ -147,8 +148,20 @@ namespace GrupoSelect.Services.Service
             };
         }
 
-        public async Task<Result<Proposal>> CheckProposal(int id, int userId)
+        public async Task<Result<Proposal>> Check(int id, int userId)
         {
+            var resultValidation = _validator.Validate(new Proposal { Id = id }, options => options.IncludeRuleSets(Constants.FLUENT_CHECK));
+
+            if (!resultValidation.IsValid)
+            {
+                return new Result<Proposal>
+                {
+                    Success = false,
+                    Object = null,
+                    Errors = resultValidation.Errors
+                };
+            }
+
             Proposal proposal = (await GetById(id)).Object;
 
             proposal.DateChecked = DateTime.Now;

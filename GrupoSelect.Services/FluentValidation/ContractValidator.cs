@@ -25,7 +25,7 @@ namespace GrupoSelect.Services.FluentValidation
 
             RuleSet(Constants.FLUENT_CHECK, () =>
             {
-                RuleFor(x => x.Id).GreaterThan(0).WithMessage("O id do contrato é inválido.");
+                RuleFor(x => x.Id).GreaterThan(0).WithMessage("O id do Contrato é inválido.");
                 RuleFor(x => x.Status).NotEmpty().WithMessage("O resultado da análise não foi informada.");
 
                 RuleFor(x => x).Custom(ValidateResultStatus);
@@ -33,7 +33,7 @@ namespace GrupoSelect.Services.FluentValidation
 
             RuleSet(Constants.FLUENT_CANCEL, () =>
             {
-                RuleFor(x => x.Id).GreaterThan(0).WithMessage("O id do contrato é inválido.");
+                RuleFor(x => x.Id).GreaterThan(0).WithMessage("O id do Contrato é inválido.");
                 RuleFor(x => x).Custom(ValidateStatus);
             });
         }
@@ -42,7 +42,7 @@ namespace GrupoSelect.Services.FluentValidation
         {
             if (model.Status == Constants.CONTRACT_STATUS_CR && string.IsNullOrEmpty(model.ReprovedReason))
             {
-                context.AddFailure("Informe o motivo da reprovação do contrato.");
+                context.AddFailure("Informe o motivo da reprovação do Contrato.");
             }
 
             if (model.Status == Constants.CONTRACT_STATUS_CR && string.IsNullOrEmpty(model.ReprovedExplain))
@@ -59,17 +59,17 @@ namespace GrupoSelect.Services.FluentValidation
             {
                 if (contract.Status == Constants.CONTRACT_STATUS_CA)
                 {
-                    context.AddFailure("O contrato não pode ser cancelado pois possui o status de " + Constants.CONTRACT_STATUS_CA + ".");
+                    context.AddFailure("O Contrato não pode ser cancelado pois possui o status de " + Constants.CONTRACT_STATUS_CA + ".");
                 }
 
                 if (contract.Status == Constants.CONTRACT_STATUS_CC)
                 {
-                    context.AddFailure("O contrato não pode ser cancelado pois já possui o status de " + Constants.CONTRACT_STATUS_CC + ".");
+                    context.AddFailure("O Contrato não pode ser cancelado pois já possui o status de " + Constants.CONTRACT_STATUS_CC + ".");
                 }
             }
             else
             {
-                context.AddFailure("O registro contrato não foi encontrado.");
+                context.AddFailure("O registro do Contrato não foi encontrado.");
             }
         }
     }

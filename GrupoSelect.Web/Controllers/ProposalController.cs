@@ -374,11 +374,11 @@ namespace GrupoSelect.Web.Controllers
         [HttpPost]
         [TypeFilter(typeof(ExceptionLog))]
         [Authorize(Roles = Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_TI + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
-        public async Task<IActionResult> CheckProposal(int id)
+        public async Task<IActionResult> Check(int id)
         {
             try
             {
-                var result = await _proposalService.CheckProposal(id, Convert.ToInt32(User.GetId()));
+                var result = await _proposalService.Check(id, Convert.ToInt32(User.GetId()));
 
                 return Json(result);
             }
