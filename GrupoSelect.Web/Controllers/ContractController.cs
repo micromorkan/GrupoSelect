@@ -178,7 +178,7 @@ namespace GrupoSelect.Web.Controllers
             }
         }
 
-        [Authorize(Roles = Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_TI + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
+        [Authorize(Roles = Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
         public async Task<IActionResult> Check(int id)
         {
             try
