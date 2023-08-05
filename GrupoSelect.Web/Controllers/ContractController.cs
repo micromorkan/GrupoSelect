@@ -11,7 +11,9 @@ using GrupoSelect.Web.Views.Shared.Reports.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using RazorEngine;
+using RazorEngine.Compilation.ImpromptuInterface;
 using RazorEngine.Templating;
 using System.Globalization;
 using System.Security.Claims;
@@ -53,7 +55,7 @@ namespace GrupoSelect.Web.Controllers
             try
             {
                 var filter = _mapper.Map<Contract>(contractVM);
-                
+
                 filter.Proposal = new Proposal();
 
                 if (HttpContext.User.IsInRole(Constants.PROFILE_REPRESENTANTE))
@@ -80,7 +82,7 @@ namespace GrupoSelect.Web.Controllers
 
                 if (result.Success)
                 {
-                    if (result.Object.Status != Constants.CONTRACT_STATUS_AD || result.Object.Status != Constants.CONTRACT_STATUS_CR)
+                    if (result.Object.Status != Constants.CONTRACT_STATUS_AD && result.Object.Status != Constants.CONTRACT_STATUS_CR)
                     {
                         TempData[Constants.SYSTEM_ERROR_KEY] = "Esse registro não pode ser editado pois possui o status de " + result.Object.Status;
                         return RedirectToAction(nameof(Index));
@@ -115,19 +117,149 @@ namespace GrupoSelect.Web.Controllers
 
                 if (resultContract.Success)
                 {
-                    if (resultContract.Object.Status != Constants.CONTRACT_STATUS_AD || resultContract.Object.Status != Constants.CONTRACT_STATUS_CR)
+                    Contract contract = resultContract.Object;
+
+                    if (contract.Status != Constants.CONTRACT_STATUS_AD && contract.Status != Constants.CONTRACT_STATUS_CR)
                     {
-                        return Json(new Result<Contract> { Success = false, Message = "Esse registro não pode ser editado pois possui o status de " + resultContract.Object.Status });
+                        return Json(new Result<Contract> { Success = false, Message = "Esse registro não pode ser editado pois possui o status de " + contract.Status });
                     }
+
+                    if (contractVM.ContractConsultancyFormFile == null || 
+                        contractVM.ContractFinancialAdminFormFile == null || 
+                        (contract.Proposal.User.BranchWithoutAdm && contractVM.VideoAgreeFormFile == null))
+                    {
+                        return Json(new Result<Contract> { Success = false, Message = "Selecione todos os arquivos antes salvar!" });
+                    }
+
+                    using (var fichaMS = new MemoryStream())
+                    {
+                        await contractVM.ContractConsultancyFormFile.CopyToAsync(fichaMS);
+
+                        // Upload the file if less than 2 MB
+                        //if (fichaMS.Length < 2097152)
+                        //{
+
+                        contract.ContractConsultancy = fichaMS.ToArray();
+                        contract.ContractConsultancyFileType = contractVM.ContractConsultancyFormFile.ContentType;
+                        //}
+                        //else
+                        //{
+                        //    ModelState.AddModelError("File", "The file is too large.");
+                        //}
+                    }
+
+                    using (var docMS = new MemoryStream())
+                    {
+                        await contractVM.ContractFinancialAdminFormFile.CopyToAsync(docMS);
+
+                        contract.ContractFinancialAdmin = docMS.ToArray();
+                        contract.ContractFinancialAdminFileType = contractVM.ContractFinancialAdminFormFile.ContentType;
+                    }
+
+                    if (contract.Proposal.User.BranchWithoutAdm)
+                    {
+                        using (var videoMS = new MemoryStream())
+                        {
+                            await contractVM.VideoAgreeFormFile.CopyToAsync(videoMS);
+
+                            contract.VideoAgree = videoMS.ToArray();
+                            contract.VideoAgreeFileType = contractVM.VideoAgreeFormFile.ContentType;
+                        }
+                    }
+
+                    var result = _contractService.Update(contract);
+
+                    return Json(result);
                 }
-                
-                var contract = _mapper.Map<Contract>(contractVM);
+                else
+                {
+                    return Json(new Result<Contract> { Success = false, Message = "Esse registro não foi encontrado!" });
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
-                contract.Proposal = new Proposal();                
+        [Authorize(Roles = Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_TI + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
+        public async Task<IActionResult> Check(int id)
+        {
+            try
+            {
+                var result = await _contractService.GetById(id);
 
-                var result = _contractService.Update(contract);
+                if (result.Success)
+                {
+                    if (result.Object.Status != Constants.CONTRACT_STATUS_PA)
+                    {
+                        TempData[Constants.SYSTEM_ERROR_KEY] = "Esse registro não pode ser analisado pois possui o status de " + result.Object.Status;
+                        return RedirectToAction(nameof(Index));
+                    }
 
-                return Json(result);
+                    var contractVM = _mapper.Map<ContractVM>(result.Object);
+                    contractVM.Id = id;
+
+                    return View(contractVM);
+                }
+                else
+                {
+                    TempData[Constants.SYSTEM_ERROR_KEY] = result.Message;
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData[Constants.SYSTEM_ERROR_KEY] = ex.Message;
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+        [HttpPost]
+        [TypeFilter(typeof(ExceptionLog))]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_TI + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
+        public async Task<IActionResult> Check(int id, ContractVM contractVM)
+        {
+            try
+            {
+                var resultContract = await _contractService.GetById(id);
+
+                if (resultContract.Success)
+                {
+                    Contract contract = resultContract.Object;
+
+                    if (contract.Status != Constants.CONTRACT_STATUS_PA)
+                    {
+                        return Json(new Result<Contract> { Success = false, Message = "Esse registro não pode ser analisado pois possui o status de " + contract.Status });
+                    }
+
+                    if (!contract.Proposal.User.BranchWithoutAdm && contractVM.VideoAgreeFormFile == null && contractVM.Status == Constants.CONTRACT_STATUS_CA)
+                    {
+                        return Json(new Result<Contract> { Success = false, Message = "Selecione o vídeo antes salvar!" });
+                    }
+
+                    var model = _mapper.Map<Contract>(contractVM);
+
+                    if (!contract.Proposal.User.BranchWithoutAdm && contractVM.Status == Constants.CONTRACT_STATUS_CA)
+                    {
+                        using (var videoMS = new MemoryStream())
+                        {
+                            await contractVM.VideoAgreeFormFile.CopyToAsync(videoMS);
+
+                            model.VideoAgree = videoMS.ToArray();
+                            model.VideoAgreeFileType = contractVM.VideoAgreeFormFile.ContentType;
+                        }
+                    }
+
+                    var result = _contractService.Check(model, Convert.ToInt32(User.GetId()));
+
+                    return Json(result);
+                }
+                else
+                {
+                    return Json(new Result<Contract> { Success = false, Message = "Esse registro não foi encontrado!" });
+                }
             }
             catch (Exception)
             {
@@ -158,23 +290,23 @@ namespace GrupoSelect.Web.Controllers
         //}
 
 
-        [HttpPost]
-        [TypeFilter(typeof(ExceptionLog))]
-        [Authorize(Roles = Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_TI + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
-        public IActionResult CheckContract(ContractVM contractVM)
-        {
-            try
-            {
-                var contract = _mapper.Map<Contract>(contractVM);
-                var result = _contractService.CheckContract(contract, Convert.ToInt32(User.GetId()));
-             
-                return Json(result);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+        //[HttpPost]
+        //[TypeFilter(typeof(ExceptionLog))]
+        //[Authorize(Roles = Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_TI + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
+        //public IActionResult Check(ContractVM contractVM)
+        //{
+        //    try
+        //    {
+        //        var contract = _mapper.Map<Contract>(contractVM);
+        //        var result = _contractService.Check(contract, Convert.ToInt32(User.GetId()));
+
+        //        return Json(result);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+        //}
 
         [TypeFilter(typeof(ExceptionLog))]
         public async Task<IActionResult> PrintContract(int id)
@@ -182,7 +314,7 @@ namespace GrupoSelect.Web.Controllers
             try
             {
                 Contract contract = (await _contractService.GetById(id)).Object;
-              
+
                 ContractForm contractForm = new ContractForm(contract.Proposal.Client, contract.Proposal, contract.Proposal.User);
 
                 string cshtmlContent = System.IO.File.ReadAllText("Views\\Shared\\Reports\\ContractForm.cshtml");
@@ -194,6 +326,69 @@ namespace GrupoSelect.Web.Controllers
             {
                 throw;
             }
+        }
+
+        public async Task<IActionResult> DownloadContract(int id)
+        {
+            byte[] bytes;
+            string fileName, contentType;
+            var result = await _contractService.GetById(id);
+
+            if (result.Success)
+            {
+                var contract = result.Object;
+
+                fileName = "CONTRATO_" + contract.Proposal.Client.Name.Replace(" ", "_") + "." + contract.ContractConsultancyFileType.Split("/")[1];
+                contentType = contract.ContractConsultancyFileType;
+                bytes = contract.ContractConsultancy;
+
+                return File(bytes, contentType, fileName);
+            }
+
+            TempData[Constants.SYSTEM_ERROR_KEY] = "Não foi possível obter o arquivo.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> DownloadDocuments(int id)
+        {
+            byte[] bytes;
+            string fileName, contentType;
+            var result = await _contractService.GetById(id);
+
+            if (result.Success)
+            {
+                var contract = result.Object;
+
+                fileName = "DOCUMENTOS_" + contract.Proposal.Client.Name.Replace(" ", "_") + "." + contract.ContractFinancialAdminFileType.Split("/")[1];
+                contentType = contract.ContractFinancialAdminFileType;
+                bytes = contract.ContractFinancialAdmin;
+
+                return File(bytes, contentType, fileName);
+            }
+
+            TempData[Constants.SYSTEM_ERROR_KEY] = "Não foi possível obter o arquivo.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> DownloadVideo(int id)
+        {
+            byte[] bytes;
+            string fileName, contentType;
+            var result = await _contractService.GetById(id);
+
+            if (result.Success)
+            {
+                var contract = result.Object;
+
+                fileName = "VIDEO_" + contract.Proposal.Client.Name.Replace(" ", "_") + "." + contract.VideoAgreeFileType.Split("/")[1];
+                contentType = contract.VideoAgreeFileType;
+                bytes = contract.VideoAgree;
+
+                return File(bytes, contentType, fileName);
+            }
+
+            TempData[Constants.SYSTEM_ERROR_KEY] = "Não foi possível obter o arquivo.";
+            return RedirectToAction(nameof(Index));
         }
 
         [TypeFilter(typeof(ExceptionLog))]

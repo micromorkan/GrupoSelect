@@ -43,5 +43,8 @@ namespace GrupoSelect.Web.ViewModel
 
         [Display(Name = "Ativo")]
         public bool Active { get; set; }
+
+        [Display(Name = "Rep. sem Administrativo")]
+        public bool BranchWithoutAdm { get; set; }
     }
 }

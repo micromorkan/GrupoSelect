@@ -11,5 +11,6 @@
         public string Password { get; set; }
         public string Profile { get; set; }
         public bool Active { get; set; }
+        public bool BranchWithoutAdm { get; set; }
     }
 }

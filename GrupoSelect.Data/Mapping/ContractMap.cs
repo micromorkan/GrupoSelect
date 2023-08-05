@@ -19,8 +19,11 @@ namespace GrupoSelect.Data.Mapping
             builder.Property(c => c.ReprovedReason).HasColumnName("ReprovedReason");
             builder.Property(c => c.ReprovedExplain).HasColumnName("ReprovedExplain");
             builder.Property(c => c.ContractConsultancy).HasColumnName("ContractConsultancy");
+            builder.Property(c => c.ContractConsultancyFileType).HasColumnName("ContractConsultancyFileType");
             builder.Property(c => c.ContractFinancialAdmin).HasColumnName("ContractFinancialAdmin");
+            builder.Property(c => c.ContractFinancialAdminFileType).HasColumnName("ContractFinancialAdminFileType");
             builder.Property(c => c.VideoAgree).HasColumnName("VideoAgree");
+            builder.Property(c => c.VideoAgreeFileType).HasColumnName("VideoAgreeFileType");
 
             builder.Property(c => c.DateCreate).HasColumnName("DateCreate").IsRequired();
             builder.Property(c => c.DateStatus).HasColumnName("DateStatus");

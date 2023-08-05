@@ -16,7 +16,8 @@ namespace GrupoSelect.Web.Mapper
                 .ForMember(dest => dest.Login, opt => opt.MapFrom(src => $"{src.Login}")).ReverseMap().ForMember(dest => dest.Login, opt => opt.Ignore())
                 .ForMember(dest => dest.Password, opt => opt.MapFrom(src => $"{src.Password}")).ReverseMap().ForMember(dest => dest.Password, opt => opt.Ignore())
                 .ForMember(dest => dest.Profile, opt => opt.MapFrom(src => $"{src.Profile}")).ReverseMap().ForMember(dest => dest.Profile, opt => opt.Ignore())
-                .ForMember(dest => dest.Active, opt => opt.MapFrom(src => $"{src.Active}")).ReverseMap().ForMember(dest => dest.Active, opt => opt.Ignore());
+                .ForMember(dest => dest.Active, opt => opt.MapFrom(src => $"{src.Active}")).ReverseMap().ForMember(dest => dest.Active, opt => opt.Ignore())
+                .ForMember(dest => dest.BranchWithoutAdm, opt => opt.MapFrom(src => $"{src.BranchWithoutAdm}")).ReverseMap().ForMember(dest => dest.BranchWithoutAdm, opt => opt.Ignore()); 
         }
     }
 }

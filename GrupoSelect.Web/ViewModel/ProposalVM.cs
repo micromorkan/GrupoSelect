@@ -63,6 +63,8 @@ namespace GrupoSelect.Web.ViewModel
         public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }
+        public UserVM User { get; set; }
+        public ClientVM Client { get; set; }
 
     }
 }

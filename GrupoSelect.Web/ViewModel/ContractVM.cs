@@ -12,25 +12,29 @@ namespace GrupoSelect.Web.ViewModel
         public string ContractNum { get; set; }
 
         [Display(Name = "Status")]
+        [Required(ErrorMessage = "O campo {0} é obrigatório!")]
         public string Status { get; set; }
 
         [Display(Name = "Motivo Reprovação")]
+        [Required(ErrorMessage = "O campo {0} é obrigatório!")]
         public string? ReprovedReason { get; set; }
 
         [Display(Name = "Complemento Motivo")]
+        [Required(ErrorMessage = "O campo {0} é obrigatório!")]
         public string? ReprovedExplain { get; set; }
 
-        [Display(Name = "Ficha Cadastral Assinada")]
+        [Display(Name = "Contrato de Consultoria Assinado")]
         [Required(ErrorMessage = "O campo {0} é obrigatório!")]
-        public byte[]? ContractConsultancy { get; set; }
+        public IFormFile? ContractConsultancyFormFile { get; set; }
 
         [Display(Name = "Documentos e Comprovantes")]
         [Required(ErrorMessage = "O campo {0} é obrigatório!")]
-        public byte[]? ContractFinancialAdmin { get; set; }
+        public IFormFile? ContractFinancialAdminFormFile { get; set; }
 
         [Display(Name = "Vídeo Aceite")]
         [Required(ErrorMessage = "O campo {0} é obrigatório!")]
-        public byte[]? VideoAgree { get; set; }
+        public IFormFile? VideoAgreeFormFile { get; set; }
+
         public DateTime DateCreate { get; set; }
         public DateTime? DateStatus { get; set; }
         public DateTime? DateAproved { get; set; }

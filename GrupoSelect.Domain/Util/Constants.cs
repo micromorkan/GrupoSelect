@@ -43,7 +43,7 @@
 
         public const string SYSTEM_ERROR_KEY = "GS_ERROR";
         public const string SYSTEM_EXCEPTION_OBJ = "EXOBJECT";
-        public static readonly string[] SYSTEM_IGNORE_AUDIT_TABLES = { "AccessLog", "SystemLog", "ErrorLog" };
+        public static readonly string[] SYSTEM_IGNORE_AUDIT_TABLES = { "Contract", "ContractHistoric", "SystemLog", "ErrorLog" };
         public const string SYSTEM_LOG_INSERT = "INSERT";
         public const string SYSTEM_LOG_UPDATE = "UPDATE";
         public const string SYSTEM_LOG_DELETE = "DELETE";

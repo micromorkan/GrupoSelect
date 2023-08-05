@@ -57,6 +57,7 @@
                                         }
                                     }
 
+                                    <th class="column text-center" data-prefix="" data-sufix="" data-column="contractNum" data-css="text-center">Nº Contrato</th>
                                     <th class="column text-center" data-prefix="" data-sufix="" data-column="proposal.client.name" data-css="text-center">Cliente</th>
                                     <th class="column text-center" data-prefix="" data-sufix="" data-column="status" data-css="text-center">Status</th>
                                     <th class="column text-center" data-prefix="" data-sufix="" data-column="dateStatus" data-css="text-center">Ultima Atualização</th>
@@ -208,20 +209,19 @@
                             actionButtons += "<a title='Visualizar Contrato' class='btn btn-xs btn-info' target = '_blank' href='" + '@Url.Action("PrintContract", "Contract")' + "\/" + item.id + "'><span class='glyphicon glyphicon-print' aria-hidden='true'></span></a>";
 
                             if ('@User.GetProfile()' === '@Constants.PROFILE_REPRESENTANTE') {
-                                if (item['status'] === '@Constants.CONTRACT_STATUS_AD') {
+                                if (item['status'] === '@Constants.CONTRACT_STATUS_AD' || item['status'] === '@Constants.CONTRACT_STATUS_CR') {
                                     actionButtons += "<a title='Editar' class='btn btn-xs btn-warning' href='" + '@Url.Action("Edit", "Contract")' + "\/" + item.id + "'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></a>";
-                                    //actionButtons += "<a title='Excluir' class='btn btn-xs btn-danger' onclick='DeleteProposalConfirm(" + item.id + ", " + pagina + ");'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></a>"
                                 }
                             } else if ('@User.GetProfile()' === '@Constants.PROFILE_ADMINISTRATIVO') {
                                 if (item['status'] === '@Constants.CONTRACT_STATUS_PA') {
-                                    actionButtons += "<a title='Conferir Contrato' class='btn btn-xs btn-success' onclick='CheckProposal(" + item.id + ", " + pagina + ");'><span class='glyphicon glyphicon-ok' style='color:white; cursor: pointer;' aria-hidden='true'></span></a>";
+                                    actionButtons += "<a title='Conferir Contrato' class='btn btn-xs btn-success' href='" + '@Url.Action("Check", "Contract")' + "\/" + item.id + "'><span class='glyphicon glyphicon-eye-open' style='color:white; cursor: pointer;' aria-hidden='true'></span></a>";
                                 }
                             } else if ('@User.GetProfile()' !== '@Constants.PROFILE_ADMINISTRATIVO' && '@User.GetProfile()' !== '@Constants.PROFILE_REPRESENTANTE' && '@User.GetProfile()' !== '@Constants.PROFILE_ADVOGADO') {
                                 if (item['status'] === '@Constants.CONTRACT_STATUS_AD') {
                                     actionButtons += "<a title='Editar' class='btn btn-xs btn-warning' href='" + '@Url.Action("Edit", "Contract")' + "\/" + item.id + "'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></a>";
                                 }
                                 if (item['status'] === '@Constants.CONTRACT_STATUS_PA') {
-                                    actionButtons += "<a title='Conferir Contrato' class='btn btn-xs btn-success' onclick='CheckProposal(" + item.id + ", " + pagina + ");'><span class='glyphicon glyphicon-ok' style='color:white; cursor: pointer;' aria-hidden='true'></span></a>";
+                                    actionButtons += "<a title='Conferir Contrato' class='btn btn-xs btn-success' href='" + '@Url.Action("Check", "Contract")' + "\/" + item.id + "'><span class='glyphicon glyphicon-eye-open' style='color:white; cursor: pointer;' aria-hidden='true'></span></a>";
                                 }
                                 if (item['status'] !== '@Constants.CONTRACT_STATUS_CC' && item['status'] !== '@Constants.CONTRACT_STATUS_CA') {
                                     //actionButtons += "<a title='Cancelar Contrato' class='btn btn-xs btn-danger' onclick='DeleteProposalConfirm(" + item.id + ", " + pagina + ");'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></a>"
@@ -293,49 +293,6 @@
             }, function (dismiss) {
                 if (dismiss === 'cancel') {
                     swal('Cancelado', 'A exclusão foi cancelada pelo usuário!', 'error');
-                }
-            });
-        }
-
-        function CheckProposal(idProposal, pagina) {
-            swal({
-                title: 'Deseja conferir a proposta?',
-                text: "Após confirmação, não será possível reverter!",
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#286090',
-                cancelButtonColor: '#d9534f',
-                confirmButtonText: 'Sim, confirmar!',
-                cancelButtonText: 'Não, cancelar!',
-                confirmButtonClass: 'btn btn-primary',
-                cancelButtonClass: 'btn btn-danger',
-                buttonsStyling: false
-            }).then(function () {
-                $('#loading').show();
-                $.ajax({
-                    url: '@Url.Action("CheckProposal", "Proposal")',
-                    type: 'POST',
-                    data: { 'id': idProposal },
-                    success: function (data) {
-                        if (data.success) {
-                            swal('Sucesso!', data.message, 'success');
-                        } else {
-                            if (data.errors) {
-                                ShowModalListWarning(data.errors);
-                            } else {
-                                ShowModalError(data.message);
-                            }
-                        }
-
-                        SearchContract(pagina);
-                    },
-                    error: function (xhr, status, error) {
-                        ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador.');
-                    }
-                });
-            }, function (dismiss) {
-                if (dismiss === 'cancel') {
-                    swal('Cancelado', 'A ação foi cancelada pelo usuário!', 'error');
                 }
             });
         }

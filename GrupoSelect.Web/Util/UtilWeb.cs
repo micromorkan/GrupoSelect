@@ -46,16 +46,39 @@ namespace GrupoSelect.Web.Util
             return items;
         }
 
-        public static IEnumerable<SelectListItem> GetContractStatusList(string filter)
+        public static IEnumerable<SelectListItem> GetContractStatusList(string filter, bool checkContract = false)
         {
             IList<SelectListItem> items = new List<SelectListItem>();
 
             items.Add(new SelectListItem() { Value = "", Text = "-- Selecione --", Selected = (string.IsNullOrEmpty(filter) ? true : false) });
-            items.Add(new SelectListItem() { Value = Constants.CONTRACT_STATUS_AD, Text = Constants.CONTRACT_STATUS_AD, Selected = (filter == Constants.CONTRACT_STATUS_AD ? true : false) });
-            items.Add(new SelectListItem() { Value = Constants.CONTRACT_STATUS_PA, Text = Constants.CONTRACT_STATUS_PA, Selected = (filter == Constants.CONTRACT_STATUS_PA ? true : false) });
-            items.Add(new SelectListItem() { Value = Constants.CONTRACT_STATUS_CA, Text = Constants.CONTRACT_STATUS_CA, Selected = (filter == Constants.CONTRACT_STATUS_CA ? true : false) });
-            items.Add(new SelectListItem() { Value = Constants.CONTRACT_STATUS_CR, Text = Constants.CONTRACT_STATUS_CR, Selected = (filter == Constants.CONTRACT_STATUS_CR ? true : false) });
-            items.Add(new SelectListItem() { Value = Constants.CONTRACT_STATUS_CC, Text = Constants.CONTRACT_STATUS_CC, Selected = (filter == Constants.CONTRACT_STATUS_CC ? true : false) });
+            
+            if (!checkContract)
+            {
+                items.Add(new SelectListItem() { Value = Constants.CONTRACT_STATUS_AD, Text = Constants.CONTRACT_STATUS_AD, Selected = (filter == Constants.CONTRACT_STATUS_AD ? true : false) });
+                items.Add(new SelectListItem() { Value = Constants.CONTRACT_STATUS_PA, Text = Constants.CONTRACT_STATUS_PA, Selected = (filter == Constants.CONTRACT_STATUS_PA ? true : false) });
+                items.Add(new SelectListItem() { Value = Constants.CONTRACT_STATUS_CA, Text = Constants.CONTRACT_STATUS_CA, Selected = (filter == Constants.CONTRACT_STATUS_CA ? true : false) });
+                items.Add(new SelectListItem() { Value = Constants.CONTRACT_STATUS_CR, Text = Constants.CONTRACT_STATUS_CR, Selected = (filter == Constants.CONTRACT_STATUS_CR ? true : false) });
+                items.Add(new SelectListItem() { Value = Constants.CONTRACT_STATUS_CC, Text = Constants.CONTRACT_STATUS_CC, Selected = (filter == Constants.CONTRACT_STATUS_CC ? true : false) });
+            }
+            else
+            {
+                items.Add(new SelectListItem() { Value = Constants.CONTRACT_STATUS_CA, Text = Constants.CONTRACT_STATUS_CA, Selected = (filter == Constants.CONTRACT_STATUS_CA ? true : false) });
+                items.Add(new SelectListItem() { Value = Constants.CONTRACT_STATUS_CR, Text = Constants.CONTRACT_STATUS_CR, Selected = (filter == Constants.CONTRACT_STATUS_CR ? true : false) });
+            }
+
+            return items;
+        }
+
+        public static IEnumerable<SelectListItem> GetContractReprovalList(string filter = null)
+        {
+            IList<SelectListItem> items = new List<SelectListItem>();
+
+            items.Add(new SelectListItem() { Value = "", Text = "-- Selecione --", Selected = (string.IsNullOrEmpty(filter) ? true : false) });
+            items.Add(new SelectListItem() { Value = "DOCUMENTOS INSUFICIENTES", Text = "DOCUMENTOS INSUFICIENTES", Selected = (filter == "DOCUMENTOS INSUFICIENTES" ? true : false) });
+            items.Add(new SelectListItem() { Value = "DOCUMENTOS ILEGÍVEIS", Text = "DOCUMENTOS ILEGÍVEIS", Selected = (filter == "DOCUMENTOS ILEGÍVEIS" ? true : false) });
+            items.Add(new SelectListItem() { Value = "DADOS DIVERGENTES", Text = "DADOS DIVERGENTES", Selected = (filter == "DADOS DIVERGENTES" ? true : false) });
+            items.Add(new SelectListItem() { Value = "FALTA ASSINATURA", Text = "FALTA ASSINATURA", Selected = (filter == "FALTA ASSINATURA" ? true : false) });
+            items.Add(new SelectListItem() { Value = "VÍDEO NÃO CONFERE", Text = "VÍDEO NÃO CONFERE", Selected = (filter == "VÍDEO NÃO CONFERE" ? true : false) });
 
 
             return items;

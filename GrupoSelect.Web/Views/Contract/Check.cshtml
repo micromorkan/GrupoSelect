@@ -1,0 +1,354 @@
+﻿@using GrupoSelect.Domain.Util;
+@using GrupoSelect.Web.Helpers;
+@model GrupoSelect.Web.ViewModel.ContractVM
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="clearfix"></div>
+<div class="row">
+    <div class="col-md-12 col-sm-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>
+                    Contrato <i class="fa fa-chevron-right"></i> Analisar
+                </h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <br>
+                @using (Html.BeginForm("Check", "Contract", FormMethod.Post, new { @id = "check", @class = "form-horizontal form-label-left" }))
+                {
+                    @Html.HiddenFor(model => model.Id)
+                    @Html.HiddenFor(model => model.DateCreate)
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.ContractNum) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.ContractNum, new {@class = "form-control", @disabled="disabled" })
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.DateCreate) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.DateCreate, new {@class = "form-control", @disabled="disabled" })
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.Proposal.User.Representation) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.Proposal.User.Representation, new {@class = "form-control", @disabled="disabled" })
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.Proposal.Client.Name) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.Proposal.Client.Name, new {@class = "form-control", @disabled="disabled" })
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.Proposal.Client.CPF) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.Proposal.Client.CPF, new {@class = "form-control", @disabled="disabled" })
+                        </div>
+                    </div>
+
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-2 col-md-2 col-sm-4" style="cursor: pointer;">
+                                <div class="tile-stats text-center" style="height: 160px; box-shadow: 0px 0px 5px 0px #888888;" onclick="DownloadContract();" onmouseover="this.style.background='lightgreen';" onmouseout="this.style.background='white';">
+                                    <div class="icon" style="right: 52%;">
+                                        <i class="fa fa-file-text-o"></i>
+                                    </div>
+                                    <div class="count"></div>
+                                    <h3 style="font-size: 18px; margin-top: 100px;">Baixar Contrato</h3>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-4" style="cursor: pointer;">
+                                <div class="tile-stats text-center" style="height: 160px; box-shadow: 0px 0px 5px 0px #888888;" onclick="DownloadDocuments();" onmouseover="this.style.background='lightgreen';" onmouseout="this.style.background='white';">
+                                    <div class="icon" style="right: 52%;">
+                                        <i class="fa fa-file-pdf-o"></i>
+                                    </div>
+                                    <div class="count"></div>
+                                    <h3 style="font-size: 18px; margin-top: 100px;">Baixar Documentos</h3>
+                                </div>
+                            </div>
+                            @if (Model.Proposal.User.BranchWithoutAdm)
+                            {
+                                <div class="col-lg-2 col-md-2 col-sm-4" style="cursor: pointer;">
+                                    <div class="tile-stats text-center" style="height: 160px; box-shadow: 0px 0px 5px 0px #888888;" onclick="DownloadVideo();" onmouseover="this.style.background='lightgreen';" onmouseout="this.style.background='white';">
+                                        <div class="icon" style="right: 53%;">
+                                            <i class="fa fa-video-camera"></i>
+                                        </div>
+                                        <div class="count"></div>
+                                        <h3 style="font-size: 18px; margin-top: 100px;">Baixar Vídeo</h3>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="ln_solid"></div>
+
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.Label("Parecer do Contrato") <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.DropDownListFor(model => model.Status, GrupoSelect.Web.Util.UtilWeb.GetContractStatusList(string.Empty, true), new { @class = "form-control js-example-responsive component-select", @style = "width: 100%;" })
+                            @Html.ValidationMessageFor(model => model.Status, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div id="reproved-reason" class="item form-group" style="display: none;">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.ReprovedReason) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.DropDownListFor(model => model.ReprovedReason, GrupoSelect.Web.Util.UtilWeb.GetContractReprovalList(), new { @class = "form-control js-example-responsive component-select", @style = "width: 100%;" })
+                            @Html.ValidationMessageFor(model => model.ReprovedReason, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div id="reproved-explain" class="item form-group" style="display: none;">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.ReprovedExplain) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextAreaFor(model => model.ReprovedExplain, new {@class = "form-control text-uppercase", @rows = "3" })
+                            @Html.ValidationMessageFor(model => model.ReprovedExplain, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+                    @if (!Model.Proposal.User.BranchWithoutAdm)
+                    {
+                        <div id="video-upload" style="display:none;" class="item form-group">
+                            <label class="col-form-label col-md-3 col-sm-3 label-align">
+                                @Html.LabelFor(model => model.VideoAgreeFormFile) <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6" style="margin-left: 10px;">
+                                <input type="file" accept="video/mp4,video/x-m4v,video/*" class="input-video custom-file-input form-control" id="VideoAgreeFormFile" aria-describedby="fileHelp">
+                                <label class="custom-file-label" for="VideoAgreeFormFile" style="margin-right: 20px;">
+                                    Selecione um vídeo...
+                                </label>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="ln_solid"></div>
+                    <div class="item form-group">
+                        <div class="col-md-6 col-sm-6 offset-md-3">
+                            <button id="btnAprovar" type="button" class="btn btn-success submit" style="display:none;">Aprovar</button>
+                            <button id="btnReprovar" type="button" class="btn btn-warning submit" style="display:none;">Reprovar</button>
+                            <a asp-action="Index" class="btn btn-danger">Cancelar</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="~/js/jquery.mask.min.js"></script>
+    <script src="~/js/jquery.inputmask.bundle.min.js"></script>
+    <script src="~/js/jquery.maskmoney.min.js"></script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+            if ('@Model.Proposal.User.BranchWithoutAdm' === 'False') {
+                document.querySelector('.input-video').addEventListener('change', function (e) {
+                    var fileName = document.getElementById("VideoAgreeFormFile").files[0].name;
+                    var nextSibling = e.target.nextElementSibling
+                    nextSibling.innerText = fileName
+                });
+            }
+
+            $('.component-select').select2();
+
+            $('#Status').on('select2:select', function (e) {
+                var resultContract = $('#Status').val();
+
+                if (resultContract == '@Constants.CONTRACT_STATUS_CR') {
+                    $("#reproved-reason").fadeIn();
+                    $("#reproved-explain").fadeIn();
+                    $("#btnReprovar").fadeIn();
+
+                    if ('@Model.Proposal.User.BranchWithoutAdm' === 'False') {
+                        $("#video-upload").fadeOut();
+                        $('#VideoAgreeFormFile').value = "";
+                        $('#VideoAgreeFormFile')[0].nextElementSibling.innerText = "Selecione um vídeo...";
+                    }
+
+                    $("#btnAprovar").fadeOut();
+                } else if (resultContract == '@Constants.CONTRACT_STATUS_CA') {
+                    $("#reproved-reason").fadeOut();
+                    $("#reproved-explain").fadeOut();
+                    $("#btnReprovar").fadeOut();
+                    $("#ReprovedReason").select2().val("").trigger("change");
+                    $("#ReprovedExplain").val("");
+
+                    if ('@Model.Proposal.User.BranchWithoutAdm' === 'False') {
+                        $("#video-upload").fadeIn();
+                    }
+
+                    $("#btnAprovar").fadeIn();
+                } else {
+                    $("#reproved-reason").fadeOut();
+                    $("#reproved-explain").fadeOut();
+                    $("#ReprovedReason").select2().val("").trigger("change");
+                    $("#ReprovedExplain").val("");
+
+                    if ('@Model.Proposal.User.BranchWithoutAdm' === 'False') {
+                        $("#video-upload").fadeOut();
+                        $('#VideoAgreeFormFile').value = "";
+                        $('#VideoAgreeFormFile')[0].nextElementSibling.innerText = "Selecione um vídeo...";
+                    }
+
+                    $("#btnReprovar").fadeOut();
+                    $("#btnAprovar").fadeOut();
+                }
+            });
+        });
+
+        $("#btnAprovar").click(function (event) {
+
+            if ('@Model.Proposal.User.BranchWithoutAdm' === 'False') {
+                if (document.getElementById("VideoAgreeFormFile").files.length == 0) {
+                    swal('Aviso!', 'Selecione o vídeo antes salvar!', 'warning');
+                }
+                else {
+                    ConfirmCheck(true, true);
+                }
+            } else {                
+                ConfirmCheck(true, false);                
+            }
+        });
+
+        $("#btnReprovar").click(function (event) {
+            if ($("#ReprovedReason").val() === "" || $("#ReprovedExplain").val() === "") {
+                swal('Aviso!', 'Informe o Motivo e o Complemento antes de prosseguir!', 'warning');
+            } else {
+                ConfirmCheck(false, false);
+            }
+        });
+
+        function DownloadContract() {
+            location.href = '@Url.Action("DownloadContract", "Contract")' + "\/" + @Model.Id
+        }
+
+        function DownloadDocuments() {
+            location.href = '@Url.Action("DownloadDocuments", "Contract")' + "\/" + @Model.Id
+        }
+
+        function DownloadVideo() {
+            location.href = '@Url.Action("DownloadVideo", "Contract")' + "\/" + @Model.Id
+        }
+
+        function ConfirmCheck(aprove = false, sendFiles = false) {
+            swal({
+                title: aprove ? 'Deseja APROVAR o contrato?' : 'Deseja REPROVAR o contrato?',
+                text: "Após confirmação, não será possível reverter!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#286090',
+                cancelButtonColor: '#d9534f',
+                confirmButtonText: 'Sim, confirmar!',
+                cancelButtonText: 'Não, cancelar!',
+                confirmButtonClass: 'btn btn-primary',
+                cancelButtonClass: 'btn btn-danger',
+                buttonsStyling: false
+            }).then(function () {
+                Check(sendFiles);
+            }, function (dismiss) {
+                if (dismiss === 'cancel') {
+                    swal('Cancelado', 'A ação foi cancelada pelo usuário!', 'error');
+                }
+            });
+        }
+
+        function Check(sendFiles = false) {
+            if (sendFiles) {
+                var formData = new FormData(jQuery('#check')[0]);
+                var form = $("#check");
+
+                form.find("[type=file]").each(function () {
+                    formData.append(this.id, this.files[0]);
+                });
+
+                if ($("form").valid()) {
+                    $('#loading').show();
+                    $.ajax({
+                        url: form[0].action,
+                        type: 'POST',
+                        dataType: 'json',
+                        contentType: false,
+                        processData: false,
+                        data: formData,
+                        success: function (data) {
+                            if (data.success) {
+                                swal({ title: 'Sucesso!', text: data.message, type: 'success', allowOutsideClick: false, allowEscapeKey: false }).then(function () { window.location.pathname = "@Url.Action("Index", "Contract")"; });
+                            } else {
+                                if (data.errors) {
+                                    ShowModalListWarning(data.errors);
+                                } else {
+                                    swal('Aviso!', data.message, 'warning');
+                                }
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador.');
+                        }
+                    });
+                } else {
+                    swal('Aviso!', 'Preencha todos os campos corretamente!', 'warning');
+                }
+            } else {
+                var form = $("#check");
+                var model = form.serializeObject();
+                if ($("form").valid()) {
+                    $('#loading').show();
+                    $.ajax({
+                        url: form[0].action,
+                        type: 'POST',
+                        dataType: 'json',
+                        //contentType: 'application/json; charset=utf-8',
+                        //data: JSON.stringify(model),
+                        data: model,
+                        success: function (data) {
+                            if (data.success) {
+                                swal({ title: 'Sucesso!', text: data.message, type: 'success', allowOutsideClick: false, allowEscapeKey: false }).then(function () { window.location.pathname = "@Url.Action("Index", "Contract")"; });
+                            } else {
+                                if (data.errors) {
+                                    ShowModalListWarning(data.errors);
+                                } else {
+                                    swal('Aviso!', data.message, 'warning');
+                                }
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador.');
+                        }
+                    });
+                } else {
+                    swal('Aviso!', 'Preencha todos os campos corretamente!', 'warning');
+                }
+            }
+        }
+
+    </script>
+}
+

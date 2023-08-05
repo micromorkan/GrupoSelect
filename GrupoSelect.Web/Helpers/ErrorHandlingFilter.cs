@@ -5,8 +5,11 @@ using GrupoSelect.Domain.Models;
 using GrupoSelect.Domain.Util;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Controller;
 using System.Diagnostics;
+using System.IO.Pipelines;
 using System.Net;
 using System.Text;
 using System.Text.Json;
@@ -19,12 +22,14 @@ namespace GrupoSelect.Web.Helpers
         private readonly IConfiguration _configuration;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ITempDataDictionaryFactory _tempDataDictionaryFactory;
 
-        public ExceptionLog(IConfiguration configuration, IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor)
+        public ExceptionLog(IConfiguration configuration, IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, ITempDataDictionaryFactory tempDataDictionaryFactory)
         {
             _configuration = configuration;
             _unitOfWork = unitOfWork;
             _httpContextAccessor = httpContextAccessor;
+            _tempDataDictionaryFactory = tempDataDictionaryFactory;
         }
 
         public void OnActionExecuted(ActionExecutedContext context)
@@ -69,17 +74,28 @@ namespace GrupoSelect.Web.Helpers
                 _unitOfWork.ErrorLogs.Save();
             }
 
-            context.ExceptionHandled = true;
-            context.Result = new JsonResult(new
-            {
-                Success = false,
-                Message = Constants.SYSTEM_ERROR_MSG
-            });
+            var tempData = _tempDataDictionaryFactory.GetTempData(context.HttpContext);
 
-            //var s = new StackTrace(context.Exception);
-            //var r = s.GetFrame(0);
-            //string actionName = GetMethodName(r.GetMethod());
-            //context.HttpContext.Response.Redirect("...");
+            context.ExceptionHandled = true;
+
+            if (context.HttpContext.Request.Method == "POST")
+            {
+                context.Result = new JsonResult(new
+                {
+                    Success = false,
+                    Message = Constants.SYSTEM_ERROR_MSG
+                });
+            }
+            else if (context.HttpContext.Request.Method == "GET")
+            {
+                tempData[Constants.SYSTEM_ERROR_KEY] = Constants.SYSTEM_ERROR_MSG;
+                context.Result = new RedirectToRouteResult(
+                new RouteValueDictionary
+                {
+                    { "controller", "Home" },
+                    { "action", "Index" }
+                });
+            }
         }
 
         private string GetMethodName(System.Reflection.MethodBase method)
