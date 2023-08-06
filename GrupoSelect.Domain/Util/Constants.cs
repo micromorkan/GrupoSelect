@@ -49,6 +49,13 @@
         public const string SYSTEM_LOG_UPDATE = "UPDATE";
         public const string SYSTEM_LOG_DELETE = "DELETE";
 
+        public const string SYSTEM_RGBA_WHITE = "rgba(255, 255, 255, 1)";
+        public const string SYSTEM_RGBA_GREEN = "rgba(201, 242, 155, 1)";
+        public const string SYSTEM_RGBA_ORANGE = "rgba(251, 192, 147, 1)";
+        public const string SYSTEM_RGBA_BLUE = "rgba(54, 162, 235, 1)";
+        public const string SYSTEM_RGBA_RED = "rgba(255, 99, 132, 1)";
+        public const string SYSTEM_RGBA_PURPLE = "rgba(159, 90, 253, 1)";
+
         #endregion
 
         #region PROPOSAL CONSTANTS

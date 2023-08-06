@@ -66,7 +66,7 @@ namespace GrupoSelect.Services.FluentValidation
         {
             var contract = _unitOfWork.Contracts.GetAll(x => x.Id == model.Id).FirstOrDefault();
 
-            if (contract == null)
+            if (contract != null)
             {
                 if (contract.Status == Constants.CONTRACT_STATUS_CA || contract.Status == Constants.CONTRACT_STATUS_CC)
                 {

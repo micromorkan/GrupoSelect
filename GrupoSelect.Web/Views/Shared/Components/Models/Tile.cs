@@ -46,5 +46,11 @@
         /// Valor definido em milisegundos. Ex: 6000 = 6 segundos
         /// </summary>
         public int IntervaloAtualizacao { get; set; }
+
+
+        /// <summary>
+        /// Filtro usado para fornecer dados opcionais quando o Tile atualizar com o servidor.
+        /// </summary>
+        public object Filter { get; set; }
     }
 }

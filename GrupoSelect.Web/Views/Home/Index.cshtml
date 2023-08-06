@@ -1,11 +1,24 @@
-﻿@{
+﻿@model GrupoSelect.Web.ViewModel.ComponentsVM
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    @*<a class="btn btn-primary" href="@Url.Action("Word", "Home")">Gerar Doc</a>*@
-    @Html.ActionLink("Teste Ficha Cadastral", "FichaCadastral", "Home", null, new { target = "_blank", @class = "btn btn-primary" })
-    @Html.ActionLink("Teste Contrato", "Contrato", "Home", null, new { target = "_blank", @class = "btn btn-primary" })
-</div>
+@*<div class="title_left">
+    <h3>Form advanced</h3>
+</div>*@
+
+<div class="clearfix"></div>
+
+@foreach (var item in Model.LstTile)
+{
+    @Html.Partial("Components/_Tile", item)
+}
+
+<script src="~/js/chart/chart.min.js"></script>
+@foreach (var item in Model.LstChart)
+{
+    <div class="col-md-6 col-sm-6 col-xs-12">
+        @Html.Partial("Components/_Chart", item)
+    </div>
+}

@@ -1,4 +1,9 @@
 ﻿using GrupoSelect.Domain.Entity;
+using GrupoSelect.Domain.Models;
+using GrupoSelect.Domain.Util;
+using GrupoSelect.Services.Interface;
+using GrupoSelect.Services.Service;
+using GrupoSelect.Web.Helpers;
 using GrupoSelect.Web.Util;
 using GrupoSelect.Web.ViewModel;
 using GrupoSelect.Web.Views.Shared.Components.Models;
@@ -10,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using RazorEngine;
 using RazorEngine.Templating;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace GrupoSelect.Web.Controllers
 {
@@ -17,40 +23,184 @@ namespace GrupoSelect.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private IContractService _contractService;
+        private IProposalService _proposalService;
+        private IUserService _userService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IContractService contractService, IProposalService proposalService, IUserService userService)
         {
             _logger = logger;
+            _contractService = contractService;
+            _proposalService = proposalService;
+            _userService = userService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            ComponentsVM dashboard = new ComponentsVM();
+
+            string userProfile = User.GetProfile();
+
+            if (userProfile != Constants.PROFILE_ADVOGADO && userProfile != Constants.PROFILE_TI)
+            {
+                dashboard.LstChart.Add(await MontarChartContratoSemanal());
+                dashboard.LstChart.Add(await MontarChartContratoMensal());
+
+                if (userProfile == Constants.PROFILE_DIRETOR || userProfile == Constants.PROFILE_GERENTE)
+                {
+                    var result = await _userService.GetAll(new Domain.Entity.User { Profile = Constants.PROFILE_REPRESENTANTE });
+
+                    for (int i = 0; i < result.Object.Count(); i++)
+                    {
+                        dashboard.LstTile.Add(await MontarTilePropostaACMensal(i + 1, result.Object.ToList()[i].Id));
+                    }
+                }
+            }
+
+            return View(dashboard);
         }
 
-        public IActionResult FichaCadastral()
+        private async Task<Chart> MontarChartContratoSemanal()
         {
-            RegistrationForm registrationForm = new RegistrationForm(new Client { Name = "DIEGO ANDRADE SAMPAIO" }, new Proposal { ProductTypeName = "CARRO" }, new Domain.Entity.User { Cnpj = "99.999.999/0001-99" });
-            // Carregue o conteúdo do arquivo CSHTML
-            string cshtmlContent = System.IO.File.ReadAllText("Views\\Shared\\Reports\\RegistrationForm.cshtml");
+            string userProfile = User.GetProfile();
+            int userId = Convert.ToInt32(User.GetId());
 
-            // Renderize o CSHTML com os dados fornecidos
-            string renderedContent = Engine.Razor.RunCompile(cshtmlContent, "FICHACADASTRAL", typeof(RegistrationForm), registrationForm);
+            DateTime startOfWeek = DateTime.Today.AddDays((int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek - (int)DateTime.Today.DayOfWeek);
 
-            return Content(renderedContent, "text/html");
+            PaginateResult<IEnumerable<Contract>> result = null;
+
+            if (userProfile == Constants.PROFILE_DIRETOR || userProfile == Constants.PROFILE_GERENTE || userProfile == Constants.PROFILE_ADMINISTRATIVO)
+            {
+                result = await _contractService.GetAllPaginate(new Contract { Proposal = new Proposal() }, 1, 1000, startOfWeek, startOfWeek.AddDays(7));
+            }
+            else if (userProfile == Constants.PROFILE_REPRESENTANTE)
+            {
+                result = await _contractService.GetAllPaginate(new Contract { Proposal = new Proposal { UserId = userId } }, 1, 1000, startOfWeek, startOfWeek.AddDays(7));
+            }
+
+            string[] status = (Constants.CONTRACT_STATUS_AD + "," + Constants.CONTRACT_STATUS_PA + "," + Constants.CONTRACT_STATUS_CA + "," + Constants.CONTRACT_STATUS_CR + "," + Constants.CONTRACT_STATUS_CC).Split(",");
+            string[] colors = (Constants.SYSTEM_RGBA_GREEN + "|" + Constants.SYSTEM_RGBA_ORANGE + "|" + Constants.SYSTEM_RGBA_BLUE + "|" + Constants.SYSTEM_RGBA_RED + "|" + Constants.SYSTEM_RGBA_PURPLE).Split("|");
+            int[] values = new int[5]
+            {
+                result.Object.Count(x => x.Status == Constants.CONTRACT_STATUS_AD),
+                result.Object.Count(x => x.Status == Constants.CONTRACT_STATUS_PA),
+                result.Object.Count(x => x.Status == Constants.CONTRACT_STATUS_CA),
+                result.Object.Count(x => x.Status == Constants.CONTRACT_STATUS_CR),
+                result.Object.Count(x => x.Status == Constants.CONTRACT_STATUS_CC)
+            };
+
+            Chart contratosSemanal = new Chart
+            {
+                Id = 1,
+                Titulo = "Contratos - Semanal (" + startOfWeek.Date.ToShortDateString() + " - " + startOfWeek.AddDays(7).Date.ToShortDateString() + ")",
+                Cores = colors,
+                Textos = status,
+                Valores = values,
+                PermiteMinimizar = true,
+                TipoChart = UtilWeb.GetEnumDescription(UtilWebEnums.TipoChart.Torta),
+                Controller = "Home",
+                Action = "AtualizarContratosSemanal",
+                BackgroundColor = "#FFF",
+                IntervaloAtualizacao = 8500 //600000
+            };
+            return contratosSemanal;
         }
 
-        public IActionResult Contrato()
+        private async Task<Chart> MontarChartContratoMensal()
         {
-            ContractForm registrationForm = new ContractForm(new Client { Name = "DIEGO ANDRADE SAMPAIO" }, new Proposal { ProductTypeName = "CARRO" }, new Domain.Entity.User { Cnpj = "99.999.999/0001-99" });
-            // Carregue o conteúdo do arquivo CSHTML
-            string cshtmlContent = System.IO.File.ReadAllText("Views\\Shared\\Reports\\ContractForm.cshtml");
+            string userProfile = User.GetProfile();
+            int userId = Convert.ToInt32(User.GetId());
 
-            // Renderize o CSHTML com os dados fornecidos
-            string renderedContent = Engine.Razor.RunCompile(cshtmlContent, "CONTRATO", typeof(ContractForm), registrationForm);
+            DateTime date = DateTime.Now;
 
-            return Content(renderedContent, "text/html");
+            var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
+            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+
+            PaginateResult<IEnumerable<Contract>> result = null;
+
+            if (userProfile == Constants.PROFILE_DIRETOR || userProfile == Constants.PROFILE_GERENTE || userProfile == Constants.PROFILE_ADMINISTRATIVO)
+            {
+                result = await _contractService.GetAllPaginate(new Contract { Proposal = new Proposal() }, 1, 1000, firstDayOfMonth, lastDayOfMonth);
+            }
+            else if (userProfile == Constants.PROFILE_REPRESENTANTE)
+            {
+                result = await _contractService.GetAllPaginate(new Contract { Proposal = new Proposal { UserId = userId } }, 1, 1000, firstDayOfMonth, lastDayOfMonth);
+            }
+
+            string[] status = (Constants.CONTRACT_STATUS_AD + "," + Constants.CONTRACT_STATUS_PA + "," + Constants.CONTRACT_STATUS_CA + "," + Constants.CONTRACT_STATUS_CR + "," + Constants.CONTRACT_STATUS_CC).Split(",");
+            string[] colors = (Constants.SYSTEM_RGBA_GREEN + "|" + Constants.SYSTEM_RGBA_ORANGE + "|" + Constants.SYSTEM_RGBA_BLUE + "|" + Constants.SYSTEM_RGBA_RED + "|" + Constants.SYSTEM_RGBA_PURPLE).Split("|");
+            int[] values = new int[5]
+            {
+                result.Object.Count(x => x.Status == Constants.CONTRACT_STATUS_AD),
+                result.Object.Count(x => x.Status == Constants.CONTRACT_STATUS_PA),
+                result.Object.Count(x => x.Status == Constants.CONTRACT_STATUS_CA),
+                result.Object.Count(x => x.Status == Constants.CONTRACT_STATUS_CR),
+                result.Object.Count(x => x.Status == Constants.CONTRACT_STATUS_CC)
+            };
+
+            Chart contratosSemanal = new Chart
+            {
+                Id = 2,
+                Titulo = "Contratos - Mensal (" + firstDayOfMonth.Date.ToShortDateString() + " - " + lastDayOfMonth.Date.ToShortDateString() + ")",
+                Cores = colors,
+                Textos = status,
+                Valores = values,
+                PermiteMinimizar = true,
+                TipoChart = UtilWeb.GetEnumDescription(UtilWebEnums.TipoChart.Torta),
+                Controller = "Home",
+                Action = "AtualizarContratosMensal",
+                BackgroundColor = "#FFF",
+                IntervaloAtualizacao = 8500 //600000
+            };
+            return contratosSemanal;
         }
+
+        private async Task<Tile> MontarTilePropostaACMensal(int id, int userId)
+        {
+            string userProfile = User.GetProfile();
+
+            DateTime date = DateTime.Now;
+
+            var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
+            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+
+            var result = await _proposalService.GetAllPaginate(new Proposal { UserId = userId }, 1, 1000, firstDayOfMonth, lastDayOfMonth);
+
+            Tile tile = new Tile();
+
+            tile.Id = id;
+            tile.BackgroundColor = Constants.SYSTEM_RGBA_WHITE;
+            tile.Icone = "fa-folder";
+            tile.Descricao = string.Empty;
+            tile.Titulo = (await _userService.GetById(userId)).Object.Name;
+            tile.Valor = result.Object != null ? result.Object.Count().ToString() + " Propostas" : "0 Propostas";
+            tile.Controller = "Home";
+            tile.Action = "AtualizarTileACMensal";
+            tile.IntervaloAtualizacao = 5000;
+            tile.Filter = userId;
+
+            return tile;
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> AtualizarContratosSemanal()
+        {
+            return Json(await MontarChartContratoSemanal());
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> AtualizarContratosMensal()
+        {
+            return Json(await MontarChartContratoMensal());
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> AtualizarTileACMensal(int id, string filter)
+        {
+            return Json(await MontarTilePropostaACMensal(id, Convert.ToInt32(filter)));
+        }
+
+        #region EXEMPLOS COMPONENTES
 
         public async Task<IActionResult> Components()
         {
@@ -393,6 +543,8 @@ namespace GrupoSelect.Web.Controllers
 
             return Json(chart);
         }
+
+        #endregion
 
         public async Task<IActionResult> LogOut()
         {

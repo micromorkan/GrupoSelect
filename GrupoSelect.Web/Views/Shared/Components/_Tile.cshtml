@@ -44,20 +44,6 @@
         z-index: 100;
     }
 </style>
-@*<div class="animated flipInY col-lg-4 col-md-4 col-sm-4 col-xs-12">
-    <div id="tile_loading_@Model.Id" class="tile_loading">
-        <img class="tile_loading_image" src="~/img/loading.gif" alt="Loading..." />
-    </div>
-    <div class="tile-stats" id="tile_backgound_@Model.Id">
-        <div class="icon">
-            <i class="fa @Model.Icone"></i>
-        </div>
-        <div class="count" id="tile_valor_@Model.Id"></div>
-        <h3 id="tile_titulo_@Model.Id"></h3>
-        <p id="tile_descricao_@Model.Id"></p>
-    </div>
-</div>*@
-
 
 <div class="animated flipInY col-lg-4 col-md-4 col-sm-6  ">
     <div id="tile_loading_@Model.Id" class="tile_loading">
@@ -96,7 +82,7 @@
             setInterval(function () {
                 $('#tile_loading_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).show();
                 $.ajax({
-                    url: '@Url.Action(Html.Raw(JsonSerializer.Serialize(Model.Action).Replace("\"", "")).ToString(), Html.Raw(JsonSerializer.Serialize(Model.Controller).Replace("\"", "")).ToString())',
+                    url: '@Url.Action(Html.Raw(JsonSerializer.Serialize(Model.Action).Replace("\"", "")).ToString(), Html.Raw(JsonSerializer.Serialize(Model.Controller).Replace("\"", "")).ToString(), new { id = Model.Id, filter = Model.Filter })',
                     type: 'POST',
                     data: null,
                     dataType: 'json',

@@ -23,7 +23,9 @@ namespace GrupoSelect.Services.Service
             return new Result<IEnumerable<User>>
             {
                 Success = true,
-                Object = _unitOfWork.Users.GetAll(f => (string.IsNullOrEmpty(filter.Name) || f.Name.Contains(filter.Name)) && (string.IsNullOrEmpty(filter.Email) || f.Email.Contains(filter.Email))),
+                Object = _unitOfWork.Users.GetAll(f => (string.IsNullOrEmpty(filter.Name) || f.Name.Contains(filter.Name)) && 
+                                                       (string.IsNullOrEmpty(filter.Email) || f.Email.Contains(filter.Email)) &&
+                                                       (string.IsNullOrEmpty(filter.Profile) || f.Profile == filter.Profile)),
             };
         }
 

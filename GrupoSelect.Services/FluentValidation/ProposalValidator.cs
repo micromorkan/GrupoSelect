@@ -98,7 +98,7 @@ namespace GrupoSelect.Services.FluentValidation
         {
             var proposal = _unitOfWork.Proposals.GetAll(x => x.Id == model.Id).FirstOrDefault();
 
-            if (proposal == null)
+            if (proposal != null)
             {
                 if (proposal.Status == Constants.PROPOSAL_STATUS_PC || proposal.Status == Constants.PROPOSAL_STATUS_CA)
                 {
