@@ -23,14 +23,14 @@ namespace GrupoSelect.Services.Service
             return new Result<IEnumerable<Client>>
             {
                 Success = true,
-                Object = _unitOfWork.Clients.GetAll(f => (string.IsNullOrEmpty(filter.Name) || f.Name == filter.Name) &&
+                Object = _unitOfWork.Clients.GetAll(f => (string.IsNullOrEmpty(filter.Name) || f.Name.Contains(filter.Name)) &&
                                                          (string.IsNullOrEmpty(filter.CPF) || f.CPF == filter.CPF)),
             };
         }
 
         public async Task<PaginateResult<IEnumerable<Client>>> GetAllPaginate(Client filter, int page, int qtPage)
         {
-            return _unitOfWork.Clients.GetAllPaginate(f => (string.IsNullOrEmpty(filter.Name) || f.Name == filter.Name) &&
+            return _unitOfWork.Clients.GetAllPaginate(f => (string.IsNullOrEmpty(filter.Name) || f.Name.Contains(filter.Name)) &&
                                                          (string.IsNullOrEmpty(filter.CPF) || f.CPF == filter.CPF), null, page, qtPage);
         }
 
@@ -71,6 +71,17 @@ namespace GrupoSelect.Services.Service
             }
 
             model.DateCreate = DateTime.Now;
+            model.Name = model.Name.ToUpper();
+            model.NaturalFrom = model.NaturalFrom.ToUpper();
+            model.Nationality = model.Nationality.ToUpper();
+            model.OrganExp = model.OrganExp.ToUpper();
+            model.Email = model.Email.ToUpper();
+            model.Profession = model.Profession.ToUpper();
+            model.Address = model.Address.ToUpper();
+            model.Neighborhood = model.Neighborhood.ToUpper();
+            model.Complement = model.Complement?.ToUpper();
+            model.City = model.City.ToUpper();
+            model.State = model.State.ToUpper();
 
             _unitOfWork.Clients.Insert(model);
             _unitOfWork.Clients.Save();
@@ -98,6 +109,17 @@ namespace GrupoSelect.Services.Service
             }
 
             model.DateUpdate = DateTime.Now;
+            model.Name = model.Name.ToUpper();
+            model.NaturalFrom = model.NaturalFrom.ToUpper();
+            model.Nationality = model.Nationality.ToUpper();
+            model.OrganExp = model.OrganExp.ToUpper();
+            model.Email = model.Email.ToUpper();
+            model.Profession = model.Profession.ToUpper();
+            model.Address = model.Address.ToUpper();
+            model.Neighborhood = model.Neighborhood.ToUpper();
+            model.Complement = model.Complement?.ToUpper();
+            model.City = model.City.ToUpper();
+            model.State = model.State.ToUpper();
 
             _unitOfWork.Clients.Update(model);
             _unitOfWork.Clients.Save();

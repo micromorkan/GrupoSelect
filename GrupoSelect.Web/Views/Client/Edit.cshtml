@@ -19,6 +19,7 @@
                 <br>
                 @using (Html.BeginForm("Edit", "Client", FormMethod.Post, new { @id = "edit", @class = "form-horizontal form-label-left" }))
                 {
+                    @Html.HiddenFor(model => model.UserId)
                     @Html.HiddenFor(model => model.DateCreate)
                     <div class="item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align">
@@ -193,11 +194,10 @@
                     </div>
                     <div class="item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align">
-                            @Html.LabelFor(model => model.Complement) <span class="required">*</span>
+                            @Html.LabelFor(model => model.Complement)
                         </label>
                         <div class="col-md-6 col-sm-6 ">
                             @Html.TextBoxFor(model => model.Complement, new {@class = "form-control text-uppercase" })
-                            @Html.ValidationMessageFor(model => model.Complement, null, new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="ln_solid"></div>

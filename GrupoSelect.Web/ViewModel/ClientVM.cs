@@ -73,8 +73,7 @@ namespace GrupoSelect.Web.ViewModel
         public string Neighborhood { get; set; }
 
         [Display(Name = "Complemento")]
-        [Required(ErrorMessage = "O campo {0} é obrigatório!")]
-        public string Complement { get; set; }
+        public string? Complement { get; set; }
 
         [Display(Name = "Cep")]
         [Required(ErrorMessage = "O campo {0} é obrigatório!")]
