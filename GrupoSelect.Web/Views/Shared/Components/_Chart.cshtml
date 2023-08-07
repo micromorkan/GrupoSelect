@@ -144,39 +144,45 @@
                             success: function (dados) {
 
                                 $('#chart_loading_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).hide();
-                                chartList[@Html.Raw(JsonSerializer.Serialize(Model.Id))].destroy();
-                                $("#chart_" + @Html.Raw(JsonSerializer.Serialize(Model.Id))).height(canvasHeight)
+                                //chartList[@Html.Raw(JsonSerializer.Serialize(Model.Id))].destroy();
+                                //$("#chart_" + @Html.Raw(JsonSerializer.Serialize(Model.Id))).height(canvasHeight)
 
-                                chartList[@Html.Raw(JsonSerializer.Serialize(Model.Id))] = new Chart($("#chart_" + @Html.Raw(JsonSerializer.Serialize(Model.Id))), {
-                                    type: dados.tipoChart,
-                                    data: {
-                                        datasets: [{
-                                            data: dados.valores,
-                                            backgroundColor: dados.cores,
-                                        }],
-                                        labels: dados.textos,
-                                    },
-                                    options: {
-                                        legend: {
-                                            display: true,
-                                            position: 'left',
-                                            labels: {
-                                                boxWidth: 40,
-                                                padding: 10,
-                                                generateLabels: (chart) => {
-                                                    const datasets = chart.data.datasets;
-                                                    return datasets[0].data.map((data, i) => ({
-                                                        text: `${chart.data.labels[i]}: ${data}`,
-                                                        fillStyle: datasets[0].backgroundColor[i],
-                                                        index: i
-                                                    }))
-                                                }
-                                            },
-                                            fullWidth: true,
-                                            reverse: false                                            
-                                        }
-                                    }
-                                });
+                                //chartList[@Html.Raw(JsonSerializer.Serialize(Model.Id))] = new Chart($("#chart_" + @Html.Raw(JsonSerializer.Serialize(Model.Id))), {
+                                //    type: dados.tipoChart,
+                                //    data: {
+                                //        datasets: [{
+                                //            data: dados.valores,
+                                //            backgroundColor: dados.cores,
+                                //        }],
+                                //        labels: dados.textos,
+                                //    },
+                                //    options: {
+                                //        legend: {
+                                //            display: true,
+                                //            position: 'left',
+                                //            labels: {
+                                //                boxWidth: 40,
+                                //                padding: 10,
+                                //                generateLabels: (chart) => {
+                                //                    const datasets = chart.data.datasets;
+                                //                    return datasets[0].data.map((data, i) => ({
+                                //                        text: `${chart.data.labels[i]}: ${data}`,
+                                //                        fillStyle: datasets[0].backgroundColor[i],
+                                //                        index: i
+                                //                    }))
+                                //                }
+                                //            },
+                                //            fullWidth: true,
+                                //            reverse: false                                            
+                                //        }
+                                //    }
+                                //});
+
+                                var datasetserver = [{ data: dados.valores, backgroundColor: dados.cores }];
+
+                                chartList[@Html.Raw(JsonSerializer.Serialize(Model.Id))].data.labels = dados.textos;
+                                chartList[@Html.Raw(JsonSerializer.Serialize(Model.Id))].data.datasets = datasetserver;
+                                chartList[@Html.Raw(JsonSerializer.Serialize(Model.Id))].update();
 
                                 if (dados.backgroundColor != "" && dados.backgroundColor) {
                                     $('#chart_backgound_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).css('background-color', blinkColor);
