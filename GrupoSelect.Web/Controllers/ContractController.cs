@@ -292,10 +292,10 @@ namespace GrupoSelect.Web.Controllers
             {
                 Contract contract = (await _contractService.GetById(id)).Object;
 
-                ContractForm contractForm = new ContractForm(contract.Proposal.Client, contract.Proposal, contract.Proposal.User);
+                ContractForm contractForm = new ContractForm(contract.Proposal.Client, contract.Proposal, contract.Proposal.User, contract);
 
                 string cshtmlContent = System.IO.File.ReadAllText("Views\\Shared\\Reports\\ContractForm.cshtml");
-                string renderedContent = Engine.Razor.RunCompile(cshtmlContent, "CONTRATO", typeof(ContractForm), contractForm);
+                string renderedContent = Engine.Razor.RunCompile(cshtmlContent, Guid.NewGuid().ToString(), typeof(ContractForm), contractForm);
 
                 return Content(renderedContent, "text/html");
             }
