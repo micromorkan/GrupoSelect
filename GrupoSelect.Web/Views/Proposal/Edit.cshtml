@@ -201,7 +201,7 @@
 
                 var valorTotal = ConvertMoneyFloat(arrayValues[1]) + ConvertMoneyFloat(arrayValues[2]);
                 //$('#CreditTotalValue').val(valorTotal.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }));
-                $('#CreditTotalValue').val(valorTotal.toLocaleString('pt-br', { minimumFractionDigits: 2 }));
+                $('#CreditTotalValue').val(valorTotal.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
             } else {
                 emptyCreditFields();
             }

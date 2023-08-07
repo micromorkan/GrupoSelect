@@ -76,7 +76,7 @@
                             @Html.LabelFor(model => model.PortionValue) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            @Html.TextBoxFor(model => model.PortionValue, new {@class = "form-control money partialValue" })
+                            @Html.TextBoxFor(model => model.PortionValue, new {@class = "form-control money" })
                             @Html.ValidationMessageFor(model => model.PortionValue, null, new { @class = "text-danger" })
                         </div>
                     </div>
@@ -85,7 +85,7 @@
                             @Html.LabelFor(model => model.MembershipValue) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            @Html.TextBoxFor(model => model.MembershipValue, new {@class = "form-control money partialValue" })
+                            @Html.TextBoxFor(model => model.MembershipValue, new {@class = "form-control money", @disabled="disabled" })
                             @Html.ValidationMessageFor(model => model.MembershipValue, null, new { @class = "text-danger" })
                         </div>
                     </div>
@@ -130,12 +130,34 @@
             Edit("@Url.Action("Index", "Credit")", false, false);
         });
 
-        $('.partialValue').on('keyup', function (e) {
+        $('#ddlTableType').on('select2:select', function (e) {
+            UpdateMembershipValue();
+        });
+
+        $('#CreditValue').on('keyup', function (e) {
+            UpdateMembershipValue();
+        });
+
+        $('#PortionValue').on('keyup', function (e) {
+            UpdateTotalValue();
+        });
+
+        function UpdateTotalValue() {
             var PortionValue = $('#PortionValue').val();
             var MembershipValue = $('#MembershipValue').val();
             var valorTotal = ConvertMoneyFloat(PortionValue) + ConvertMoneyFloat(MembershipValue);
-            $('#TotalValue').val(valorTotal.toLocaleString('pt-br', { minimumFractionDigits: 2 }));
-        });
+            $('#TotalValue').val(valorTotal.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+        }
+
+        function UpdateMembershipValue() {
+            if ($('#ddlTableType').val() !== "") {
+                var CreditValue = $('#CreditValue').val();
+                var MembershipFee = $('#ddlTableType option:selected').text().split('-')[1].trim();
+                var MembershipValue = ConvertMoneyFloat(CreditValue) * parseFloat(MembershipFee) / 100.0;
+                $('#MembershipValue').val(MembershipValue.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                UpdateTotalValue();
+            }
+        }
     </script>
 }
 

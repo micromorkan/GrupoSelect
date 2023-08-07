@@ -112,9 +112,14 @@ namespace GrupoSelect.Web.Controllers
                     proposalVM.CreditPortionValue = credit.PortionValue;
                     proposalVM.FinancialAdminName = credit.FinancialAdmin.Name;
                     proposalVM.TableTypeFee = credit.TableType.MembershipFee;
+                    proposalVM.TableTypeCommission = credit.TableType.CommissionFee;
                     proposalVM.TableTypeRate = credit.TableType.RemainingRate;
                     proposalVM.TableTypeTax = credit.TableType.TableTax;
                     proposalVM.ProductTypeName = credit.ProductType.ProductName;
+                }
+                else
+                {
+                    return Json(new Result<Proposal> { Success = false, Message = "Não foi possivel obter os dados do Crédito selecionado. Contate o setor de TI." });
                 }
 
                 proposalVM.Status = Constants.PROPOSAL_STATUS_AC;
@@ -204,6 +209,7 @@ namespace GrupoSelect.Web.Controllers
                         proposalVM.CreditPortionValue = credit.PortionValue;
                         proposalVM.FinancialAdminName = credit.FinancialAdmin.Name;
                         proposalVM.TableTypeFee = credit.TableType.MembershipFee;
+                        proposalVM.TableTypeCommission = credit.TableType.CommissionFee;
                         proposalVM.TableTypeRate = credit.TableType.RemainingRate;
                         proposalVM.TableTypeTax = credit.TableType.TableTax;
                         proposalVM.ProductTypeName = credit.ProductType.ProductName;
@@ -280,7 +286,7 @@ namespace GrupoSelect.Web.Controllers
                     items.Add(new SelectListItem()
                     {
                         Value = item.Id.ToString(),
-                        Text = item.TableTax + " - " + item.MembershipFee.ToString() + " - " + item.RemainingRate.ToString(),
+                        Text = item.TableTax + " - " + item.MembershipFee + " - " + item.RemainingRate + " - " + item.CommissionFee,
                         Selected = filter.Id == item.Id ? true : false
                     });
                 }

@@ -84,6 +84,17 @@ namespace GrupoSelect.Services.FluentValidation
             {
                 context.AddFailure("Taxa Restante inválida.");
             }
+
+            Decimal result3 = 0;
+
+            if (!Decimal.TryParse(model.CommissionFee, out result3))
+            {
+                context.AddFailure("Informe um valor numérico para Taxa Comissão.");
+            }
+            else if (result2 < 0)
+            {
+                context.AddFailure("Taxa Restante inválida.");
+            }
         }
         private void DeleteBlock(Domain.Entity.TableType model, ValidationContext<Domain.Entity.TableType> context)
         {

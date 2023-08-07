@@ -25,7 +25,7 @@ namespace GrupoSelect.Services.Service
                 Success = true,
                 Object = _unitOfWork.Credits.GetAll(f => ((filter.ProductTypeId == 0) || f.ProductTypeId == filter.ProductTypeId) &&
                                                          ((filter.TableTypeId == 0) || f.TableTypeId == filter.TableTypeId) &&
-                                                         ((filter.FinancialAdminId == 0) || f.FinancialAdminId == filter.FinancialAdminId)),
+                                                         ((filter.FinancialAdminId == 0) || f.FinancialAdminId == filter.FinancialAdminId), null, i => i.ProductType, i => i.FinancialAdmin, i => i.TableType),
             };
         }
 
@@ -33,7 +33,7 @@ namespace GrupoSelect.Services.Service
         {
             return _unitOfWork.Credits.GetAllPaginate(f => ((filter.ProductTypeId == 0) || f.ProductTypeId == filter.ProductTypeId) &&
                                                            ((filter.TableTypeId == 0) || f.TableTypeId == filter.TableTypeId) &&
-                                                           ((filter.FinancialAdminId == 0) || f.FinancialAdminId == filter.FinancialAdminId), null, page, qtPage);
+                                                           ((filter.FinancialAdminId == 0) || f.FinancialAdminId == filter.FinancialAdminId), null, page, qtPage, i => i.ProductType, i => i.FinancialAdmin, i => i.TableType);
         }
 
         public async Task<Result<Credit>> GetById(int id)

@@ -633,7 +633,7 @@ function ConvertMoneyFloat(valor) {
         valor = 0;
     } else {
         valor = valor.replace("R$", "");
-        valor = valor.replace(".", "");
+        valor = valor.replaceAll(".", "");
         valor = valor.replace(",", ".");
         valor = valor.trim();
         valor = parseFloat(valor);

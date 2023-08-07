@@ -177,7 +177,7 @@ namespace GrupoSelect.Web.Controllers
                     items.Add(new SelectListItem()
                     {
                         Value = item.Id.ToString(),
-                        Text = item.TableTax + " - " + item.MembershipFee.ToString() + " - " + item.RemainingRate.ToString(),
+                        Text = item.TableTax + " - " + item.MembershipFee + " - " + item.RemainingRate + " - " + item.CommissionFee,
                         Selected = filter.Id == item.Id ? true : false
                     });
                 }

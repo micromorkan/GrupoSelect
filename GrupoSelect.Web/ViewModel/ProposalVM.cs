@@ -29,9 +29,8 @@ namespace GrupoSelect.Web.ViewModel
         public string ProductTypeName { get; set; }
 
         public string TableTypeTax { get; set; }
-
         public string TableTypeFee { get; set; }
-
+        public string TableTypeCommission { get; set; }
         public string TableTypeRate { get; set; }
 
         public string FinancialAdminName { get; set; }

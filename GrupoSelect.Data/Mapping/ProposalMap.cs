@@ -19,6 +19,7 @@ namespace GrupoSelect.Data.Mapping
             builder.Property(c => c.TableTypeTax).HasColumnName("TableTypeTax").IsRequired();
             builder.Property(c => c.TableTypeFee).HasColumnName("TableTypeFee").IsRequired();
             builder.Property(c => c.TableTypeRate).HasColumnName("TableTypeRate").IsRequired();
+            builder.Property(c => c.TableTypeCommission).HasColumnName("TableTypeCommission").IsRequired();
             builder.Property(c => c.FinancialAdminName).HasColumnName("FinancialAdminName").IsRequired();
             builder.Property(c => c.CreditValue).HasColumnName("CreditValue").IsRequired();
             builder.Property(c => c.CreditPortionValue).HasColumnName("CreditPortionValue").IsRequired();
