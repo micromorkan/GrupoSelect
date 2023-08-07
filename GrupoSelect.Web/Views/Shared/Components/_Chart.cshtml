@@ -110,7 +110,17 @@
                 options: {
                     legend: {
                         display: true,
-                        position: 'bottom',
+                        position: 'left',
+                        labels: {
+                            generateLabels: (chart) => {
+                                const datasets = chart.data.datasets;
+                                return datasets[0].data.map((data, i) => ({
+                                    text: `${chart.data.labels[i]}: ${data}`,
+                                    fillStyle: datasets[0].backgroundColor[i],
+                                    index: i
+                                }))
+                            }
+                        }
                     }
                 }
             });
@@ -149,13 +159,21 @@
                                     options: {
                                         legend: {
                                             display: true,
-                                            position: "bottom",
-                                            fullWidth: true,
-                                            reverse: false,
+                                            position: 'left',
                                             labels: {
                                                 boxWidth: 40,
-                                                padding: 10
-                                            }
+                                                padding: 10,
+                                                generateLabels: (chart) => {
+                                                    const datasets = chart.data.datasets;
+                                                    return datasets[0].data.map((data, i) => ({
+                                                        text: `${chart.data.labels[i]}: ${data}`,
+                                                        fillStyle: datasets[0].backgroundColor[i],
+                                                        index: i
+                                                    }))
+                                                }
+                                            },
+                                            fullWidth: true,
+                                            reverse: false                                            
                                         }
                                     }
                                 });
