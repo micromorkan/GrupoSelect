@@ -39,7 +39,7 @@ namespace GrupoSelect.Services.FluentValidation
 
         private void ValidateUpdateStatus(Domain.Entity.Contract model, ValidationContext<Domain.Entity.Contract> context)
         {
-            if (model.Status != Constants.CONTRACT_STATUS_AD)
+            if (model.Status != Constants.CONTRACT_STATUS_AD && model.Status != Constants.CONTRACT_STATUS_CR)
             {
                 context.AddFailure("O Contrato não pode ser editado pois possui o status de " + model.Status + ".");
             }

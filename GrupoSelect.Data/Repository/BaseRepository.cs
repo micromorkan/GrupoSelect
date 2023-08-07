@@ -82,11 +82,11 @@ namespace GrupoSelect.Data.Repository
 
             if (orderBy != null)
             {
-                return orderBy(query).ToList();
+                return orderBy(query).AsNoTracking().ToList();
             }
             else
             {
-                return query.ToList();
+                return query.AsNoTracking().ToList();
             }
         }
 
@@ -119,7 +119,7 @@ namespace GrupoSelect.Data.Repository
             query = query.Skip(qtPage * (page - 1));
             query = query.Take(qtPage);
 
-            result.Object = query.ToList();
+            result.Object = query.AsNoTracking().ToList();
             result.Success = true;
             
             return result;
