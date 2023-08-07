@@ -45,7 +45,7 @@ namespace GrupoSelect.Services.Service
 
         public async Task<Result<Proposal>> GetById(int id)
         {
-            Proposal model = _unitOfWork.Proposals.GetAll(f => f.Id == id, null, i => i.User).FirstOrDefault();
+            Proposal model = _unitOfWork.Proposals.GetAll(f => f.Id == id, null, i => i.User, i => i.Client).FirstOrDefault();
 
             if (model != null)
             {
