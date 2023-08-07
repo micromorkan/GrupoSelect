@@ -273,7 +273,7 @@ namespace GrupoSelect.Web.Controllers
             GrupoSelect.Web.Views.Shared.Components.Models.Chart chart = new GrupoSelect.Web.Views.Shared.Components.Models.Chart
             {
                 Id = 1,
-                Titulo = "Usuários Ativos",
+                Titulo = "1",
                 Cores = new string[3] { "rgba(255, 99, 132, 1)", "rgba(255, 206, 86, 1)", "rgba(54, 162, 235, 1)" },
                 Textos = new string[3] { "Red", "Yellow", "Blue" },
                 Valores = new int[3] { 15, 20, 30 },
@@ -290,7 +290,7 @@ namespace GrupoSelect.Web.Controllers
             GrupoSelect.Web.Views.Shared.Components.Models.Chart chart2 = new GrupoSelect.Web.Views.Shared.Components.Models.Chart
             {
                 Id = 2,
-                Titulo = "Perfis Cadastrados",
+                Titulo = "2",
                 Cores = new string[3] { "rgba(255, 99, 132, 1)", "rgba(255, 206, 86, 1)", "rgba(54, 162, 235, 1)" },
                 Textos = new string[3] { "Red", "Yellow", "Blue" },
                 Valores = new int[3] { 15, 20, 30 },
@@ -307,7 +307,7 @@ namespace GrupoSelect.Web.Controllers
             GrupoSelect.Web.Views.Shared.Components.Models.Chart chart3 = new GrupoSelect.Web.Views.Shared.Components.Models.Chart
             {
                 Id = 3,
-                Titulo = "Usuários Ativos",
+                Titulo = "3",
                 Cores = new string[3] { "rgba(255, 99, 132, 1)", "rgba(255, 206, 86, 1)", "rgba(54, 162, 235, 1)" },
                 Textos = new string[3] { "Red", "Yellow", "Blue" },
                 Valores = new int[3] { 15, 20, 30 },
@@ -480,7 +480,7 @@ namespace GrupoSelect.Web.Controllers
             GrupoSelect.Web.Views.Shared.Components.Models.Chart chart = new GrupoSelect.Web.Views.Shared.Components.Models.Chart
             {
                 Id = 1,
-                Titulo = "Usuários Cadastrados",
+                Titulo = "1",
                 Cores = new string[3] { "rgba(255, 99, 132, 1)", "rgba(255, 206, 86, 1)", "rgba(54, 162, 235, 1)" },
                 Textos = new string[3] { "Red", "Yellow", "Blue" },
                 Valores = new int[3] { a, b, c },
@@ -500,7 +500,8 @@ namespace GrupoSelect.Web.Controllers
 
             GrupoSelect.Web.Views.Shared.Components.Models.Chart chart = new GrupoSelect.Web.Views.Shared.Components.Models.Chart
             {
-                Titulo = "Usuários Cadastrados",
+                Id = 2,
+                Titulo = "2",
                 Cores = new string[3] { "rgba(255, 99, 132, 1)", "rgba(255, 206, 86, 1)", "rgba(54, 162, 235, 1)" },
                 Textos = new string[3] { "Red", "Yellow", "Blue" },
                 Valores = new int[3] { a, b, c },
@@ -520,7 +521,8 @@ namespace GrupoSelect.Web.Controllers
 
             GrupoSelect.Web.Views.Shared.Components.Models.Chart chart = new GrupoSelect.Web.Views.Shared.Components.Models.Chart
             {
-                Titulo = "Propostas Preenchidas",
+                Id = 3,
+                Titulo = "3",
                 Cores = new string[3] { "rgba(255, 99, 132, 1)", "rgba(255, 206, 86, 1)", "rgba(54, 162, 235, 1)" },
                 Textos = new string[3] { "Red", "Yellow", "Blue" },
                 Valores = new int[3] { a, b, c },

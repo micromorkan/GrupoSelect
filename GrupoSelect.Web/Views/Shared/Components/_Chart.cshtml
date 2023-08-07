@@ -216,7 +216,8 @@
                                 beginAtZero: true,
                                 steps: 10,
                                 stepValue: 5,
-                                max: Math.max.apply(null, @Html.Raw(JsonSerializer.Serialize(Model.Valores))) + Math.min.apply(null, @Html.Raw(JsonSerializer.Serialize(Model.Valores)))
+                                max: Math.max.apply(null, @Html.Raw(JsonSerializer.Serialize(Model.Valores))) + Math.min.apply(null, @Html.Raw(JsonSerializer.Serialize(Model.Valores))),
+                                fontSize: 12
                             }
                         }],
                         xAxes: [{
@@ -225,7 +226,8 @@
                                 beginAtZero: true,
                                 steps: 10,
                                 stepValue: 5,
-                                max: Math.max.apply(null, @Html.Raw(JsonSerializer.Serialize(Model.Valores))) + Math.min.apply(null, @Html.Raw(JsonSerializer.Serialize(Model.Valores)))
+                                max: Math.max.apply(null, @Html.Raw(JsonSerializer.Serialize(Model.Valores))) + Math.min.apply(null, @Html.Raw(JsonSerializer.Serialize(Model.Valores))),
+                                fontSize: 12
                             }
                         }]
                     },
@@ -250,44 +252,12 @@
                             contentType: 'application/json; charset=utf-8',
                             success: function (dados) {
                                 $('#chart_loading_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).hide();
-                                chartList[@Html.Raw(JsonSerializer.Serialize(Model.Id))].destroy();
-                                $("#chart_" + @Html.Raw(JsonSerializer.Serialize(Model.Id))).height(canvasHeight)
 
-                                chartList[@Html.Raw(JsonSerializer.Serialize(Model.Id))] = new Chart($("#chart_" + @Html.Raw(JsonSerializer.Serialize(Model.Id))), {
-                                    type: dados.tipoChart,
-                                    data: {
-                                        datasets: [{
-                                            data: dados.valores,
-                                            backgroundColor: dados.cores,
-                                        }],
-                                        labels: dados.textos,
-                                    },
-                                    options: {
-                                        legend: {
-                                            display: false
-                                        },
-                                        scales: {
-                                            yAxes: [{
-                                                display: true,
-                                                ticks: {
-                                                    beginAtZero: true,
-                                                    steps: 10,
-                                                    stepValue: 5,
-                                                    max: Math.max.apply(null, dados.valores) + Math.min.apply(null, dados.valores),
-                                                }
-                                            }],
-                                            xAxes: [{
-                                                display: true,
-                                                ticks: {
-                                                    beginAtZero: true,
-                                                    steps: 10,
-                                                    stepValue: 5,
-                                                    max: Math.max.apply(null, dados.valores) + Math.min.apply(null, dados.valores),
-                                                }
-                                            }]
-                                        },
-                                    }
-                                });
+                                var datasetserver = [{ data: dados.valores, backgroundColor: dados.cores }];
+
+                                chartList[@Html.Raw(JsonSerializer.Serialize(Model.Id))].data.labels = dados.textos;
+                                chartList[@Html.Raw(JsonSerializer.Serialize(Model.Id))].data.datasets = datasetserver;
+                                chartList[@Html.Raw(JsonSerializer.Serialize(Model.Id))].update();
 
                                 if (dados.backgroundColor != "" && dados.backgroundColor) {
                                     $('#chart_backgound_' + @Html.Raw(JsonSerializer.Serialize(Model.Id))).css('background-color', blinkColor);
