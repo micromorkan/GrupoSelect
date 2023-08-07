@@ -1,4 +1,4 @@
-﻿@model GrupoSelect.Web.ViewModel.CreditVM
+﻿@model GrupoSelect.Web.ViewModel.ClientVM
 
 @{
     ViewData["Title"] = "Edit";
@@ -11,91 +11,193 @@
         <div class="x_panel">
             <div class="x_title">
                 <h2>
-                    Crédito <i class="fa fa-chevron-right"></i> Editar
+                    Cliente <i class="fa fa-chevron-right"></i> Editar
                 </h2>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
                 <br>
-                @using (Html.BeginForm("Edit", "Credit", FormMethod.Post, new { @id = "edit", @class = "form-horizontal form-label-left" }))
+                @using (Html.BeginForm("Edit", "Client", FormMethod.Post, new { @id = "edit", @class = "form-horizontal form-label-left" }))
                 {
+                    @Html.HiddenFor(model => model.UserId)
                     @Html.HiddenFor(model => model.DateCreate)
                     <div class="item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align">
-                            @Html.LabelFor(model => model.ProductTypeId) <span class="required">*</span>
+                            @Html.LabelFor(model => model.Name) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            <select asp-for="ProductTypeId" id="ddlProductType" class="form-control js-example-responsive component-select" style="width: 100%">
-                                <option value="">-- Selecione --</option>
-                            </select>
-                            @Html.ValidationMessageFor(model => model.ProductTypeId, null, new { @class = "text-danger" })
+                            @Html.TextBoxFor(model => model.Name, new { required = "required", @class = "form-control text-uppercase" })
+                            @Html.ValidationMessageFor(model => model.Name, null, new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align">
-                            @Html.LabelFor(model => model.TableTypeId) <span class="required">*</span>
+                            @Html.LabelFor(model => model.CPF) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            <select asp-for="TableTypeId" id="ddlTableType" class="form-control js-example-responsive component-select" style="width: 100%">
-                                <option value="">-- Selecione --</option>
-                            </select>
-                            @Html.ValidationMessageFor(model => model.TableTypeId, null, new { @class = "text-danger" })
+                            @Html.TextBoxFor(model => model.CPF, new {@class = "form-control cpf" })
+                            @Html.ValidationMessageFor(model => model.CPF, null, new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align">
-                            @Html.LabelFor(model => model.FinancialAdminId) <span class="required">*</span>
+                            @Html.LabelFor(model => model.RG) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            <select asp-for="FinancialAdminId" id="ddlFinancialAdmin" class="form-control js-example-responsive component-select" style="width: 100%">
-                                <option value="">-- Selecione --</option>
-                            </select>
-                            @Html.ValidationMessageFor(model => model.FinancialAdminId, null, new { @class = "text-danger" })
+                            @Html.TextBoxFor(model => model.RG, new {@class = "form-control rg" })
+                            @Html.ValidationMessageFor(model => model.RG, null, new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align">
-                            @Html.LabelFor(model => model.Months) <span class="required">*</span>
+                            @Html.LabelFor(model => model.Sex) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            @Html.TextBoxFor(model => model.Months, new {@class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.Months, null, new { @class = "text-danger" })
+                            @Html.DropDownListFor(model => model.Sex, GrupoSelect.Web.Util.UtilWeb.GetSexList(), new { @class = "form-control js-example-responsive", @style = "width: 100%;" })
+                            @Html.ValidationMessageFor(model => model.Sex, null, new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align">
-                            @Html.LabelFor(model => model.CreditValue) <span class="required">*</span>
+                            @Html.LabelFor(model => model.DateBirth) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            @Html.TextBoxFor(model => model.CreditValue, new {@class = "form-control money" })
-                            @Html.ValidationMessageFor(model => model.CreditValue, null, new { @class = "text-danger" })
+                            @Html.TextBoxFor(model => model.DateBirth, new {@class = "form-control dateFormat" })
+                            @Html.ValidationMessageFor(model => model.DateBirth, null, new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align">
-                            @Html.LabelFor(model => model.PortionValue) <span class="required">*</span>
+                            @Html.LabelFor(model => model.NaturalFrom) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            @Html.TextBoxFor(model => model.PortionValue, new {@class = "form-control money" })
-                            @Html.ValidationMessageFor(model => model.PortionValue, null, new { @class = "text-danger" })
+                            @Html.TextBoxFor(model => model.NaturalFrom, new {@class = "form-control text-uppercase" })
+                            @Html.ValidationMessageFor(model => model.NaturalFrom, null, new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align">
-                            @Html.LabelFor(model => model.MembershipValue) <span class="required">*</span>
+                            @Html.LabelFor(model => model.Nationality) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            @Html.TextBoxFor(model => model.MembershipValue, new {@class = "form-control money" })
-                            @Html.ValidationMessageFor(model => model.MembershipValue, null, new { @class = "text-danger" })
+                            @Html.TextBoxFor(model => model.Nationality, new {@class = "form-control text-uppercase" })
+                            @Html.ValidationMessageFor(model => model.Nationality, null, new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align">
-                            @Html.LabelFor(model => model.TotalValue) <span class="required">*</span>
+                            @Html.LabelFor(model => model.MaritalStatus) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            @Html.TextBoxFor(model => model.TotalValue, new {@class = "form-control money" })
-                            @Html.ValidationMessageFor(model => model.TotalValue, null, new { @class = "text-danger" })
+                            @Html.DropDownListFor(model => model.MaritalStatus, GrupoSelect.Web.Util.UtilWeb.GetMaritalStatusList(), new { @class = "form-control js-example-responsive", @style = "width: 100%;" })
+                            @Html.ValidationMessageFor(model => model.MaritalStatus, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.DateExp) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.DateExp, new {@class = "form-control dateFormat" })
+                            @Html.ValidationMessageFor(model => model.DateExp, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.OrganExp) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.OrganExp, new {@class = "form-control text-uppercase" })
+                            @Html.ValidationMessageFor(model => model.OrganExp, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.Contact) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.Contact, new {@class = "form-control phone" })
+                            @Html.ValidationMessageFor(model => model.Contact, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.Email) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.Email, new {@class = "form-control text-uppercase" })
+                            @Html.ValidationMessageFor(model => model.Email, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.Profession) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.Profession, new {@class = "form-control text-uppercase" })
+                            @Html.ValidationMessageFor(model => model.Profession, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.Income) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.Income, new {@class = "form-control money" })
+                            @Html.ValidationMessageFor(model => model.Income, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.Cep) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.Cep, new {@class = "form-control cep" })
+                            @Html.ValidationMessageFor(model => model.Cep, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.State) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.DropDownListFor(model => model.State, GrupoSelect.Web.Util.UtilWeb.GetStateList(), new { @class = "form-control js-example-responsive", @disabled="disabled", @style = "width: 100%;" })
+                            @Html.ValidationMessageFor(model => model.State, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.City) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.City, new {@class = "form-control text-uppercase", @disabled="disabled" })
+                            @Html.ValidationMessageFor(model => model.City, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.Neighborhood) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.Neighborhood, new {@class = "form-control text-uppercase", @disabled="disabled" })
+                            @Html.ValidationMessageFor(model => model.Neighborhood, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.Address) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.Address, new {@class = "form-control text-uppercase", @disabled="disabled" })
+                            @Html.ValidationMessageFor(model => model.Address, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.Complement)
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.Complement, new {@class = "form-control text-uppercase" })
                         </div>
                     </div>
                     <div class="ln_solid"></div>
@@ -119,15 +221,67 @@
     }
     <script>
         $(document).ready(function () {
-            FillSelect("@Url.Action("GetProductTypeList", "Credit")", null, "#ddlProductType", "@Model.ProductTypeId", true);
-            FillSelect("@Url.Action("GetTableTypeList", "Credit")", null, "#ddlTableType", "@Model.TableTypeId", true);
-            FillSelect("@Url.Action("GetFinancialAdminList", "Credit")", { Active: true }, "#ddlFinancialAdmin", "@Model.FinancialAdminId", true);
-            $('.component-select').select2();
-            InputMaskNumber("#Months", "2");
+            $('select').select2();
             MaskMoney();
+            MaskCpf();
+            MaskCep();
+            MaskRG();
+            MaskPhone();
+            MaskDate();
         });
+
+        $("#Cep").blur(function () {
+            $('#loading').show();
+            var cep = $(this).val().replace(/[^0-9]/, '');
+            if (cep) {
+                var url = 'https://viacep.com.br/ws/' + cep + '/json/';
+                $.ajax({
+                    url: url,
+                    dataType: 'jsonp',
+                    crossDomain: true,
+                    contentType: "application/json",
+                    success: function (json) {
+                        if (json.logradouro) {
+                            $("#Address").val(json.logradouro.toUpperCase());
+                        }
+                        else {
+                            $('#Address').removeAttr('disabled');
+                            $('#Address').val("");
+                        }
+
+                        if (json.bairro) {
+                            $("#Neighborhood").val(json.bairro.toUpperCase());
+                        }
+                        else {
+                            $('#Neighborhood').removeAttr('disabled');
+                            $('#Neighborhood').val("");
+                        }
+
+                        if (json.localidade) {
+                            $("#City").val(json.localidade.toUpperCase());
+                        }
+                        else {
+                            $('#City').removeAttr('disabled');
+                            $('#City').val("");
+                        }
+
+                        if (json.uf) {
+                            $('#State').select2().val(json.uf.toUpperCase()).trigger("change");
+                        }
+                        else {
+                            $('#State').removeAttr('disabled');
+                            $('#State').select2().val("").trigger("change");
+                        }
+                    },
+                    complete: function (data) {
+                        $('#loading').fadeOut();
+                    }
+                });
+            }
+        });
+
         $(".submit").click(function (event) {
-            Edit("@Url.Action("Index", "Credit")", false, false);
+            Edit("@Url.Action("Index", "Client")", false, false);
         });
     </script>
 }

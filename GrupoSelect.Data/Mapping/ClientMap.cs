@@ -33,13 +33,12 @@ namespace GrupoSelect.Data.Mapping
             builder.Property(c => c.Income).HasColumnName("Income").IsRequired();
             builder.Property(c => c.Address).HasColumnName("Address").HasMaxLength(500).IsRequired();
             builder.Property(c => c.Neighborhood).HasColumnName("Neighborhood").HasMaxLength(50).IsRequired();
-            builder.Property(c => c.Complement).HasColumnName("Complement").HasMaxLength(500).IsRequired();
+            builder.Property(c => c.Complement).HasColumnName("Complement").HasMaxLength(500);
             builder.Property(c => c.Cep).HasColumnName("Cep").HasMaxLength(50).IsRequired();
             builder.Property(c => c.City).HasColumnName("City").HasMaxLength(50).IsRequired();
             builder.Property(c => c.State).HasColumnName("State").HasMaxLength(50).IsRequired();
             builder.Property(c => c.DateCreate).HasColumnName("DateCreate").IsRequired();
             builder.Property(c => c.DateUpdate).HasColumnName("DateUpdate");
-            builder.Property(c => c.Active).HasColumnName("Active").IsRequired();
 
             builder.HasOne(s => s.User).WithMany().HasForeignKey(s => s.UserId);
         }

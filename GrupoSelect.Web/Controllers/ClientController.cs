@@ -65,7 +65,7 @@ namespace GrupoSelect.Web.Controllers
             try
             {
                 var client = _mapper.Map<Client>(clientVM);
-
+                client.UserId = Convert.ToInt32(User.GetId());
                 var result = _clientService.Insert(client);
 
                 return Json(result);

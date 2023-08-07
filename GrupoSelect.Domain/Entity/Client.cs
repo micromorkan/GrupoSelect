@@ -26,13 +26,12 @@ namespace GrupoSelect.Domain.Entity
         public string Income { get; set; }
         public string Address { get; set; }
         public string Neighborhood { get; set; }
-        public string Complement { get; set; }
+        public string? Complement { get; set; }
         public string Cep { get; set; }
         public string City { get; set; }
         public string State { get; set; }
         public DateTime DateCreate { get; set; }
         public DateTime? DateUpdate { get; set; }
-        public bool? Active { get; set; }
         public virtual User User { get; set; }
     }
 }
