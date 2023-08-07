@@ -326,6 +326,7 @@ function Search(editar, urlEditar, excluir, urlExlcuir, pagina) {
             if (data.success) {
                 if (!$.fn.DataTable.isDataTable($('table'))) {
                     $('table').DataTable({
+                        order: [],
                         paging: false,
                         searching: true,
                         lengthChange: false,
@@ -451,6 +452,7 @@ function AplicarCSSDTT() {
 function AplicarDTT() {
     if (!$.fn.DataTable.isDataTable($('table'))) {
         $('table').DataTable({
+            order: [],
             paging: false,
             searching: true,
             lengthChange: false,

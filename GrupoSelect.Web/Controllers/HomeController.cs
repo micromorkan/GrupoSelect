@@ -65,17 +65,17 @@ namespace GrupoSelect.Web.Controllers
             string userProfile = User.GetProfile();
             int userId = Convert.ToInt32(User.GetId());
 
-            DateTime startOfWeek = DateTime.Today.AddDays((int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek - (int)DateTime.Today.DayOfWeek);
+            DateTime startOfWeek = DateTime.Today.AddDays((int)DayOfWeek.Thursday - (int)DateTime.Today.DayOfWeek - 7);
 
             PaginateResult<IEnumerable<Contract>> result = null;
 
             if (userProfile == Constants.PROFILE_DIRETOR || userProfile == Constants.PROFILE_GERENTE || userProfile == Constants.PROFILE_ADMINISTRATIVO)
             {
-                result = await _contractService.GetAllPaginate(new Contract { Proposal = new Proposal() }, 1, 1000, startOfWeek, startOfWeek.AddDays(7));
+                result = await _contractService.GetAllPaginate(new Contract { Proposal = new Proposal() }, 1, 1000, startOfWeek, startOfWeek.AddDays(6));
             }
             else if (userProfile == Constants.PROFILE_REPRESENTANTE)
             {
-                result = await _contractService.GetAllPaginate(new Contract { Proposal = new Proposal { UserId = userId } }, 1, 1000, startOfWeek, startOfWeek.AddDays(7));
+                result = await _contractService.GetAllPaginate(new Contract { Proposal = new Proposal { UserId = userId } }, 1, 1000, startOfWeek, startOfWeek.AddDays(6));
             }
 
             string[] status = (Constants.CONTRACT_STATUS_AD + "," + Constants.CONTRACT_STATUS_PA + "," + Constants.CONTRACT_STATUS_CA + "," + Constants.CONTRACT_STATUS_CR + "," + Constants.CONTRACT_STATUS_CC).Split(",");
@@ -92,7 +92,7 @@ namespace GrupoSelect.Web.Controllers
             Chart contratosSemanal = new Chart
             {
                 Id = 1,
-                Titulo = "Contratos - Semanal (" + startOfWeek.Date.ToShortDateString() + " - " + startOfWeek.AddDays(7).Date.ToShortDateString() + ")",
+                Titulo = "Contratos - Semanal (" + startOfWeek.Date.ToShortDateString() + " - " + startOfWeek.AddDays(6).Date.ToShortDateString() + ")",
                 Cores = colors,
                 Textos = status,
                 Valores = values,

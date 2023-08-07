@@ -36,7 +36,7 @@ namespace GrupoSelect.Services.Service
                                                          (filter.Proposal.ClientId == 0 || f.Proposal.ClientId == filter.Proposal.ClientId) &&
                                                          (string.IsNullOrEmpty(filter.Status) || f.Status == filter.Status) &&
                                                          (string.IsNullOrEmpty(filter.ContractNum) || f.ContractNum.Contains(filter.ContractNum)) &&
-                                                         (f.DateCreate.Date >= startDate.Date && f.DateCreate.Date <= endDate.Date), o => o.OrderByDescending(x => x.DateCreate), page, qtPage, i => i.Proposal.Client, i => i.Proposal.User);
+                                                         (f.DateCreate.Date >= startDate.Date && f.DateCreate.Date <= endDate.Date), o => o.OrderByDescending(x => x.DateStatus), page, qtPage, i => i.Proposal.Client, i => i.Proposal.User);
         }
 
         public async Task<Result<Contract>> GetById(int id)

@@ -28,7 +28,7 @@ namespace GrupoSelect.Web.Controllers
             _mapper = mapper;
         }
 
-        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_ADVOGADO)]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_ADVOGADO)]
         public async Task<IActionResult> Index()
         {
             var proposal = new ContractVM();
@@ -42,8 +42,8 @@ namespace GrupoSelect.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_ADVOGADO)]
         [TypeFilter(typeof(ExceptionLog))]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_ADVOGADO)]
         public async Task<IActionResult> Index(ContractVM contractVM, int page, int qtPage)
         {
             try
@@ -69,7 +69,7 @@ namespace GrupoSelect.Web.Controllers
             }
         }
 
-        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_TI + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
         public async Task<IActionResult> Edit(int id)
         {
             try
@@ -104,7 +104,7 @@ namespace GrupoSelect.Web.Controllers
         [HttpPost]
         [TypeFilter(typeof(ExceptionLog))]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_TI + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
         public async Task<IActionResult> Edit(int id, ContractVM contractVM)
         {
             try

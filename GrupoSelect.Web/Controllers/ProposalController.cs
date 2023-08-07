@@ -47,7 +47,7 @@ namespace GrupoSelect.Web.Controllers
             _mapper = mapper;
         }
 
-        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_TI + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_GERENTE)]
         public async Task<IActionResult> Index()
         {
             var proposal = new ProposalVM();
@@ -61,7 +61,7 @@ namespace GrupoSelect.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_TI + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_GERENTE)]
         [TypeFilter(typeof(ExceptionLog))]
         public async Task<IActionResult> Index(ProposalVM proposalVM, int page, int qtPage)
         {
@@ -88,14 +88,14 @@ namespace GrupoSelect.Web.Controllers
             }
         }
 
-        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_TI + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_GERENTE)]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_TI + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + ","  + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_GERENTE)]
         [TypeFilter(typeof(ExceptionLog))]
         public async Task<IActionResult> Create(ProposalVM proposalVM)
         {
@@ -133,7 +133,7 @@ namespace GrupoSelect.Web.Controllers
             }
         }
 
-        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_TI + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + ","  + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_GERENTE)]
         public async Task<IActionResult> Edit(int id)
         {
             try
@@ -179,7 +179,7 @@ namespace GrupoSelect.Web.Controllers
         [HttpPost]
         [TypeFilter(typeof(ExceptionLog))]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_TI + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_GERENTE)]
         public async Task<IActionResult> Edit(int id, ProposalVM proposalVM)
         {
             try
@@ -229,7 +229,7 @@ namespace GrupoSelect.Web.Controllers
         }
 
         [TypeFilter(typeof(ExceptionLog))]
-        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_TI + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_GERENTE)]
         public async Task<IActionResult> Delete(int id)
         {
             try
