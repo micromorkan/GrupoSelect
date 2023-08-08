@@ -24,14 +24,14 @@ namespace GrupoSelect.Web.Controllers
             _mapper = mapper;
         }
 
-        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_ADMINISTRATIVO)]
+        [Authorize(Roles = Constants.PROFILE_DIRETOR)]
         public async Task<IActionResult> Index()
         {
             return View(new FinancialAdminVM());
         }
 
         [HttpPost]
-        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE)]
+        [Authorize(Roles = Constants.PROFILE_DIRETOR)]
         [TypeFilter(typeof(ExceptionLog))]
         public async Task<IActionResult> Index(FinancialAdminVM modelVM, int page, int qtPage)
         {
@@ -58,6 +58,7 @@ namespace GrupoSelect.Web.Controllers
 
         [HttpPost]
         [TypeFilter(typeof(ExceptionLog))]
+        [Authorize(Roles = Constants.PROFILE_DIRETOR)]
         public async Task<IActionResult> Create(FinancialAdminVM modelVM)
         {
             try
@@ -74,6 +75,8 @@ namespace GrupoSelect.Web.Controllers
             }
         }
 
+        [TypeFilter(typeof(ExceptionLog))]
+        [Authorize(Roles = Constants.PROFILE_DIRETOR)]
         public async Task<IActionResult> Edit(int id)
         {
             try
@@ -117,6 +120,7 @@ namespace GrupoSelect.Web.Controllers
         }
 
         [TypeFilter(typeof(ExceptionLog))]
+        [Authorize(Roles = Constants.PROFILE_DIRETOR)]
         public async Task<IActionResult> Delete(int id)
         {
             try

@@ -24,15 +24,16 @@ namespace GrupoSelect.Web.Controllers
             _mapper = mapper;
         }
 
-        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_ADMINISTRATIVO)]
+        [TypeFilter(typeof(ExceptionLog))]
+        [Authorize(Roles = Constants.PROFILE_DIRETOR)]
         public async Task<IActionResult> Index()
         {
             return View(new TableTypeVM());
         }
 
         [HttpPost]
-        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE)]
         [TypeFilter(typeof(ExceptionLog))]
+        [Authorize(Roles = Constants.PROFILE_DIRETOR)]
         public async Task<IActionResult> Index(TableTypeVM modelVM, int page, int qtPage)
         {
             var result = new PaginateResult<IEnumerable<TableType>>();
@@ -51,6 +52,8 @@ namespace GrupoSelect.Web.Controllers
             }
         }
 
+        [TypeFilter(typeof(ExceptionLog))]
+        [Authorize(Roles = Constants.PROFILE_DIRETOR)]
         public IActionResult Create()
         {
             return View();
@@ -58,6 +61,7 @@ namespace GrupoSelect.Web.Controllers
 
         [HttpPost]
         [TypeFilter(typeof(ExceptionLog))]
+        [Authorize(Roles = Constants.PROFILE_DIRETOR)]
         public async Task<IActionResult> Create(TableTypeVM modelVM)
         {
             try
@@ -74,6 +78,8 @@ namespace GrupoSelect.Web.Controllers
             }
         }
 
+        [TypeFilter(typeof(ExceptionLog))]
+        [Authorize(Roles = Constants.PROFILE_DIRETOR)]
         public async Task<IActionResult> Edit(int id)
         {
             try
@@ -99,7 +105,7 @@ namespace GrupoSelect.Web.Controllers
 
         [HttpPost]
         [TypeFilter(typeof(ExceptionLog))]
-        [ValidateAntiForgeryToken]
+        [Authorize(Roles = Constants.PROFILE_DIRETOR)]
         public async Task<IActionResult> Edit(int id, TableTypeVM modelVM)
         {
             try
@@ -117,6 +123,7 @@ namespace GrupoSelect.Web.Controllers
         }
 
         [TypeFilter(typeof(ExceptionLog))]
+        [Authorize(Roles = Constants.PROFILE_DIRETOR)]
         public async Task<IActionResult> Delete(int id)
         {
             try
