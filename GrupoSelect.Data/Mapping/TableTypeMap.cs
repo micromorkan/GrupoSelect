@@ -16,6 +16,7 @@ namespace GrupoSelect.Data.Mapping
             builder.Property(c => c.MembershipFee).HasColumnName("MembershipFee").HasMaxLength(50).IsRequired();
             builder.Property(c => c.RemainingRate).HasColumnName("RemainingRate").HasMaxLength(50).IsRequired();
             builder.Property(c => c.CommissionFee).HasColumnName("CommissionFee").HasMaxLength(50).IsRequired();
+            builder.Property(c => c.ManagerFee).HasColumnName("ManagerFee").HasMaxLength(50).IsRequired();
         }
     }
 }

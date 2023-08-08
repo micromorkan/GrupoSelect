@@ -55,6 +55,15 @@
                             @Html.ValidationMessageFor(model => model.CommissionFee, null, new { @class = "text-danger" })
                         </div>
                     </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.ManagerFee) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.ManagerFee, new { required = "required", @class = "form-control text-uppercase" })
+                            @Html.ValidationMessageFor(model => model.ManagerFee, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
                     <div class="ln_solid"></div>
                     <div class="item form-group">
                         <div class="col-md-6 col-sm-6 offset-md-3">

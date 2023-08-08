@@ -18,8 +18,12 @@ namespace GrupoSelect.Web.ViewModel
         [Required(ErrorMessage = "O campo {0} é obrigatório!")]
         public string RemainingRate { get; set; }
 
-        [Display(Name = "Taxa Comissão")]
+        [Display(Name = "Taxa Comissão Representante")]
         [Required(ErrorMessage = "O campo {0} é obrigatório!")]
         public string CommissionFee { get; set; }
+
+        [Display(Name = "Taxa Comissão Gerente")]
+        [Required(ErrorMessage = "O campo {0} é obrigatório!")]
+        public string ManagerFee { get; set; }
     }
 }

@@ -113,6 +113,7 @@ namespace GrupoSelect.Web.Controllers
                     proposalVM.FinancialAdminName = credit.FinancialAdmin.Name;
                     proposalVM.TableTypeFee = credit.TableType.MembershipFee;
                     proposalVM.TableTypeCommission = credit.TableType.CommissionFee;
+                    proposalVM.TableTypeManager = credit.TableType.ManagerFee;
                     proposalVM.TableTypeRate = credit.TableType.RemainingRate;
                     proposalVM.TableTypeTax = credit.TableType.TableTax;
                     proposalVM.ProductTypeName = credit.ProductType.ProductName;
@@ -210,6 +211,7 @@ namespace GrupoSelect.Web.Controllers
                         proposalVM.FinancialAdminName = credit.FinancialAdmin.Name;
                         proposalVM.TableTypeFee = credit.TableType.MembershipFee;
                         proposalVM.TableTypeCommission = credit.TableType.CommissionFee;
+                        proposalVM.TableTypeManager = credit.TableType.ManagerFee;
                         proposalVM.TableTypeRate = credit.TableType.RemainingRate;
                         proposalVM.TableTypeTax = credit.TableType.TableTax;
                         proposalVM.ProductTypeName = credit.ProductType.ProductName;
@@ -286,7 +288,7 @@ namespace GrupoSelect.Web.Controllers
                     items.Add(new SelectListItem()
                     {
                         Value = item.Id.ToString(),
-                        Text = item.TableTax + " - " + item.MembershipFee + " - " + item.RemainingRate + " - " + item.CommissionFee,
+                        Text = item.TableTax + " - " + item.MembershipFee + " - " + item.RemainingRate,
                         Selected = filter.Id == item.Id ? true : false
                     });
                 }

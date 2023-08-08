@@ -89,11 +89,22 @@ namespace GrupoSelect.Services.FluentValidation
 
             if (!Decimal.TryParse(model.CommissionFee, out result3))
             {
-                context.AddFailure("Informe um valor numérico para Taxa Comissão.");
+                context.AddFailure("Informe um valor numérico para Taxa Comissão do Representante.");
             }
-            else if (result2 < 0)
+            else if (result3 < 0)
             {
-                context.AddFailure("Taxa Restante inválida.");
+                context.AddFailure("Taxa Comissão do Representante inválida.");
+            }
+
+            Decimal result4 = 0;
+
+            if (!Decimal.TryParse(model.ManagerFee, out result4))
+            {
+                context.AddFailure("Informe um valor numérico para Taxa Comissão do Gerente.");
+            }
+            else if (result4 < 0)
+            {
+                context.AddFailure("Taxa Comissão do Gerente inválida.");
             }
         }
         private void DeleteBlock(Domain.Entity.TableType model, ValidationContext<Domain.Entity.TableType> context)
