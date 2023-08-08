@@ -50,6 +50,24 @@
                     </div>
                     <div class="item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.DateExp) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.DateExp, new {@class = "form-control dateFormat" })
+                            @Html.ValidationMessageFor(model => model.DateExp, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.OrganExp) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.OrganExp, new {@class = "form-control text-uppercase" })
+                            @Html.ValidationMessageFor(model => model.OrganExp, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
                             @Html.LabelFor(model => model.Sex) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
@@ -92,25 +110,7 @@
                             @Html.DropDownListFor(model => model.MaritalStatus, GrupoSelect.Web.Util.UtilWeb.GetMaritalStatusList(), new { @class = "form-control js-example-responsive", @style = "width: 100%;" })
                             @Html.ValidationMessageFor(model => model.MaritalStatus, null, new { @class = "text-danger" })
                         </div>
-                    </div>
-                    <div class="item form-group">
-                        <label class="col-form-label col-md-3 col-sm-3 label-align">
-                            @Html.LabelFor(model => model.DateExp) <span class="required">*</span>
-                        </label>
-                        <div class="col-md-6 col-sm-6 ">
-                            @Html.TextBoxFor(model => model.DateExp, new {@class = "form-control dateFormat" })
-                            @Html.ValidationMessageFor(model => model.DateExp, null, new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <div class="item form-group">
-                        <label class="col-form-label col-md-3 col-sm-3 label-align">
-                            @Html.LabelFor(model => model.OrganExp) <span class="required">*</span>
-                        </label>
-                        <div class="col-md-6 col-sm-6 ">
-                            @Html.TextBoxFor(model => model.OrganExp, new {@class = "form-control text-uppercase" })
-                            @Html.ValidationMessageFor(model => model.OrganExp, null, new { @class = "text-danger" })
-                        </div>
-                    </div>
+                    </div>                    
                     <div class="item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align">
                             @Html.LabelFor(model => model.Contact) <span class="required">*</span>

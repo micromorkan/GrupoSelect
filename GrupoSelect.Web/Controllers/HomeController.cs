@@ -170,7 +170,7 @@ namespace GrupoSelect.Web.Controllers
 
             tile.Id = id;
             tile.BackgroundColor = Constants.SYSTEM_RGBA_WHITE;
-            tile.Icone = "fa-folder";
+            tile.Icone = "fa-file-text-o";
             tile.Descricao = string.Empty;
             tile.Titulo = (await _userService.GetById(userId)).Object.Name;
             tile.Valor = result.Object != null ? result.Object.Count().ToString() + " Propostas" : "0 Propostas";

@@ -123,7 +123,7 @@
             FillSelect("@Url.Action("GetTableTypeList", "Credit")", null, "#ddlTableType", "@Model.TableTypeId", true);
             FillSelect("@Url.Action("GetFinancialAdminList", "Credit")", { Active: true }, "#ddlFinancialAdmin", "@Model.FinancialAdminId", true);
             $('.component-select').select2();
-            InputMaskNumber("#Months", "2");
+            InputMaskNumber("#Months", "3");
             MaskMoney();
         });
         $(".submit").click(function (event) {

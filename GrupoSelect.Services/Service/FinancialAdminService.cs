@@ -23,13 +23,13 @@ namespace GrupoSelect.Services.Service
             return new Result<IEnumerable<FinancialAdmin>>
             {
                 Success = true,
-                Object = _unitOfWork.FinancialAdmins.GetAll(f => (string.IsNullOrEmpty(filter.Name) || f.Name.Contains(filter.Name)) && (filter.Active == null || f.Active == filter.Active)),
+                Object = _unitOfWork.FinancialAdmins.GetAll(f => (string.IsNullOrEmpty(filter.Name) || f.Name.Contains(filter.Name)) && (filter.Active == null || f.Active == filter.Active), o => o.OrderBy(i => i.Name)),
             };
         }
 
         public async Task<PaginateResult<IEnumerable<FinancialAdmin>>> GetAllPaginate(FinancialAdmin filter, int page, int qtPage)
         {
-            return _unitOfWork.FinancialAdmins.GetAllPaginate(f => (string.IsNullOrEmpty(filter.Name) || f.Name.Contains(filter.Name)) && (filter.Active == null || f.Active == filter.Active), null, page, qtPage);
+            return _unitOfWork.FinancialAdmins.GetAllPaginate(f => (string.IsNullOrEmpty(filter.Name) || f.Name.Contains(filter.Name)) && (filter.Active == null || f.Active == filter.Active), o => o.OrderBy(i => i.Name), page, qtPage);
         }
 
         public async Task<Result<FinancialAdmin>> GetById(int id)

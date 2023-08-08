@@ -23,13 +23,13 @@ namespace GrupoSelect.Services.Service
             return new Result<IEnumerable<ProductType>>
             {
                 Success = true,
-                Object = _unitOfWork.ProductTypes.GetAll(f => (string.IsNullOrEmpty(filter.ProductName) || f.ProductName.Contains(filter.ProductName))),
+                Object = _unitOfWork.ProductTypes.GetAll(f => (string.IsNullOrEmpty(filter.ProductName) || f.ProductName.Contains(filter.ProductName)), o => o.OrderBy(i => i.ProductName)),
             };
         }
 
         public async Task<PaginateResult<IEnumerable<ProductType>>> GetAllPaginate(ProductType filter, int page, int qtPage)
         {
-            return _unitOfWork.ProductTypes.GetAllPaginate(f => (string.IsNullOrEmpty(filter.ProductName) || f.ProductName.Contains(filter.ProductName)), null, page, qtPage);
+            return _unitOfWork.ProductTypes.GetAllPaginate(f => (string.IsNullOrEmpty(filter.ProductName) || f.ProductName.Contains(filter.ProductName)), o => o.OrderBy(i => i.ProductName), page, qtPage);
         }
 
         public async Task<Result<ProductType>> GetById(int id)
