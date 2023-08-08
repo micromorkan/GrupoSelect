@@ -100,7 +100,7 @@
                                 }
                             </ul>
                             @{
-                                if (User.GetProfile() == Constants.PROFILE_DIRETOR || User.GetProfile() == Constants.PROFILE_TI || User.GetProfile() == Constants.PROFILE_GERENTE)
+                                if (User.GetProfile() == Constants.PROFILE_DIRETOR)
                                 {
                                     <br />
                                     <h3>Financeiro</h3>
@@ -108,7 +108,7 @@
                                         <li>
                                             <a><i class="fa fa-money"></i> Borderô <span class="fa fa-chevron-down"></span></a>
                                             <ul class="nav child_menu">
-                                                <li><a href="index.html">Consultar</a></li>
+                                                <li><a href="@Url.Action("Index", "Bordero")">Consultar</a></li>
                                             </ul>
                                         </li>
                                     </ul>

@@ -23,7 +23,7 @@ namespace GrupoSelect.Web.Configurations
             services.AddScoped<IProposalService, ProposalService>();
             services.AddScoped<IClientService, ClientService>();
             services.AddScoped<IContractService, ContractService>();
-
+            services.AddScoped<IBorderoService, BorderoService>();
 
             services.AddScoped<ISessionProvider, SessionProvider>();
             services.AddValidatorsFromAssemblyContaining<UserValidator>();

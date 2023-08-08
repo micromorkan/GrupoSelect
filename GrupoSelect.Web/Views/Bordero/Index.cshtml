@@ -2,7 +2,7 @@
 @using GrupoSelect.Domain.Util;
 @using GrupoSelect.Web.Helpers;
 @using System.Globalization;
-@model GrupoSelect.Web.ViewModel.ProposalVM
+@model GrupoSelect.Web.ViewModel.BorderoVM
 
 @{
     ViewData["Title"] = "Index";
@@ -14,51 +14,29 @@
     <div class="x_panel">
         <div class="x_title">
             <h2>
-                Proposta <i class="fa fa-chevron-right"></i> Pesquisar
+                Bordero <i class="fa fa-chevron-right"></i> Consultar
             </h2>
             <div class="clearfix"></div>
         </div>
         <div class="x_content">
             <div class="row">
-                @using (Html.BeginForm("Index", "Proposal", FormMethod.Post, new { @id = "search", @class = "form-horizontal col-md-12 col-xs-12" }))
+                @using (Html.BeginForm("Index", "Bordero", FormMethod.Post, new { @id = "search", @class = "form-horizontal col-md-12 col-xs-12" }))
                 {
-                    <div class="form-group col-md-4 col-xs-12">
-                        @Html.LabelFor(model => model.ClientId)
-                        <select asp-for="ClientId" id="ddlClient" class="form-control js-example-responsive component-select" style="width: 100%">
+                    <div class="form-group col-md-6 col-xs-12">
+                        @Html.LabelFor(model => model.UserId)
+                        <select asp-for="UserId" id="ddlUser" class="form-control js-example-responsive component-select" style="width: 100%">
                             <option value="">-- Selecione --</option>
                         </select>
                     </div>
-                    <div class="form-group col-md-4 col-xs-12">
-                        @Html.LabelFor(model => model.ProductTypeId)
-                        <select asp-for="ProductTypeId" id="ddlProductType" class="form-control js-example-responsive component-select" style="width: 100%">
-                            <option value="">-- Selecione --</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-4 col-xs-12">
-                        @Html.LabelFor(model => model.TableTypeId)
-                        <select asp-for="TableTypeId" id="ddlTableType" class="form-control js-example-responsive component-select" style="width: 100%">
-                            <option value="">-- Selecione --</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-4 col-xs-12">
-                        @Html.LabelFor(model => model.FinancialAdminId)
-                        <select asp-for="FinancialAdminId" id="ddlFinancialAdmin" class="form-control js-example-responsive component-select" style="width: 100%">
-                            <option value="">-- Selecione --</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-4 col-xs-12">
+                    <div class="form-group col-md-6 col-xs-12">
                         @Html.Label("Período")
                         <input type="text" id="dateFilter" class="form-control" value="">
-                    </div>
-                    <div class="form-group col-md-4 col-xs-12">
-                        @Html.LabelFor(model => model.Status)
-                        @Html.DropDownListFor(model => model.Status, GrupoSelect.Web.Util.UtilWeb.GetProposalStatusList(Model.Status), new { @class = "form-control js-example-responsive component-select", @style = "width: 100%;" })
                     </div>
                 }
             </div>
             <div class="row">
                 <div class="form-group col-md-12 col-xs-12 text-right">
-                    <button type="button" onclick="GetProposalData(1);" class="btn btn-primary">Pesquisar</button>
+                    <button type="button" onclick="GetBorderoData(1);" class="btn btn-primary">Pesquisar</button>
                 </div>
             </div>
             <hr />
@@ -68,28 +46,16 @@
                         <table id="search" class="table table-striped table-bordered" style="width:100%" data-page-length='2'>
                             <thead>
                                 <tr>
-                                    @{
-                                        if (User.GetProfile() == Constants.PROFILE_ADMINISTRATIVO)
-                                        {
-                                            <th class="column text-center" data-prefix="" data-sufix="" data-column="user.representation" data-css="text-center">Representação</th>
-                                        }
-                                    }
-
-                                    <th class="column text-center" data-prefix="" data-sufix="" data-column="client.name" data-css="text-center">Cliente</th>
-                                    <th class="column text-center" data-prefix="" data-sufix="" data-column="productTypeName" data-css="text-center">Produto</th>
-                                    <th class="column text-center" data-prefix="" data-sufix="" data-column="financialAdminName" data-css="text-center">Administradora</th>
-                                    <th class="column text-center" data-prefix="R$ " data-sufix="" data-column="creditValue" data-css="text-right">Crédito</th>
-                                    <th class="column text-center" data-prefix="R$ " data-sufix="" data-column="creditMembershipValue" data-css="text-right">Adesão</th>
-                                    <th class="column text-center" data-prefix="R$ " data-sufix="" data-column="creditPortionValue" data-css="text-right">Parcela</th>
-                                    <th class="column text-center" data-prefix="R$ " data-sufix="" data-column="creditTotalValue" data-css="text-right">Total</th>
-                                    <th class="column text-center" data-prefix="" data-sufix="" data-column="status" data-css="text-center">Status</th>
-                                    <th class="column text-center" data-prefix="" data-sufix="" data-column="dateCreate" data-css="text-center">Data</th>
-                                    <th class="column text-center" style="width:10%;" data-column="" data-css="text-center">Ação</th>
+                                    <th class="column text-center" data-prefix="" data-sufix="" data-column="contractNum" data-css="text-center">Produto</th>
+                                    <th class="column text-center" data-prefix="" data-sufix="" data-column="proposal.productTypeName" data-css="text-center">Produto</th>
+                                    <th class="column text-center" data-prefix="" data-sufix="" data-column="dateAproved" data-css="text-center">Data Venda</th>
+                                    <th class="column text-center" data-prefix="" data-sufix="" data-column="proposal.client.name" data-css="text-center">Cliente</th>
+                                    <th class="column text-center" data-prefix="R$ " data-sufix="" data-column="proposal.creditValue" data-css="text-right">Crédito</th>
+                                    <th class="column text-center" data-prefix="" data-sufix="" data-column="proposal.tableTypeTax" data-css="text-center">Tabela</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
                         </table>
-                        <div id="pagination"></div>
                     </div>
                 </div>
             </div>
@@ -103,15 +69,12 @@
     <script src="~/js/daterangepicker.js"></script>
     <script>
         $(document).ready(function () {
-            FillSelect("@Url.Action("GetClientList", "Proposal")", { Active: true }, "#ddlClient");
-            FillSelect("@Url.Action("GetProductTypeList", "Proposal")", null, "#ddlProductType");
-            FillSelect("@Url.Action("GetTableTypeList", "Proposal")", null, "#ddlTableType");
-            FillSelect("@Url.Action("GetFinancialAdminList", "Proposal")", { Active: true }, "#ddlFinancialAdmin");
+            FillSelect("@Url.Action("GetUserList", "Bordero")", null, "#ddlUser");
             $('.component-select').select2();
             moment.locale('pt-br');
             void 0 !== $.fn.daterangepicker && $("#dateFilter").daterangepicker({
-                startDate: '@DateTime.Now.Date.AddDays(-7).ToShortDateString()',
-                endDate: '@DateTime.Now.Date.ToShortDateString()',
+                startDate: '@DateTime.Today.AddDays((int)DayOfWeek.Thursday - (int)DateTime.Today.DayOfWeek - 7).ToShortDateString()',
+                endDate: '@DateTime.Today.AddDays((int)DayOfWeek.Thursday - (int)DateTime.Today.DayOfWeek - 7).AddDays(6).ToShortDateString()',
                 locale: {
                     format: "DD/MM/YYYY",
                     "applyLabel": "Selecionar",
@@ -119,21 +82,22 @@
                 }
             });
 
-            GetProposalData();
+            AplicarCSSDTT();
+            AplicarDTT();
         });
 
-        function GetProposalData(pagina) {
-            SearchProposal(pagina);
+        function GetBorderoData(pagina) {
+            SearchBordero(pagina);
         }
 
-        function SearchProposal(pagina) {
+        function SearchBordero(pagina) {
             var form = $("#search");
             var model = form.serializeObject();
 
             model.StartDate = moment($('#dateFilter').data('daterangepicker').startDate._d).format('LL');
             model.EndDate = moment($('#dateFilter').data('daterangepicker').endDate._d).format('LL');
 
-            var qtdPagina = 20;
+            var qtdPagina = 0;
 
             if (pagina == null) {
                 pagina = 1;
@@ -230,39 +194,11 @@
                                 }
                             });
 
-                            var actionButtons = "";
-
-                            actionButtons += "<a title='Visualizar Ficha Cadastral' class='btn btn-xs btn-info' target = '_blank' href='" + '@Url.Action("PrintProposal", "Proposal")' + "\/" + item.id + "'><span class='glyphicon glyphicon-print' aria-hidden='true'></span></a>";
-
-                            if ('@User.GetProfile()' === '@Constants.PROFILE_REPRESENTANTE') {
-                                if (item['aproved'] === false && item['userChecked'] === null) {
-                                    actionButtons += "<a title='Editar' class='btn btn-xs btn-warning' href='" + '@Url.Action("Edit", "Proposal")' + "\/" + item.id + "'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></a>";
-                                    actionButtons += "<a title='Excluir' class='btn btn-xs btn-danger' onclick='DeleteProposalConfirm(" + item.id + ", " + pagina + ");'><span class='glyphicon glyphicon-trash' style='color:white; cursor: pointer;' aria-hidden='true'></span></a>"
-                                }
-                            } else if ('@User.GetProfile()' === '@Constants.PROFILE_ADMINISTRATIVO') {
-                                if (item['aproved'] === false && item['userChecked'] === null) {
-                                    actionButtons += "<a title='Aceitar Proposta' class='btn btn-xs btn-success' onclick='Check(" + item.id + ", " + pagina + ");'><span class='glyphicon glyphicon-ok' style='color:white; cursor: pointer;' aria-hidden='true'></span></a>";
-                                }
-                            } else if ('@User.GetProfile()' !== '@Constants.PROFILE_ADMINISTRATIVO' && '@User.GetProfile()' !== '@Constants.PROFILE_REPRESENTANTE' && '@User.GetProfile()' !== '@Constants.PROFILE_ADVOGADO') {
-                                if (item['aproved'] === false) {
-                                    actionButtons += "<a title='Editar' class='btn btn-xs btn-warning' href='" + '@Url.Action("Edit", "Proposal")' + "\/" + item.id + "'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></a>";
-
-                                    if (item['userChecked'] === null) {
-                                        actionButtons += "<a title='Aceitar Proposta' class='btn btn-xs btn-success' onclick='Check(" + item.id + ", " + pagina + ");'><span class='glyphicon glyphicon-ok' style='color:white; cursor: pointer;' aria-hidden='true'></span></a>";
-                                        actionButtons += "<a title='Excluir' class='btn btn-xs btn-danger' onclick='DeleteProposalConfirm(" + item.id + ", " + pagina + ");'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></a>"
-                                    } 
-                                }
-                            }
-
-                            row.push(actionButtons)
-
                             dt.row.add(row).draw(false);
                         });
 
                         AplicarCSSDTT();
                         AplicarDTT();
-
-                        RenderProposalPagination(data.page, data.total, qtdPagina);
                     } else {
                         AplicarCSSDTT();
                         AplicarDTT();
@@ -278,49 +214,6 @@
                 },
                 error: function (xhr, status, error) {
                     ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador.');
-                }
-            });
-        }
-
-        function DeleteProposalConfirm(idExclusao, pagina) {
-            swal({
-                title: 'Deseja continuar a exclusão?',
-                text: "Após confirmação, não será possível reverter!",
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#286090',
-                cancelButtonColor: '#d9534f',
-                confirmButtonText: 'Sim, deletar!',
-                cancelButtonText: 'Não, cancelar!',
-                confirmButtonClass: 'btn btn-primary',
-                cancelButtonClass: 'btn btn-danger',
-                buttonsStyling: false
-            }).then(function () {
-                $('#loading').show();
-                $.ajax({
-                    url: '@Url.Action("Delete", "Proposal")',
-                    type: 'POST',
-                    data: { 'id': idExclusao },
-                    success: function (data) {
-                        if (data.success) {
-                            swal('Sucesso!', data.message, 'success');
-                        } else {
-                            if (data.errors) {
-                                ShowModalListWarning(data.errors);
-                            } else {
-                                ShowModalError(data.message);
-                            }
-                        }
-
-                        SearchProposal(pagina);
-                    },
-                    error: function (xhr, status, error) {
-                        ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador.');
-                    }
-                });
-            }, function (dismiss) {
-                if (dismiss === 'cancel') {
-                    swal('Cancelado', 'A exclusão foi cancelada pelo usuário!', 'error');
                 }
             });
         }

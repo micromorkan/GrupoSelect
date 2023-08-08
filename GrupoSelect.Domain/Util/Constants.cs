@@ -22,6 +22,7 @@
 
         #region FLUENT VALIDATION CONSTANTS
 
+        public const string FLUENT_SEARCH = "SEARCH";
         public const string FLUENT_INSERT = "INSERT";
         public const string FLUENT_UPDATE = "UPDATE";
         public const string FLUENT_DELETE = "DELETE";

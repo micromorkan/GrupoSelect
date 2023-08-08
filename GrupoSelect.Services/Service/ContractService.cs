@@ -114,7 +114,7 @@ namespace GrupoSelect.Services.Service
                 };
             }
 
-            Contract contract = _unitOfWork.Contracts.GetAll(f => f.Id == model.Id, null).First();
+            Contract contract = _unitOfWork.Contracts.GetAll(f => f.Id == model.Id, null, i => i.Proposal.User).First();
 
             contract.Status = model.Status;
 
