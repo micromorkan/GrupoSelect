@@ -231,7 +231,7 @@
         $("#Cep").blur(function () {
             $('#loading').show();
             var cep = $(this).val().replace(/[^0-9]/, '');
-            if (cep) {
+            if (cep && cep !== "") {
                 var url = 'https://viacep.com.br/ws/' + cep + '/json/';
                 $.ajax({
                     url: url,
@@ -271,10 +271,23 @@
                             $('#State').select2().val("").trigger("change");
                         }
                     },
+                    error: function (xhr) {
+                        swal('Aviso!', 'O sistema de ViaCep está indisponível no momento. Os dados devem ser preenchidos manualmente.','warning');
+                        $('#Address').removeAttr('disabled');
+                        $('#Neighborhood').removeAttr('disabled');
+                        $('#City').removeAttr('disabled');
+                        $('#State').removeAttr('disabled');
+                        $('#Address').val("");
+                        $('#Neighborhood').val("");
+                        $('#City').val("");
+                        $('#State').select2().val("").trigger("change");
+                    },
                     complete: function (data) {
                         $('#loading').fadeOut();
                     }
                 });
+            } else {
+                $('#loading').fadeOut();
             }
         });
         $(".submit").click(function (event) {

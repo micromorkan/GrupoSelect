@@ -161,7 +161,7 @@
                             @Html.LabelFor(model => model.State) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            @Html.DropDownListFor(model => model.State, GrupoSelect.Web.Util.UtilWeb.GetStateList(), new { @class = "form-control js-example-responsive", @disabled="disabled", @style = "width: 100%;" })
+                            @Html.DropDownListFor(model => model.State, GrupoSelect.Web.Util.UtilWeb.GetStateList(Model.State), new { @class = "form-control js-example-responsive", @disabled="disabled", @style = "width: 100%;" })
                             @Html.ValidationMessageFor(model => model.State, null, new { @class = "text-danger" })
                         </div>
                     </div>
@@ -233,7 +233,7 @@
         $("#Cep").blur(function () {
             $('#loading').show();
             var cep = $(this).val().replace(/[^0-9]/, '');
-            if (cep) {
+            if (cep && cep !== "") {
                 var url = 'https://viacep.com.br/ws/' + cep + '/json/';
                 $.ajax({
                     url: url,
@@ -273,10 +273,23 @@
                             $('#State').select2().val("").trigger("change");
                         }
                     },
+                    error: function (xhr) {
+                        swal('Aviso!', 'O sistema de ViaCep está indisponível no momento. Os dados devem ser preenchidos manualmente.', 'warning');
+                        $('#Address').removeAttr('disabled');
+                        $('#Neighborhood').removeAttr('disabled');
+                        $('#City').removeAttr('disabled');
+                        $('#State').removeAttr('disabled');
+                        $('#Address').val("");
+                        $('#Neighborhood').val("");
+                        $('#City').val("");
+                        $('#State').select2().val("").trigger("change");
+                    },
                     complete: function (data) {
                         $('#loading').fadeOut();
                     }
                 });
+            } else {
+                $('#loading').fadeOut();
             }
         });
 
