@@ -87,7 +87,10 @@ namespace GrupoSelect.Web.Controllers
 
                 foreach (User item in result.Object)
                 {
-                    items.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Representation + " - " + item.Profile, Selected = filter.Id == item.Id ? true : false });
+                    if (item.Profile == Constants.PROFILE_GERENTE || item.Profile == Constants.PROFILE_REPRESENTANTE)
+                    {
+                        items.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Representation + " - " + item.Profile, Selected = filter.Id == item.Id ? true : false });
+                    }
                 }
 
                 return items;
