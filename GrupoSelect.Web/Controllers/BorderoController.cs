@@ -84,18 +84,34 @@ namespace GrupoSelect.Web.Controllers
 
         [TypeFilter(typeof(ExceptionLog))]
         [Authorize(Roles = Constants.PROFILE_DIRETOR)]
-        public async Task<IActionResult> ViewPaytable(int userId, DateTime startDate, DateTime endDate) 
+        public async Task<IActionResult> ViewPaytable(int userId, string startDate, string endDate) 
         {
             try
             {
-                Proposal proposal = null;
+                User user = (await _userService.GetById(userId)).Object;
 
-                RegistrationForm registrationForm = new RegistrationForm(proposal.Client, proposal, proposal.User);
+                if (user.Profile == Constants.PROFILE_GERENTE)
+                {
+                    IEnumerable<Contract> contracts = (await _borderoService.GetAllManager(userId, Convert.ToDateTime(startDate), Convert.ToDateTime(endDate))).Object;
 
-                string cshtmlContent = System.IO.File.ReadAllText("Views\\Shared\\Reports\\RegistrationForm.cshtml");
-                string renderedContent = Engine.Razor.RunCompile(cshtmlContent, Guid.NewGuid().ToString(), typeof(RegistrationForm), registrationForm);
+                    BorderoForm borderoForm = new BorderoForm(contracts, user, Convert.ToDateTime(startDate), Convert.ToDateTime(endDate));
 
-                return Content(renderedContent, "text/html");
+                    string cshtmlContent = System.IO.File.ReadAllText("Views\\Shared\\Reports\\BorderoForm.cshtml");
+                    string renderedContent = Engine.Razor.RunCompile(cshtmlContent, Guid.NewGuid().ToString(), typeof(BorderoForm), borderoForm);
+
+                    return Content(renderedContent, "text/html");
+                }
+                else
+                {
+                    IEnumerable<Contract> contracts = (await _borderoService.GetAll(userId, Convert.ToDateTime(startDate), Convert.ToDateTime(endDate))).Object;
+
+                    BorderoForm borderoForm = new BorderoForm(contracts, user, Convert.ToDateTime(startDate), Convert.ToDateTime(endDate));
+
+                    string cshtmlContent = System.IO.File.ReadAllText("Views\\Shared\\Reports\\BorderoForm.cshtml");
+                    string renderedContent = Engine.Razor.RunCompile(cshtmlContent, Guid.NewGuid().ToString(), typeof(BorderoForm), borderoForm);
+
+                    return Content(renderedContent, "text/html");
+                }
             }
             catch (Exception)
             {
