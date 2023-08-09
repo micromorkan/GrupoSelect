@@ -23,7 +23,7 @@ namespace GrupoSelect.Services.Service
 
             if (userId == 0)
             {
-                messageError = "Selecione um Usuário!";
+                messageError = "Selecione um Representante!";
             }
             else if (startDate == DateTime.MinValue)
             {
@@ -60,7 +60,7 @@ namespace GrupoSelect.Services.Service
 
             if (userId == 0)
             {
-                messageError = "Selecione um Usuário!";
+                messageError = "Selecione um Representante!";
             }
             else if (startDate == DateTime.MinValue)
             {

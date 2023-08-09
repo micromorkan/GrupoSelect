@@ -4,7 +4,7 @@ namespace GrupoSelect.Web.ViewModel
 {
     public class BorderoVM
     {
-        [Display(Name = "Usuário")]
+        [Display(Name = "Representante")]
         public int UserId { get; set; }
 
         public DateTime StartDate { get; set; }

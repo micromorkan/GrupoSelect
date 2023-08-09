@@ -50,7 +50,23 @@ namespace GrupoSelect.Web.Controllers
         {
             try
             {
-                var result = await _borderoService.GetAll(proposalVM.UserId, proposalVM.StartDate, proposalVM.EndDate);
+                Result<IEnumerable<Contract>> result = null;
+
+                var userResult = await _userService.GetById(proposalVM.UserId);
+
+                if (!userResult.Success)
+                {
+                    result = new Result<IEnumerable<Contract>> { Success = false, Message = "Nenhum represente foi selecionado!" };
+                }
+
+                if (userResult.Object.Profile == Constants.PROFILE_GERENTE)
+                {
+                    result = await _borderoService.GetAllManager(proposalVM.UserId, proposalVM.StartDate, proposalVM.EndDate);
+                }
+                else
+                {
+                    result = await _borderoService.GetAll(proposalVM.UserId, proposalVM.StartDate, proposalVM.EndDate);
+                }
 
                 return Json(result);
             }
@@ -71,7 +87,7 @@ namespace GrupoSelect.Web.Controllers
 
                 foreach (User item in result.Object)
                 {
-                    items.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Name + " - " + item.Profile, Selected = filter.Id == item.Id ? true : false });
+                    items.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Representation + " - " + item.Profile, Selected = filter.Id == item.Id ? true : false });
                 }
 
                 return items;
@@ -88,13 +104,18 @@ namespace GrupoSelect.Web.Controllers
         {
             try
             {
-                User user = (await _userService.GetById(userId)).Object;
+                var userResult = await _userService.GetById(userId);
 
-                if (user.Profile == Constants.PROFILE_GERENTE)
+                if (!userResult.Success)
+                {
+                    throw new Exception("Nenhum represente foi selecionado!");
+                }
+
+                if (userResult.Object.Profile == Constants.PROFILE_GERENTE)
                 {
                     IEnumerable<Contract> contracts = (await _borderoService.GetAllManager(userId, Convert.ToDateTime(startDate), Convert.ToDateTime(endDate))).Object;
 
-                    BorderoForm borderoForm = new BorderoForm(contracts, user, Convert.ToDateTime(startDate), Convert.ToDateTime(endDate));
+                    BorderoForm borderoForm = new BorderoForm(contracts, userResult.Object, Convert.ToDateTime(startDate), Convert.ToDateTime(endDate));
 
                     string cshtmlContent = System.IO.File.ReadAllText("Views\\Shared\\Reports\\BorderoForm.cshtml");
                     string renderedContent = Engine.Razor.RunCompile(cshtmlContent, Guid.NewGuid().ToString(), typeof(BorderoForm), borderoForm);
@@ -105,7 +126,7 @@ namespace GrupoSelect.Web.Controllers
                 {
                     IEnumerable<Contract> contracts = (await _borderoService.GetAll(userId, Convert.ToDateTime(startDate), Convert.ToDateTime(endDate))).Object;
 
-                    BorderoForm borderoForm = new BorderoForm(contracts, user, Convert.ToDateTime(startDate), Convert.ToDateTime(endDate));
+                    BorderoForm borderoForm = new BorderoForm(contracts, userResult.Object, Convert.ToDateTime(startDate), Convert.ToDateTime(endDate));
 
                     string cshtmlContent = System.IO.File.ReadAllText("Views\\Shared\\Reports\\BorderoForm.cshtml");
                     string renderedContent = Engine.Razor.RunCompile(cshtmlContent, Guid.NewGuid().ToString(), typeof(BorderoForm), borderoForm);
