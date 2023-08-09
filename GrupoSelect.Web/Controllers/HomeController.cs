@@ -48,11 +48,14 @@ namespace GrupoSelect.Web.Controllers
 
                 if (userProfile == Constants.PROFILE_DIRETOR || userProfile == Constants.PROFILE_GERENTE)
                 {
-                    var result = await _userService.GetAll(new Domain.Entity.User { Profile = Constants.PROFILE_REPRESENTANTE });
+                    var userList = (await _userService.GetAll(new Domain.Entity.User())).Object.ToList();
 
-                    for (int i = 0; i < result.Object.Count(); i++)
+                    for (int i = 0; i < userList.Count(); i++)
                     {
-                        dashboard.LstTile.Add(await MontarTilePropostaACMensal(i + 1, result.Object.ToList()[i].Id));
+                        if (userList[i].Profile == Constants.PROFILE_REPRESENTANTE || userList[i].Profile == Constants.PROFILE_GERENTE)
+                        {
+                            dashboard.LstTile.Add(await MontarTilePropostaACMensal(i + 1, userList[i].Id));
+                        }
                     }
                 }
             }
@@ -172,7 +175,7 @@ namespace GrupoSelect.Web.Controllers
             tile.BackgroundColor = Constants.SYSTEM_RGBA_WHITE;
             tile.Icone = "fa-file-text-o";
             tile.Descricao = string.Empty;
-            tile.Titulo = (await _userService.GetById(userId)).Object.Name;
+            tile.Titulo = (await _userService.GetById(userId)).Object.Representation;
             tile.Valor = result.Object != null ? result.Object.Count().ToString() + " Propostas" : "0 Propostas";
             tile.Controller = "Home";
             tile.Action = "AtualizarTileACMensal";
