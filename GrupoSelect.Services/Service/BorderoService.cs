@@ -87,7 +87,7 @@ namespace GrupoSelect.Services.Service
                 Object = _unitOfWork.Contracts.GetAll(f => (f.Proposal.UserId == userId || f.Proposal.User.Profile == Constants.PROFILE_REPRESENTANTE) &&
                                                            f.Status == Constants.CONTRACT_STATUS_CA &&
                                                            f.DateAproved >= startDate &&
-                                                           f.DateAproved <= endDate, o => o.OrderBy(x => x.ContractNum), i => i.Proposal.User, i => i.Proposal.Client),
+                                                           f.DateAproved <= endDate.AddDays(1).AddSeconds(-1), o => o.OrderBy(x => x.ContractNum), i => i.Proposal.User, i => i.Proposal.Client),
             };
         }
     }
