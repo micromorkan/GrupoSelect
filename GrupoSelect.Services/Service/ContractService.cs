@@ -128,6 +128,7 @@ namespace GrupoSelect.Services.Service
                 contract.ReprovedReason = null;
                 contract.ReprovedExplain = null;
                 contract.Proposal.Status = Constants.PROPOSAL_STATUS_PF;
+                contract.Proposal.Aproved = true;
 
                 if (!contract.Proposal.User.BranchWithoutAdm)
                 {
