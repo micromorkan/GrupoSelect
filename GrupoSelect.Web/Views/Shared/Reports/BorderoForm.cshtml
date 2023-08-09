@@ -120,24 +120,27 @@
                     <tbody>
                         @foreach (var item in Model.Contracts)
                         {
-                            totalCreditoGerente += Convert.ToDecimal(item.Proposal.CreditValue);
-                            totalComissaoGerente += Convert.ToDecimal(item.Proposal.CreditValue) * Convert.ToDecimal(item.Proposal.TableTypeManager) / 100;
+                            if (item.Proposal.UserId != Model.User.Id)
+                            {
+                                totalCreditoGerente += Convert.ToDecimal(item.Proposal.CreditValue);
+                                totalComissaoGerente += Convert.ToDecimal(item.Proposal.CreditValue) * Convert.ToDecimal(item.Proposal.TableTypeManager) / 100;
 
-                            <tr>
-                                <td class="text-center noBorder">@item.ContractNum</td>
-                                <td class="text-center noBorder">@item.Proposal.ProductTypeName</td>
-                                <td class="text-center noBorder">@item.DateAproved.ToString().Split(" ")[0]</td>
-                                <td class="text-center noBorder">@item.Proposal.Client.Name</td>
-                                <td class="text-center noBorder">@item.Proposal.CreditValue</td>
-                                <td class="text-center noBorder">@item.Proposal.TableTypeTax</td>
-                                <td class="text-center noBorder">@item.Proposal.TableTypeManager</td>
-                                <td class="text-center noBorder">
-                                    @(
+                                <tr>
+                                    <td class="text-center noBorder">@item.ContractNum</td>
+                                    <td class="text-center noBorder">@item.Proposal.ProductTypeName</td>
+                                    <td class="text-center noBorder">@item.DateAproved.ToString().Split(" ")[0]</td>
+                                    <td class="text-center noBorder">@item.Proposal.Client.Name</td>
+                                    <td class="text-center noBorder">@item.Proposal.CreditValue</td>
+                                    <td class="text-center noBorder">@item.Proposal.TableTypeTax</td>
+                                    <td class="text-center noBorder">@item.Proposal.TableTypeManager</td>
+                                    <td class="text-center noBorder">
+                                        @(
                                     string.Format("{0:C}", Convert.ToDecimal(item.Proposal.CreditValue) * Convert.ToDecimal(item.Proposal.TableTypeManager) / 100)
                                         )
-                                </td>
-                                <td class="text-center noBorder">CONSULTORIA</td>
-                            </tr>
+                                    </td>
+                                    <td class="text-center noBorder">CONSULTORIA</td>
+                                </tr>
+                            }
                         }
                         <tr class="bold">
                             <td class="border" colspan="3"></td>
@@ -209,24 +212,27 @@
                 <tbody>
                     @foreach (var item in Model.Contracts)
                     {
-                        totalCredito += Convert.ToDecimal(item.Proposal.CreditValue);
-                        totalComissao += Convert.ToDecimal(item.Proposal.CreditValue) * Convert.ToDecimal(item.Proposal.TableTypeCommission) / 100;
+                        if (item.Proposal.UserId == Model.User.Id)
+                        {
+                            totalCredito += Convert.ToDecimal(item.Proposal.CreditValue);
+                            totalComissao += Convert.ToDecimal(item.Proposal.CreditValue) * Convert.ToDecimal(item.Proposal.TableTypeCommission) / 100;
 
-                        <tr>
-                            <td class="text-center noBorder">@item.ContractNum</td>
-                            <td class="text-center noBorder">@item.Proposal.ProductTypeName</td>
-                            <td class="text-center noBorder">@item.DateAproved.ToString().Split(" ")[0]</td>
-                            <td class="text-center noBorder">@item.Proposal.Client.Name</td>
-                            <td class="text-center noBorder">@item.Proposal.CreditValue</td>
-                            <td class="text-center noBorder">@item.Proposal.TableTypeTax</td>
-                            <td class="text-center noBorder">@item.Proposal.TableTypeCommission</td>
-                            <td class="text-center noBorder">
-                                @(
-                                string.Format("{0:C}", Convert.ToDecimal(item.Proposal.CreditValue) * Convert.ToDecimal(item.Proposal.TableTypeCommission) / 100)
+                            <tr>
+                                <td class="text-center noBorder">@item.ContractNum</td>
+                                <td class="text-center noBorder">@item.Proposal.ProductTypeName</td>
+                                <td class="text-center noBorder">@item.DateAproved.ToString().Split(" ")[0]</td>
+                                <td class="text-center noBorder">@item.Proposal.Client.Name</td>
+                                <td class="text-center noBorder">@item.Proposal.CreditValue</td>
+                                <td class="text-center noBorder">@item.Proposal.TableTypeTax</td>
+                                <td class="text-center noBorder">@item.Proposal.TableTypeCommission</td>
+                                <td class="text-center noBorder">
+                                    @(
+                                    string.Format("{0:C}", Convert.ToDecimal(item.Proposal.CreditValue) * Convert.ToDecimal(item.Proposal.TableTypeCommission) / 100)
                                     )
-                            </td>
-                            <td class="text-center noBorder">CONSULTORIA</td>
-                        </tr>
+                                </td>
+                                <td class="text-center noBorder">CONSULTORIA</td>
+                            </tr>
+                        }
                     }
                     <tr class="bold">
                         <td class="border" colspan="3"></td>
