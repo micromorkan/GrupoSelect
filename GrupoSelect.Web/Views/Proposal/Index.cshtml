@@ -69,7 +69,7 @@
                             <thead>
                                 <tr>
                                     @{
-                                        if (User.GetProfile() == Constants.PROFILE_ADMINISTRATIVO)
+                                        if (User.GetProfile() == Constants.PROFILE_ADMINISTRATIVO || User.GetProfile() == Constants.PROFILE_GERENTE || User.GetProfile() == Constants.PROFILE_DIRETOR)
                                         {
                                             <th class="column text-center" data-prefix="" data-sufix="" data-column="user.representation" data-css="text-center">Representação</th>
                                         }
