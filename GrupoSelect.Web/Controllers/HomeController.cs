@@ -35,6 +35,7 @@ namespace GrupoSelect.Web.Controllers
             _userService = userService;
         }
 
+        #region Index
         public async Task<IActionResult> Index()
         {
             ComponentsVM dashboard = new ComponentsVM();
@@ -215,6 +216,203 @@ namespace GrupoSelect.Web.Controllers
             return Json(await MontarTileContratoMensal(id, Convert.ToInt32(filter)));
         }
 
+        #endregion
+
+        #region FINANCEIRO
+
+        [Authorize(Roles = Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
+        public async Task<IActionResult> Financeiro()
+        {
+            ComponentsVM dashboard = new ComponentsVM();
+
+            string userProfile = User.GetProfile();
+
+
+            if (userProfile != Constants.PROFILE_ADVOGADO && userProfile != Constants.PROFILE_TI)
+            {
+                dashboard.LstChartMoney.Add(await MontarChartContratoFinanceiroSemanal());
+                dashboard.LstChartMoney.Add(await MontarChartContratoFinanceiroMensal());
+                dashboard.LstChartMoney.Add(await MontarChartContratoFinanceiroTriMestral());
+            }
+
+            return View(dashboard);
+        }
+
+        private async Task<ChartMoney> MontarChartContratoFinanceiroSemanal()
+        {
+            string userProfile = User.GetProfile();
+            int userId = Convert.ToInt32(User.GetId());
+
+            DateTime startOfWeek = DateTime.Now;
+
+            int days = CalculateOffset(startOfWeek.DayOfWeek, DayOfWeek.Thursday);
+
+            startOfWeek = startOfWeek.AddDays(days - 7);
+
+            PaginateResult<IEnumerable<Contract>> result = null;
+
+            if (userProfile == Constants.PROFILE_DIRETOR || userProfile == Constants.PROFILE_GERENTE || userProfile == Constants.PROFILE_ADMINISTRATIVO)
+            {
+                result = await _contractService.GetAllPaginate(new Contract { Proposal = new Proposal(), Status = Constants.CONTRACT_STATUS_CA }, 1, 1000, startOfWeek, startOfWeek.AddDays(6));
+            }
+
+            List<Contract> listContracts = result.Object.ToList();
+
+            string[] users = listContracts.Select(x => x.Proposal.User.Representation).Distinct().ToArray();
+            string[] colors = new string[users.Length];
+            decimal[] values = new decimal[users.Length];
+
+            for (int i = 0; i < users.Length; i++)
+            {
+                colors[i] = "rgba(221, 221, 221, 1)";
+                values[i] = listContracts.Where(x => x.Proposal.User.Representation == users[i]).Sum(x => Convert.ToDecimal(x.Proposal.CreditValue));
+            }
+
+            ChartMoney contratosFinanceiroSemanal = new ChartMoney
+            {
+                Id = 1,
+                Titulo = "Parcial - Semanal (" + startOfWeek.Date.ToShortDateString() + " - " + startOfWeek.AddDays(6).Date.ToShortDateString() + ")",
+                Cores = colors,
+                Textos = users,
+                Valores = values,
+                PermiteMinimizar = true,
+                TipoChart = UtilWeb.GetEnumDescription(UtilWebEnums.TipoChart.BarraHorizontal),
+                Controller = "Home",
+                Action = "AtualizarChartContratoFinanceiroSemanal",
+                BackgroundColor = "#FFF",
+                IntervaloAtualizacao = 8500
+            };
+
+            return contratosFinanceiroSemanal;
+        }
+
+        private async Task<ChartMoney> MontarChartContratoFinanceiroMensal()
+        {
+            string userProfile = User.GetProfile();
+            int userId = Convert.ToInt32(User.GetId());
+
+            DateTime date = DateTime.Now;
+
+            var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
+            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+
+            PaginateResult<IEnumerable<Contract>> result = null;
+
+            if (userProfile == Constants.PROFILE_DIRETOR || userProfile == Constants.PROFILE_GERENTE || userProfile == Constants.PROFILE_ADMINISTRATIVO)
+            {
+                result = await _contractService.GetAllPaginate(new Contract { Proposal = new Proposal(), Status = Constants.CONTRACT_STATUS_CA }, 1, 1000, firstDayOfMonth, lastDayOfMonth);
+            }
+
+            List<Contract> listContracts = result.Object.ToList();
+
+            string[] users = listContracts.GroupBy(s => s.Proposal.User.Representation)
+                           .Select(g => new {
+                               User = g.Key,
+                               Sales = g.Sum(s => Convert.ToDecimal(s.Proposal.CreditValue))
+                           })
+                           .OrderByDescending(r => r.Sales)
+                           .Select(x => x.User).ToArray();
+
+            string[] colors = new string[users.Length];
+            decimal[] values = new decimal[users.Length];
+
+            for (int i = 0; i < users.Length; i++)
+            {
+                colors[i] = "rgba(221, 221, 221, 1)";
+                values[i] = listContracts.Where(x => x.Proposal.User.Representation == users[i]).Sum(x => Convert.ToDecimal(x.Proposal.CreditValue));
+            }
+
+            ChartMoney contratosFinanceiroSemanal = new ChartMoney
+            {
+                Id = 2,
+                Titulo = "Mensal (" + firstDayOfMonth.Date.ToShortDateString() + " - " + lastDayOfMonth.ToShortDateString() + ")",
+                Cores = colors,
+                Textos = users,
+                Valores = values,
+                PermiteMinimizar = true,
+                TipoChart = UtilWeb.GetEnumDescription(UtilWebEnums.TipoChart.BarraHorizontal),
+                Controller = "Home",
+                Action = "AtualizarChartContratoFinanceiroMensal",
+                BackgroundColor = "#FFF",
+                IntervaloAtualizacao = 8500
+            };
+
+            return contratosFinanceiroSemanal;
+        }
+
+        private async Task<ChartMoney> MontarChartContratoFinanceiroTriMestral()
+        {
+            string userProfile = User.GetProfile();
+            int userId = Convert.ToInt32(User.GetId());
+
+            DateTime date = DateTime.Now;
+
+            var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
+
+            string[] months = new string[3];
+            string[] colors = new string[3];
+            decimal[] values = new decimal[3];
+
+            for (int i = -2; i < 1; i++)
+            {
+                var firstMonth = firstDayOfMonth.AddMonths(i);
+                var lastDayOfMonth = firstMonth.AddMonths(1).AddDays(-1);
+
+                months[i + 2] = firstMonth.ToString("MMMM", CultureInfo.CreateSpecificCulture("pt-BR")).ToUpper();
+                colors[i + 2] = "rgba(221, 221, 221, 1)";
+
+                PaginateResult<IEnumerable<Contract>> result = await _contractService.GetAllPaginate(new Contract { Proposal = new Proposal(), Status = Constants.CONTRACT_STATUS_CA }, 1, 1000, firstMonth, lastDayOfMonth);
+
+                if (result.Object.Count() > 0)
+                {
+                    List<Contract> listContracts = result.Object.ToList();
+
+                    values[i + 2] = listContracts.Sum(x => Convert.ToDecimal(x.Proposal.CreditValue));
+                }
+                else
+                {
+                    values[i + 2] = 0;
+                }
+            }
+
+            ChartMoney contratosFinanceiroSemanal = new ChartMoney
+            {
+                Id = 3,
+                Titulo = "Renda Bruta dos últimos 3 meses",
+                Cores = colors,
+                Textos = months,
+                Valores = values,
+                PermiteMinimizar = true,
+                TipoChart = UtilWeb.GetEnumDescription(UtilWebEnums.TipoChart.BarraVertical),
+                Controller = "Home",
+                Action = "AtualizarChartContratoFinanceiroTriMestral",
+                BackgroundColor = "#FFF",
+                IntervaloAtualizacao = 8500
+            };
+
+            return contratosFinanceiroSemanal;
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> AtualizarChartContratoFinanceiroSemanal()
+        {
+            return Json(await MontarChartContratoFinanceiroSemanal());
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> AtualizarChartContratoFinanceiroMensal()
+        {
+            return Json(await MontarChartContratoFinanceiroMensal());
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> AtualizarChartContratoFinanceiroTriMestral()
+        {
+            return Json(await MontarChartContratoFinanceiroTriMestral());
+        }
+
+        #endregion
+
         #region EXEMPLOS COMPONENTES
 
         public async Task<IActionResult> Components()
@@ -289,9 +487,9 @@ namespace GrupoSelect.Web.Controllers
             {
                 Id = 1,
                 Titulo = "1",
-                Cores = new string[3] { "rgba(255, 99, 132, 1)", "rgba(255, 206, 86, 1)", "rgba(54, 162, 235, 1)" },
-                Textos = new string[3] { "Red", "Yellow", "Blue" },
-                Valores = new int[3] { 15, 20, 30 },
+                Cores = new string[10] { "rgba(255, 99, 132, 1)", "rgba(255, 206, 86, 1)", "rgba(54, 162, 235, 1)", "rgba(255, 206, 86, 1)", "rgba(255, 206, 86, 1)", "rgba(255, 206, 86, 1)", "rgba(255, 206, 86, 1)", "rgba(255, 206, 86, 1)", "rgba(255, 206, 86, 1)", "rgba(255, 206, 86, 1)" },
+                Textos = new string[10] { "Red", "Yellow", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue" },
+                Valores = new int[10] { 15, 20, 30, 40, 50, 60, 70, 80, 90, 100 },
                 PermiteMinimizar = true,
                 TipoChart = UtilWeb.GetEnumDescription(UtilWebEnums.TipoChart.BarraHorizontal),
                 Controller = "Home",
@@ -491,14 +689,21 @@ namespace GrupoSelect.Web.Controllers
             var a = new Random().Next(1, 10);
             var b = new Random().Next(11, 20);
             var c = new Random().Next(21, 30);
+            var d = new Random().Next(31, 40);
+            var e = new Random().Next(41, 50);
+            var f = new Random().Next(51, 60);
+            var g = new Random().Next(61, 70);
+            var h = new Random().Next(71, 80);
+            var i = new Random().Next(81, 90);
+            var j = new Random().Next(91, 100);
 
             GrupoSelect.Web.Views.Shared.Components.Models.Chart chart = new GrupoSelect.Web.Views.Shared.Components.Models.Chart
             {
                 Id = 1,
                 Titulo = "1",
-                Cores = new string[3] { "rgba(255, 99, 132, 1)", "rgba(255, 206, 86, 1)", "rgba(54, 162, 235, 1)" },
-                Textos = new string[3] { "Red", "Yellow", "Blue" },
-                Valores = new int[3] { a, b, c },
+                Cores = new string[10] { "rgba(255, 99, 132, 1)", "rgba(255, 206, 86, 1)", "rgba(54, 162, 235, 1)", "rgba(255, 206, 86, 1)", "rgba(255, 206, 86, 1)", "rgba(255, 206, 86, 1)", "rgba(255, 206, 86, 1)", "rgba(255, 206, 86, 1)", "rgba(255, 206, 86, 1)", "rgba(255, 206, 86, 1)" },
+                Textos = new string[10] { "Red", "Yellow", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue" },
+                Valores = new int[10] { j, i, h, g, f, e, d, c, b, a },
                 PermiteMinimizar = true,
                 TipoChart = UtilWeb.GetEnumDescription(UtilWebEnums.TipoChart.BarraHorizontal),
             };
