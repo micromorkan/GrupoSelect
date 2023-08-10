@@ -192,6 +192,7 @@ namespace GrupoSelect.Services.Service
             contractHistoric.UserIdRegister = userId;
 
             _unitOfWork.Contracts.Update(contract);
+            _unitOfWork.Proposals.Update(contract.Proposal);
             _unitOfWork.ContractHistorics.Insert(contractHistoric);
             _unitOfWork.SaveAllChanges();
 
