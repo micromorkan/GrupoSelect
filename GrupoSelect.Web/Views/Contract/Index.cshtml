@@ -229,7 +229,7 @@
                                     actionButtons += "<a title='Conferir Contrato' class='btn btn-xs btn-success' href='" + '@Url.Action("Check", "Contract")' + "\/" + item.id + "'><span class='glyphicon glyphicon-eye-open' style='color:white; cursor: pointer;' aria-hidden='true'></span></a>";
                                 }
                                 if (item['status'] !== '@Constants.CONTRACT_STATUS_CC' && item['status'] !== '@Constants.CONTRACT_STATUS_CA') {
-                                    actionButtons += "<a title='Cancelar Contrato' class='btn btn-xs btn-danger' onclick='CancelContract(" + item.id + ", " + pagina + ");'><span class='glyphicon glyphicon-trash' style='cursor: pointer;' aria-hidden='true'></span></a>"
+                                    actionButtons += "<a title='Cancelar Contrato' class='btn btn-xs btn-danger' onclick='CancelContract(" + item.id + ", " + pagina + ");'><span class='glyphicon glyphicon-remove' style='color:white; cursor: pointer;' aria-hidden='true'></span></a>"
                                 } 
                             }
 
