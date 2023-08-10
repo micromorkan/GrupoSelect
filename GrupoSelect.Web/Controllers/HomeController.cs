@@ -68,7 +68,11 @@ namespace GrupoSelect.Web.Controllers
             string userProfile = User.GetProfile();
             int userId = Convert.ToInt32(User.GetId());
 
-            DateTime startOfWeek = DateTime.Today.AddDays((int)DayOfWeek.Thursday - (int)DateTime.Today.DayOfWeek - 7);
+            DateTime startOfWeek = DateTime.Now;
+
+            int days = CalculateOffset(startOfWeek.DayOfWeek, DayOfWeek.Thursday);
+
+            startOfWeek = startOfWeek.AddDays(days - 7);
 
             PaginateResult<IEnumerable<Contract>> result = null;
 
@@ -183,6 +187,14 @@ namespace GrupoSelect.Web.Controllers
             tile.Filter = userId;
 
             return tile;
+        }
+
+        public int CalculateOffset(DayOfWeek current, DayOfWeek desired)
+        {
+            int c = (int)current;
+            int d = (int)desired;
+            int offset = (7 - c + d) % 7;
+            return offset == 0 ? 7 : offset;
         }
 
         [HttpPost]
