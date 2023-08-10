@@ -54,7 +54,7 @@ namespace GrupoSelect.Web.Controllers
                     {
                         if (userList[i].Profile == Constants.PROFILE_REPRESENTANTE || userList[i].Profile == Constants.PROFILE_GERENTE)
                         {
-                            dashboard.LstTile.Add(await MontarTilePropostaACMensal(i + 1, userList[i].Id));
+                            dashboard.LstTile.Add(await MontarTileContratoMensal(i + 1, userList[i].Id));
                         }
                     }
                 }
@@ -162,7 +162,7 @@ namespace GrupoSelect.Web.Controllers
             return contratosSemanal;
         }
 
-        private async Task<Tile> MontarTilePropostaACMensal(int id, int userId)
+        private async Task<Tile> MontarTileContratoMensal(int id, int userId)
         {
             string userProfile = User.GetProfile();
 
@@ -171,7 +171,7 @@ namespace GrupoSelect.Web.Controllers
             var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
             var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
 
-            var result = await _proposalService.GetAllPaginate(new Proposal { UserId = userId }, 1, 1000, firstDayOfMonth, lastDayOfMonth);
+            var result = await _contractService.GetAllPaginate(new Contract { Status = Constants.CONTRACT_STATUS_CA, Proposal = new Proposal { UserId = userId } }, 1, 1000, firstDayOfMonth, lastDayOfMonth);
 
             Tile tile = new Tile();
 
@@ -180,9 +180,9 @@ namespace GrupoSelect.Web.Controllers
             tile.Icone = "fa-file-text-o";
             tile.Descricao = string.Empty;
             tile.Titulo = (await _userService.GetById(userId)).Object.Representation;
-            tile.Valor = result.Object != null ? result.Object.Count().ToString() + " Propostas" : "0 Propostas";
+            tile.Valor = result.Object != null ? result.Object.Count().ToString() + " Contratos" : "0 Contratos";
             tile.Controller = "Home";
-            tile.Action = "AtualizarTileACMensal";
+            tile.Action = "AtualizarTileContratoMensal";
             tile.IntervaloAtualizacao = 5000;
             tile.Filter = userId;
 
@@ -210,9 +210,9 @@ namespace GrupoSelect.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> AtualizarTileACMensal(int id, string filter)
+        public async Task<JsonResult> AtualizarTileContratoMensal(int id, string filter)
         {
-            return Json(await MontarTilePropostaACMensal(id, Convert.ToInt32(filter)));
+            return Json(await MontarTileContratoMensal(id, Convert.ToInt32(filter)));
         }
 
         #region EXEMPLOS COMPONENTES
