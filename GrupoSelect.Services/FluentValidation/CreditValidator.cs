@@ -68,7 +68,6 @@ namespace GrupoSelect.Services.FluentValidation
             var result = _unitOfWork.Credits.GetAll(filter => filter.ProductTypeId == model.ProductTypeId &&
                                                             filter.TableTypeId == model.TableTypeId &&
                                                             filter.FinancialAdminId == model.FinancialAdminId &&
-                                                            filter.Months == model.Months &&
                                                             filter.Id != model.Id);
 
             if (result.Any())
