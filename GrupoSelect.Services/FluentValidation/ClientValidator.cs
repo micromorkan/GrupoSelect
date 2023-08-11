@@ -17,7 +17,7 @@ namespace GrupoSelect.Services.FluentValidation
             {
                 RuleFor(x => x.Name).NotEmpty().WithMessage("Informe o Nome do cliente");
                 RuleFor(x => x.CPF).NotEmpty().Length(14).WithMessage("Informe o CPF");
-                RuleFor(x => x.RG).NotEmpty().Length(13).WithMessage("Informe o RG");
+                RuleFor(x => x.RG).NotEmpty().MinimumLength(12).MaximumLength(13).WithMessage("Informe o RG");
                 RuleFor(x => x.Sex).NotEmpty().WithMessage("Informe o Sexo");
                 RuleFor(x => x.NaturalFrom).NotEmpty().WithMessage("Informe o campo Natural");
                 RuleFor(x => x.Nationality).NotEmpty().WithMessage("Informe a Naturalidade");
@@ -45,7 +45,7 @@ namespace GrupoSelect.Services.FluentValidation
                 RuleFor(x => x.Id).GreaterThan(0).WithMessage("O id do usuário é inválido.");
                 RuleFor(x => x.Name).NotEmpty().WithMessage("Informe o Nome do cliente");
                 RuleFor(x => x.CPF).NotEmpty().Length(14).WithMessage("Informe o CPF");
-                RuleFor(x => x.RG).NotEmpty().Length(13).WithMessage("Informe o RG");
+                RuleFor(x => x.RG).NotEmpty().MinimumLength(12).MaximumLength(13).WithMessage("Informe o RG");
                 RuleFor(x => x.Sex).NotEmpty().WithMessage("Informe o Sexo");
                 RuleFor(x => x.NaturalFrom).NotEmpty().WithMessage("Informe o campo Natural");
                 RuleFor(x => x.Nationality).NotEmpty().WithMessage("Informe a Naturalidade");
