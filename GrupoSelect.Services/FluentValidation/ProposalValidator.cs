@@ -58,12 +58,18 @@ namespace GrupoSelect.Services.FluentValidation
             {
                 decimal creditPortionValue = decimal.Parse(model.CreditPortionValue, NumberStyles.Any, new CultureInfo("pt-BR"));
                 decimal creditMembershipValue = decimal.Parse(model.CreditMembershipValue, NumberStyles.Any, new CultureInfo("pt-BR"));
+                decimal creditValue = decimal.Parse(model.CreditValue, NumberStyles.Any, new CultureInfo("pt-BR"));
                 decimal valueMinimalRequired = creditPortionValue + creditMembershipValue;
 
                 if (creditTotalValue < valueMinimalRequired)
                 {
                     string formatedValue = string.Format(CultureInfo.GetCultureInfo("pt-BR"), "{0:C}", valueMinimalRequired);
                     context.AddFailure("Valor Total deve ser igual ou superior a " + formatedValue);
+                }
+                else if(creditTotalValue > creditValue)
+                {
+                    string formatedValue = string.Format(CultureInfo.GetCultureInfo("pt-BR"), "{0:C}", creditValue);
+                    context.AddFailure("Valor Total deve ser igual ou inferior a " + formatedValue);
                 }
             }
             else
