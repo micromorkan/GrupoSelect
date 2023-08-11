@@ -167,9 +167,9 @@ namespace GrupoSelect.Services.Service
             };
         }
 
-        public Result<Contract> Cancel(int id, int userId)
+        public Result<Contract> Cancel(int id, int userId, string reason)
         {
-            var resultValidation = _validator.Validate(new Contract { Id = id }, options => options.IncludeRuleSets(Constants.FLUENT_CANCEL));
+            var resultValidation = _validator.Validate(new Contract { Id = id, ReprovedReason = reason }, options => options.IncludeRuleSets(Constants.FLUENT_CANCEL));
 
             if (!resultValidation.IsValid)
             {
@@ -185,6 +185,7 @@ namespace GrupoSelect.Services.Service
 
             contract.Status = Constants.CONTRACT_STATUS_CC;
             contract.DateStatus = DateTime.Now;
+            contract.ReprovedReason = reason;
             contract.Proposal.Status = Constants.PROPOSAL_STATUS_CA;
 
             ContractHistoric contractHistoric = new ContractHistoric();
@@ -194,6 +195,7 @@ namespace GrupoSelect.Services.Service
             contractHistoric.Status = Constants.CONTRACT_STATUS_CC;
             contractHistoric.DateRegister = (DateTime)contract.DateStatus;
             contractHistoric.UserIdRegister = userId;
+            contractHistoric.ReprovedReason = reason;
 
             _unitOfWork.Contracts.Update(contract);
             _unitOfWork.Proposals.Update(contract.Proposal);

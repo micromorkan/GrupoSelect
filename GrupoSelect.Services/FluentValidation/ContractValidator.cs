@@ -33,6 +33,7 @@ namespace GrupoSelect.Services.FluentValidation
             RuleSet(Constants.FLUENT_CANCEL, () =>
             {
                 RuleFor(x => x.Id).GreaterThan(0).WithMessage("O id do Contrato é inválido.");
+                RuleFor(x => x.ReprovedReason).NotEmpty().WithMessage("Escolha o motivo de cancelamento.");
                 RuleFor(x => x).Custom(ValidateCancelStatus);
             });
         }

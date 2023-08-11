@@ -12,7 +12,7 @@ namespace GrupoSelect.Services.Interface
     {
         Result<Contract> Update(Contract model);
         Result<Contract> Check(Contract model, int userId);
-        Result<Contract> Cancel(int id, int userId);
+        Result<Contract> Cancel(int id, int userId, string reason);
         Task<Result<Contract>> GetById(int id);
         Task<Result<IEnumerable<Contract>>> GetAll(Contract filter);
         Task<PaginateResult<IEnumerable<Contract>>> GetAllPaginate(Contract filter, int page, int qtPage, DateTime startDate, DateTime endDate);

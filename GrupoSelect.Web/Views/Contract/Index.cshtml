@@ -291,13 +291,32 @@
                 cancelButtonText: 'Não, voltar!',
                 confirmButtonClass: 'btn btn-primary',
                 cancelButtonClass: 'btn btn-danger',
-                buttonsStyling: false
-            }).then(function () {
+                buttonsStyling: false,
+                input: 'select',
+                inputOptions: {
+                    '@Html.Raw(Constants.CONTRACT_REASON_C1)': '@Html.Raw(Constants.CONTRACT_REASON_C1)',
+                    '@Html.Raw(Constants.CONTRACT_REASON_C2)': '@Html.Raw(Constants.CONTRACT_REASON_C2)',
+                    '@Html.Raw(Constants.CONTRACT_REASON_C3)': '@Html.Raw(Constants.CONTRACT_REASON_C3)',
+                    '@Html.Raw(Constants.CONTRACT_REASON_C4)': '@Html.Raw(Constants.CONTRACT_REASON_C4)',
+                    '@Html.Raw(Constants.CONTRACT_REASON_C5)': '@Html.Raw(Constants.CONTRACT_REASON_C5)',
+                    '@Html.Raw(Constants.CONTRACT_REASON_C6)': '@Html.Raw(Constants.CONTRACT_REASON_C6)'
+                },
+                inputPlaceholder: '-- Selecione o Motivo --',
+                inputValidator: function (value) {
+                    return new Promise(function (resolve, reject) {
+                        if (value !== '') {
+                            resolve();
+                        } else {
+                            reject('Por favor informe um motivo para o cancelamento');
+                        }
+                    });
+                }
+            }).then(function (result) {
                 $('#loading').show();
                 $.ajax({
                     url: '@Url.Action("Cancel", "Contract")',
                     type: 'POST',
-                    data: { 'id': idExclusao },
+                    data: { 'id': idExclusao, 'reason': result },
                     success: function (data) {
                         if (data.success) {
                             swal('Sucesso!', data.message, 'success');

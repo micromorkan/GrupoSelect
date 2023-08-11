@@ -390,11 +390,11 @@ namespace GrupoSelect.Web.Controllers
 
         [TypeFilter(typeof(ExceptionLog))]
         [Authorize(Roles = Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
-        public async Task<IActionResult> Cancel(int id)
+        public async Task<IActionResult> Cancel(int id, string reason)
         {
             try
             {
-                var result = _contractService.Cancel(id, Convert.ToInt32(User.GetId()));
+                var result = _contractService.Cancel(id, Convert.ToInt32(User.GetId()), reason);
 
                 return Json(result);
             }

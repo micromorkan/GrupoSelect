@@ -76,6 +76,13 @@
         public const string CONTRACT_STATUS_CR = "CONTRATO REPROVADO";
         public const string CONTRACT_STATUS_CC = "CONTRATO CANCELADO";
 
+        public const string CONTRACT_REASON_C1 = "CLIENTE SOLICITOU O CANCELAMENTO";
+        public const string CONTRACT_REASON_C2 = "CLIENTE NÃO DISPONIBILIZOU OS DOCUMENTOS";
+        public const string CONTRACT_REASON_C3 = "SEM CONTATO COM O CLIENTE";
+        public const string CONTRACT_REASON_C4 = "REPRESENTANTE NÃO FAZ MAIS PARTE DA EMPRESA";
+        public const string CONTRACT_REASON_C5 = "POSSÍVEL TENTATIVA DE FRAUDE";
+        public const string CONTRACT_REASON_C6 = "OUTRO";
+
         #endregion
     }
 }
