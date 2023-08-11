@@ -8,6 +8,9 @@ namespace GrupoSelect.Web.ViewModel
         public int Id { get; set; }        
         public int ProposalId { get; set; }
 
+        [Display(Name = "Cliente")]
+        public int ClientId { get; set; }
+
         [Display(Name = "Número do Contrato")]
         public string ContractNum { get; set; }
 
@@ -35,8 +38,11 @@ namespace GrupoSelect.Web.ViewModel
         [Required(ErrorMessage = "O campo {0} é obrigatório!")]
         public IFormFile? VideoAgreeFormFile { get; set; }
 
+        [Display(Name = "Data Cadastro Registro")]
         public DateTime DateCreate { get; set; }
         public DateTime? DateStatus { get; set; }
+
+        [Display(Name = "Data da Aprovação")]
         public DateTime? DateAproved { get; set; }
         public int? UserIdAproved { get; set; }
         public DateTime StartDate { get; set; }

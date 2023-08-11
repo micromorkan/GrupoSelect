@@ -22,12 +22,15 @@
             <div class="row">
                 @using (Html.BeginForm("Index", "Contract", FormMethod.Post, new { @id = "search", @class = "form-horizontal col-md-12 col-xs-12" }))
                 {
-                   @* <div class="form-group col-md-4 col-xs-12">
-                        @Html.LabelFor(model => model.ClientId)
-                        <select asp-for="ClientId" id="ddlClient" class="form-control js-example-responsive component-select" style="width: 100%">
-                            <option value="">-- Selecione --</option>
-                        </select>
-                    </div>*@
+                    @if (User.GetProfile() == Constants.PROFILE_ADVOGADO)
+                    {
+                        <div class="form-group col-md-4 col-xs-12">
+                            @Html.LabelFor(model => model.ClientId)
+                            <select asp-for="ClientId" id="ddlClient" class="form-control js-example-responsive component-select" style="width: 100%">
+                                <option value="">-- Selecione --</option>
+                            </select>
+                        </div>
+                    }
                     <div class="form-group col-md-4 col-xs-12">
                         @Html.LabelFor(model => model.ContractNum)
                         @Html.TextBoxFor(model => model.ContractNum, new { @class = "form-control text-uppercase" })
@@ -36,10 +39,13 @@
                         @Html.Label("Período")
                         <input type="text" id="dateFilter" class="form-control" value="">
                     </div>
-                    <div class="form-group col-md-4 col-xs-12">
-                        @Html.LabelFor(model => model.Status)
-                        @Html.DropDownListFor(model => model.Status, GrupoSelect.Web.Util.UtilWeb.GetContractStatusList(Model.Status), new { @class = "form-control js-example-responsive component-select", @style = "width: 100%;" })
-                    </div>
+                    @if (User.GetProfile() != Constants.PROFILE_ADVOGADO)
+                    {
+                        <div class="form-group col-md-4 col-xs-12">
+                            @Html.LabelFor(model => model.Status)
+                            @Html.DropDownListFor(model => model.Status, GrupoSelect.Web.Util.UtilWeb.GetContractStatusList(Model.Status), new { @class = "form-control js-example-responsive component-select", @style = "width: 100%;" })
+                        </div>
+                    }
                 }
             </div>
             <div class="row">
@@ -55,12 +61,11 @@
                             <thead>
                                 <tr>
                                     @{
-                                        if (User.GetProfile() == Constants.PROFILE_ADMINISTRATIVO || User.GetProfile() == Constants.PROFILE_GERENTE || User.GetProfile() == Constants.PROFILE_DIRETOR)
+                                        if (User.GetProfile() == Constants.PROFILE_ADMINISTRATIVO || User.GetProfile() == Constants.PROFILE_GERENTE || User.GetProfile() == Constants.PROFILE_DIRETOR || User.GetProfile() == Constants.PROFILE_ADVOGADO)
                                         {
                                             <th class="column text-center" data-prefix="" data-sufix="" data-column="proposal.user.representation" data-css="text-center">Representação</th>
                                         }
                                     }
-
                                     <th class="column text-center" data-prefix="" data-sufix="" data-column="contractNum" data-css="text-center">Nº Contrato</th>
                                     <th class="column text-center" data-prefix="" data-sufix="" data-column="proposal.client.name" data-css="text-center">Cliente</th>
                                     <th class="column text-center" data-prefix="" data-sufix="" data-column="status" data-css="text-center">Status</th>
@@ -82,9 +87,16 @@
     <script src="~/js/jquery.mask.min.js"></script>
     <script src="~/js/jquery.inputmask.bundle.min.js"></script>
     <script src="~/js/daterangepicker.js"></script>
+    @if (User.GetProfile() == Constants.PROFILE_ADVOGADO)
+    {
+        <script>
+            $(document).ready(function () {
+                FillSelect("@Url.Action("GetClientList", "Contract")", null, "#ddlClient");
+            });
+        </script>
+    }
     <script>
         $(document).ready(function () {
-            //FillSelect("@Url.Action("GetClientList", "Proposal")", { Active: true }, "#ddlClient");
             $('.component-select').select2();
             moment.locale('pt-br');
             void 0 !== $.fn.daterangepicker && $("#dateFilter").daterangepicker({
@@ -210,31 +222,39 @@
                             });
 
                             var actionButtons = "";
-                            
-                            actionButtons += "<a title='Visualizar Contrato' class='btn btn-xs btn-info' target = '_blank' href='" + '@Url.Action("PrintContract", "Contract")' + "\/" + item.id + "'><span class='glyphicon glyphicon-print' aria-hidden='true'></span></a>";
 
-                            if ('@User.GetProfile()' === '@Constants.PROFILE_REPRESENTANTE') {
-                                if (item['status'] === '@Constants.CONTRACT_STATUS_AD' || item['status'] === '@Constants.CONTRACT_STATUS_CR') {
-                                    actionButtons += "<a title='Editar' class='btn btn-xs btn-warning' href='" + '@Url.Action("Edit", "Contract")' + "\/" + item.id + "'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></a>";
+                            if ('@User.GetProfile()' === '@Constants.PROFILE_ADVOGADO')
+                            {
+                                actionButtons += "<a title='Detalhar Contrato' class='btn btn-xs btn-info' target = '_blank' href='" + '@Url.Action("Detail", "Contract")' + "\/" + item.id + "'><span class='glyphicon glyphicon-search' aria-hidden='true'></span></a>";
+                            }
+                            else
+                            {
+                                actionButtons += "<a title='Visualizar Contrato' class='btn btn-xs btn-info' target = '_blank' href='" + '@Url.Action("PrintContract", "Contract")' + "\/" + item.id + "'><span class='glyphicon glyphicon-print' aria-hidden='true'></span></a>";
+
+                                if ('@User.GetProfile()' === '@Constants.PROFILE_REPRESENTANTE') {
+                                    if (item['status'] === '@Constants.CONTRACT_STATUS_AD' || item['status'] === '@Constants.CONTRACT_STATUS_CR') {
+                                        actionButtons += "<a title='Editar' class='btn btn-xs btn-warning' href='" + '@Url.Action("Edit", "Contract")' + "\/" + item.id + "'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></a>";
+                                    }
+                                } else if ('@User.GetProfile()' === '@Constants.PROFILE_ADMINISTRATIVO') {
+                                    if (item['status'] === '@Constants.CONTRACT_STATUS_PA') {
+                                        actionButtons += "<a title='Conferir Contrato' class='btn btn-xs btn-success' href='" + '@Url.Action("Check", "Contract")' + "\/" + item.id + "'><span class='glyphicon glyphicon-eye-open' style='color:white; cursor: pointer;' aria-hidden='true'></span></a>";
+                                    }
+                                } else if ('@User.GetProfile()' === '@Constants.PROFILE_DIRETOR' || '@User.GetProfile()' === '@Constants.PROFILE_GERENTE') {
+                                    if (item['status'] === '@Constants.CONTRACT_STATUS_AD') {
+                                        actionButtons += "<a title='Editar' class='btn btn-xs btn-warning' href='" + '@Url.Action("Edit", "Contract")' + "\/" + item.id + "'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></a>";
+                                    }
+                                    if (item['status'] === '@Constants.CONTRACT_STATUS_PA') {
+                                        actionButtons += "<a title='Conferir Contrato' class='btn btn-xs btn-success' href='" + '@Url.Action("Check", "Contract")' + "\/" + item.id + "'><span class='glyphicon glyphicon-eye-open' style='color:white; cursor: pointer;' aria-hidden='true'></span></a>";
+                                    }
+                                    if (item['status'] !== '@Constants.CONTRACT_STATUS_CC' && item['status'] !== '@Constants.CONTRACT_STATUS_CA') {
+                                        actionButtons += "<a title='Cancelar Contrato' class='btn btn-xs btn-danger' onclick='CancelContract(" + item.id + ", " + pagina + ");'><span class='glyphicon glyphicon-remove' style='color:white; cursor: pointer;' aria-hidden='true'></span></a>"
+                                    }
                                 }
-                            } else if ('@User.GetProfile()' === '@Constants.PROFILE_ADMINISTRATIVO') {
-                                if (item['status'] === '@Constants.CONTRACT_STATUS_PA') {
-                                    actionButtons += "<a title='Conferir Contrato' class='btn btn-xs btn-success' href='" + '@Url.Action("Check", "Contract")' + "\/" + item.id + "'><span class='glyphicon glyphicon-eye-open' style='color:white; cursor: pointer;' aria-hidden='true'></span></a>";
-                                }
-                            } else if ('@User.GetProfile()' === '@Constants.PROFILE_DIRETOR' || '@User.GetProfile()' === '@Constants.PROFILE_GERENTE') {
-                                if (item['status'] === '@Constants.CONTRACT_STATUS_AD') {
-                                    actionButtons += "<a title='Editar' class='btn btn-xs btn-warning' href='" + '@Url.Action("Edit", "Contract")' + "\/" + item.id + "'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></a>";
-                                }
-                                if (item['status'] === '@Constants.CONTRACT_STATUS_PA') {
-                                    actionButtons += "<a title='Conferir Contrato' class='btn btn-xs btn-success' href='" + '@Url.Action("Check", "Contract")' + "\/" + item.id + "'><span class='glyphicon glyphicon-eye-open' style='color:white; cursor: pointer;' aria-hidden='true'></span></a>";
-                                }
-                                if (item['status'] !== '@Constants.CONTRACT_STATUS_CC' && item['status'] !== '@Constants.CONTRACT_STATUS_CA') {
-                                    actionButtons += "<a title='Cancelar Contrato' class='btn btn-xs btn-danger' onclick='CancelContract(" + item.id + ", " + pagina + ");'><span class='glyphicon glyphicon-remove' style='color:white; cursor: pointer;' aria-hidden='true'></span></a>"
-                                } 
                             }
 
                             row.push(actionButtons)
-
+                            row.push("");
+                            row.push("");
                             dt.row.add(row).draw(false);
                         });
 

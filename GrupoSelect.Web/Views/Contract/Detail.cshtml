@@ -1,0 +1,155 @@
+﻿@using GrupoSelect.Domain.Util;
+@using GrupoSelect.Web.Helpers;
+@model GrupoSelect.Web.ViewModel.ContractVM
+
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="clearfix"></div>
+<div class="row">
+    <div class="col-md-12 col-sm-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>
+                    Contrato <i class="fa fa-chevron-right"></i> Detalhar
+                </h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <br>
+                @using (Html.BeginForm("Detail", "Contract", FormMethod.Post, new { @id = "check", @class = "form-horizontal form-label-left" }))
+                {
+                    @Html.HiddenFor(model => model.Id)
+                    @Html.HiddenFor(model => model.DateCreate)
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.ContractNum)
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.ContractNum, new {@class = "form-control", @disabled="disabled" })
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.Status)
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.Status, new {@class = "form-control", @disabled="disabled" })
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.DateAproved)
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.DateAproved, new {@class = "form-control", @disabled="disabled" })
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.Proposal.User.Representation)
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.Proposal.User.Representation, new {@class = "form-control", @disabled="disabled" })
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.Label("Nome do Cliente")
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.Proposal.Client.Name, new {@class = "form-control", @disabled="disabled" })
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.Proposal.Client.CPF)
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.Proposal.Client.CPF, new {@class = "form-control", @disabled="disabled" })
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">
+                            @Html.LabelFor(model => model.Proposal.Client.Contact)
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                            @Html.TextBoxFor(model => model.Proposal.Client.Contact, new {@class = "form-control", @disabled="disabled" })
+                        </div>
+                    </div>
+
+                    <div class="ln_solid"></div>
+
+                    <div class="container">
+                        <div class="text-center">
+                            <h3>Anexos do Contrato</h3>
+                            <br />
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="col-lg-2 col-md-2 col-sm-4" style="cursor: pointer;">
+                                <div class="tile-stats text-center" style="height: 160px; box-shadow: 0px 0px 5px 0px #888888;" onclick="DownloadContract();" onmouseover="this.style.background='lightgreen';" onmouseout="this.style.background='white';">
+                                    <div class="icon" style="right: 52%;">
+                                        <i class="fa fa-file-text-o"></i>
+                                    </div>
+                                    <div class="count"></div>
+                                    <h3 style="font-size: 18px; margin-top: 100px;">Baixar Contrato</h3>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-4" style="cursor: pointer;">
+                                <div class="tile-stats text-center" style="height: 160px; box-shadow: 0px 0px 5px 0px #888888;" onclick="DownloadDocuments();" onmouseover="this.style.background='lightgreen';" onmouseout="this.style.background='white';">
+                                    <div class="icon" style="right: 52%;">
+                                        <i class="fa fa-file-pdf-o"></i>
+                                    </div>
+                                    <div class="count"></div>
+                                    <h3 style="font-size: 18px; margin-top: 100px;">Baixar Documentos</h3>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-4" style="cursor: pointer;">
+                                <div class="tile-stats text-center" style="height: 160px; box-shadow: 0px 0px 5px 0px #888888;" onclick="DownloadVideo();" onmouseover="this.style.background='lightgreen';" onmouseout="this.style.background='white';">
+                                    <div class="icon" style="right: 53%;">
+                                        <i class="fa fa-video-camera"></i>
+                                    </div>
+                                    <div class="count"></div>
+                                    <h3 style="font-size: 18px; margin-top: 100px;">Baixar Vídeo</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ln_solid"></div>
+
+                    <div class="item form-group">
+                        <div class="col-md-6 col-sm-6 offset-md-3">
+                            <a asp-action="Index" class="btn btn-danger">Voltar</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+        });
+
+        function DownloadContract() {
+            location.href = '@Url.Action("DownloadContract", "Contract")' + "\/" + @Model.Id;
+        }
+
+        function DownloadDocuments() {
+            location.href = '@Url.Action("DownloadDocuments", "Contract")' + "\/" + @Model.Id;
+        }
+
+        function DownloadVideo() {
+            location.href = '@Url.Action("DownloadVideo", "Contract")' + "\/" + @Model.Id;
+        }
+
+    </script>
+}
+

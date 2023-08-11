@@ -9,6 +9,7 @@ using GrupoSelect.Web.ViewModel;
 using GrupoSelect.Web.Views.Shared.Reports.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using RazorEngine;
 using RazorEngine.Templating;
 
@@ -18,13 +19,16 @@ namespace GrupoSelect.Web.Controllers
     public class ContractController : Controller
     {
         private IContractService _contractService;
+        private IClientService _clientService;
 
         public readonly IMapper _mapper;
 
-        public ContractController(GSDbContext context, IContractService contractService,
-                                                     IMapper mapper)
+        public ContractController(GSDbContext context, IContractService contractService, 
+                                                       IClientService clientService,
+                                                       IMapper mapper)
         {
             _contractService = contractService;
+            _clientService = clientService;
             _mapper = mapper;
         }
 
@@ -33,10 +37,10 @@ namespace GrupoSelect.Web.Controllers
         {
             var proposal = new ContractVM();
 
-            if (HttpContext.User.IsInRole(Constants.PROFILE_ADMINISTRATIVO))
+            if (HttpContext.User.GetProfile() == Constants.PROFILE_ADMINISTRATIVO)
             {
                 proposal.Status = Constants.CONTRACT_STATUS_PA;
-            }
+            }            
 
             return View(proposal);
         }
@@ -52,14 +56,26 @@ namespace GrupoSelect.Web.Controllers
 
                 filter.Proposal = new Proposal();
 
-                if (HttpContext.User.IsInRole(Constants.PROFILE_REPRESENTANTE))
+                if (HttpContext.User.GetProfile() == Constants.PROFILE_REPRESENTANTE)
                 {
                     filter.Proposal.UserId = Convert.ToInt32(User.GetId());
+                }
+                else if (HttpContext.User.GetProfile() == Constants.PROFILE_ADVOGADO)
+                {
+                    filter.Proposal.ClientId = contractVM.ClientId;
+                    filter.Status = Constants.CONTRACT_STATUS_CA;
                 }
 
                 filter.ContractNum = string.IsNullOrEmpty(filter.ContractNum) ? string.Empty : filter.ContractNum.ToUpper();
 
                 var result = await _contractService.GetAllPaginate(filter, page, qtPage, contractVM.StartDate, contractVM.EndDate);
+
+                foreach (var item in result.Object) 
+                {
+                    item.ContractConsultancy = null;
+                    item.ContractFinancialAdmin = null;
+                    item.VideoAgree = null;
+                }
 
                 return Json(result);
             }
@@ -263,28 +279,6 @@ namespace GrupoSelect.Web.Controllers
             }
         }
 
-        //[HttpPost]
-        //public async Task<IEnumerable<SelectListItem>> GetClientList(Client filter)
-        //{
-        //    var result = await _clientService.GetAll(filter);
-
-        //    if (result.Success)
-        //    {
-        //        IList<SelectListItem> items = new List<SelectListItem>();
-
-        //        foreach (Client item in result.Object)
-        //        {
-        //            items.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Name, Selected = filter.Id == item.Id ? true : false });
-        //        }
-
-        //        return items;
-        //    }
-        //    else
-        //    {
-        //        return new List<SelectListItem>();
-        //    }
-        //}
-
         [TypeFilter(typeof(ExceptionLog))]
         public async Task<IActionResult> PrintContract(int id)
         {
@@ -298,6 +292,32 @@ namespace GrupoSelect.Web.Controllers
                 string renderedContent = Engine.Razor.RunCompile(cshtmlContent, Guid.NewGuid().ToString(), typeof(ContractForm), contractForm);
 
                 return Content(renderedContent, "text/html");
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }        
+
+        [TypeFilter(typeof(ExceptionLog))]
+        [Authorize(Roles = Constants.PROFILE_ADVOGADO)]
+        public async Task<IActionResult> Detail(int id)
+        {
+            try
+            {
+                var result = await _contractService.GetById(id);
+
+                if (result.Success)
+                {
+                    var contractVM = _mapper.Map<ContractVM>(result.Object);
+
+                    return View(contractVM);
+                }
+                else
+                {
+                    TempData[Constants.SYSTEM_ERROR_KEY] = result.Message;
+                    return RedirectToAction(nameof(Index));
+                }
             }
             catch (Exception)
             {
@@ -381,6 +401,28 @@ namespace GrupoSelect.Web.Controllers
             catch (Exception)
             {
                 throw;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IEnumerable<SelectListItem>> GetClientList(Client filter)
+        {
+            var result = await _clientService.GetAll(filter);
+
+            if (result.Success)
+            {
+                IList<SelectListItem> items = new List<SelectListItem>();
+
+                foreach (Client item in result.Object)
+                {
+                    items.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Name + " - " + item.CPF, Selected = filter.Id == item.Id ? true : false });
+                }
+
+                return items;
+            }
+            else
+            {
+                return new List<SelectListItem>();
             }
         }
     }

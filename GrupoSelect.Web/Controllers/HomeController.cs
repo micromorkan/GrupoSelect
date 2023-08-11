@@ -65,6 +65,10 @@ namespace GrupoSelect.Web.Controllers
                     }
                 }
             }
+            else if (userProfile == Constants.PROFILE_ADVOGADO)
+            {
+                return RedirectToAction("Index", "Contract");
+            }
 
             return View(dashboard);
         }

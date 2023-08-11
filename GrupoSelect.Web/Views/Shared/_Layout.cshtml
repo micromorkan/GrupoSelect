@@ -48,22 +48,24 @@
 
                     <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
                         <div class="menu_section">
-                            <h3>Página Inicial</h3>
-                            <ul class="nav side-menu">
-                                <li>
-                                    <a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li><a href="@Url.Action("Index", "Home")">Dashboard - Contratos</a></li>
-                                        @if (User.GetProfile() == Constants.PROFILE_ADMINISTRATIVO ||
-                                        User.GetProfile() == Constants.PROFILE_GERENTE ||
-                                        User.GetProfile() == Constants.PROFILE_DIRETOR)
-                                        {
-                                            <li><a href="@Url.Action("Financeiro", "Home")">Dashboard - Financeiro</a></li>
-                                        }
-                                    </ul>
-                                </li>
-                            </ul>
-
+                            @if (User.GetProfile() != Constants.PROFILE_ADVOGADO)
+                            {
+                                <h3>Página Inicial</h3>
+                                <ul class="nav side-menu">
+                                    <li>
+                                        <a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="@Url.Action("Index", "Home")">Dashboard - Contratos</a></li>
+                                            @if (User.GetProfile() == Constants.PROFILE_ADMINISTRATIVO ||
+                                           User.GetProfile() == Constants.PROFILE_GERENTE ||
+                                           User.GetProfile() == Constants.PROFILE_DIRETOR)
+                                            {
+                                                <li><a href="@Url.Action("Financeiro", "Home")">Dashboard - Financeiro</a></li>
+                                            }
+                                        </ul>
+                                    </li>
+                                </ul>
+                            }
                             <br />
                             <h3>Ficha Cadastral</h3>
                             <ul class="nav side-menu">

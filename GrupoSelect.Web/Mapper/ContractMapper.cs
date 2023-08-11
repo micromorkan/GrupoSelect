@@ -8,7 +8,7 @@ namespace GrupoSelect.Web.Mapper
         public ContractMapper()
         {
             CreateMap<ContractVM, Contract>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => $"{src.Id}")).ReverseMap().ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => $"{src.Id}")).ReverseMap().ForMember(dest => dest.Id, opt => opt.AllowNull())
                 .ForMember(dest => dest.ProposalId, opt => opt.MapFrom(src => $"{src.ProposalId}")).ReverseMap().ForMember(dest => dest.ProposalId, opt => opt.Ignore())
                 .ForMember(dest => dest.ContractNum, opt => opt.MapFrom(src => $"{src.ContractNum}")).ReverseMap().ForMember(dest => dest.ContractNum, opt => opt.Ignore())
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => $"{src.Status}")).ReverseMap().ForMember(dest => dest.Status, opt => opt.Ignore())
