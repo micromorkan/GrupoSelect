@@ -258,13 +258,22 @@ namespace GrupoSelect.Web.Controllers
 
             List<Contract> listContracts = result.Object.ToList();
 
-            string[] users = listContracts.Select(x => x.Proposal.User.Representation).Distinct().ToArray();
+            string[] users = listContracts.GroupBy(s => s.Proposal.User.Representation)
+                           .Select(g => new
+                           {
+                               User = g.Key,
+                               Sales = g.Sum(s => Convert.ToDecimal(s.Proposal.CreditValue))
+                           })
+                           .OrderByDescending(r => r.Sales)
+                           .Select(x => x.User).ToArray();
+
             string[] colors = new string[users.Length];
             decimal[] values = new decimal[users.Length];
 
             for (int i = 0; i < users.Length; i++)
             {
-                colors[i] = "rgba(221, 221, 221, 1)";
+                string rgb = (220 - (i * 20)).ToString();
+                colors[i] = "rgba(" + rgb + ", " + rgb + ", " + rgb + ", 1)";
                 values[i] = listContracts.Where(x => x.Proposal.User.Representation == users[i]).Sum(x => Convert.ToDecimal(x.Proposal.CreditValue));
             }
 
