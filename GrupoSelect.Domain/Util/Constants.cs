@@ -76,6 +76,12 @@
         public const string CONTRACT_STATUS_CR = "CONTRATO REPROVADO";
         public const string CONTRACT_STATUS_CC = "CONTRATO CANCELADO";
 
+        public const string CONTRACT_REPROVAL_R1 = "DOCUMENTOS INSUFICIENTES";
+        public const string CONTRACT_REPROVAL_R2 = "DOCUMENTOS ILEGÍVEIS";
+        public const string CONTRACT_REPROVAL_R3 = "DADOS DIVERGENTES";
+        public const string CONTRACT_REPROVAL_R4 = "FALTA ASSINATURA";
+        public const string CONTRACT_REPROVAL_R5 = "VÍDEO NÃO CONFERE";
+
         public const string CONTRACT_REASON_C1 = "CLIENTE SOLICITOU O CANCELAMENTO";
         public const string CONTRACT_REASON_C2 = "CLIENTE NÃO DISPONIBILIZOU OS DOCUMENTOS";
         public const string CONTRACT_REASON_C3 = "SEM CONTATO COM O CLIENTE";

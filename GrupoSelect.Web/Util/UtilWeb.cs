@@ -69,17 +69,20 @@ namespace GrupoSelect.Web.Util
             return items;
         }
 
-        public static IEnumerable<SelectListItem> GetContractReprovalList(string filter = null)
+        public static IEnumerable<SelectListItem> GetContractReprovalList(string filter = null, bool showVideoOpt = true)
         {
             IList<SelectListItem> items = new List<SelectListItem>();
 
             items.Add(new SelectListItem() { Value = "", Text = "-- Selecione --", Selected = (string.IsNullOrEmpty(filter) ? true : false) });
-            items.Add(new SelectListItem() { Value = "DOCUMENTOS INSUFICIENTES", Text = "DOCUMENTOS INSUFICIENTES", Selected = (filter == "DOCUMENTOS INSUFICIENTES" ? true : false) });
-            items.Add(new SelectListItem() { Value = "DOCUMENTOS ILEGÍVEIS", Text = "DOCUMENTOS ILEGÍVEIS", Selected = (filter == "DOCUMENTOS ILEGÍVEIS" ? true : false) });
-            items.Add(new SelectListItem() { Value = "DADOS DIVERGENTES", Text = "DADOS DIVERGENTES", Selected = (filter == "DADOS DIVERGENTES" ? true : false) });
-            items.Add(new SelectListItem() { Value = "FALTA ASSINATURA", Text = "FALTA ASSINATURA", Selected = (filter == "FALTA ASSINATURA" ? true : false) });
-            items.Add(new SelectListItem() { Value = "VÍDEO NÃO CONFERE", Text = "VÍDEO NÃO CONFERE", Selected = (filter == "VÍDEO NÃO CONFERE" ? true : false) });
+            items.Add(new SelectListItem() { Value = Constants.CONTRACT_REPROVAL_R1, Text = Constants.CONTRACT_REPROVAL_R1, Selected = (filter == Constants.CONTRACT_REPROVAL_R1 ? true : false) });
+            items.Add(new SelectListItem() { Value = Constants.CONTRACT_REPROVAL_R2, Text = Constants.CONTRACT_REPROVAL_R2, Selected = (filter == Constants.CONTRACT_REPROVAL_R2 ? true : false) });
+            items.Add(new SelectListItem() { Value = Constants.CONTRACT_REPROVAL_R3, Text = Constants.CONTRACT_REPROVAL_R3, Selected = (filter == Constants.CONTRACT_REPROVAL_R3 ? true : false) });
+            items.Add(new SelectListItem() { Value = Constants.CONTRACT_REPROVAL_R4, Text = Constants.CONTRACT_REPROVAL_R4, Selected = (filter == Constants.CONTRACT_REPROVAL_R4 ? true : false) });
 
+            if (showVideoOpt)
+            {
+                items.Add(new SelectListItem() { Value = Constants.CONTRACT_REPROVAL_R5, Text = Constants.CONTRACT_REPROVAL_R5, Selected = (filter == Constants.CONTRACT_REPROVAL_R5 ? true : false) });
+            }
 
             return items;
         }

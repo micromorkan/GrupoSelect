@@ -186,6 +186,7 @@ namespace GrupoSelect.Services.Service
             contract.Status = Constants.CONTRACT_STATUS_CC;
             contract.DateStatus = DateTime.Now;
             contract.ReprovedReason = reason;
+            contract.ReprovedExplain = null;
             contract.Proposal.Status = Constants.PROPOSAL_STATUS_CA;
 
             ContractHistoric contractHistoric = new ContractHistoric();
