@@ -37,6 +37,7 @@ namespace GrupoSelect.Services.FluentValidation
                 RuleFor(x => x).Custom(InsertUniqueClient);
                 RuleFor(x => x).Custom(ValidateMoney);
                 RuleFor(x => x).Custom(ValidateDateBirth);
+                RuleFor(x => x).Custom(ValidateDateExp);
                 RuleFor(x => x).Custom(ValidateCpf);
             });
 
@@ -65,6 +66,7 @@ namespace GrupoSelect.Services.FluentValidation
                 RuleFor(x => x).Custom(EditUniqueClient);
                 RuleFor(x => x).Custom(ValidateMoney);
                 RuleFor(x => x).Custom(ValidateDateBirth);
+                RuleFor(x => x).Custom(ValidateDateExp);
                 RuleFor(x => x).Custom(ValidateCpf);
             });
 
@@ -117,24 +119,47 @@ namespace GrupoSelect.Services.FluentValidation
             {
                 if (datebirth == DateTime.MinValue)
                 {
-                    context.AddFailure("Data de Nascimento inválido");
+                    context.AddFailure("Data de Nascimento inválido.");
                 }
                 else if (datebirth.Date > DateTime.Now.AddYears(-18))
                 {
-                    context.AddFailure("O Cliente deve ser maior de idade");
+                    context.AddFailure("O Cliente deve ser maior de idade.");
                 }
             }
             else
             {
-                context.AddFailure("Data de Nascimento inválido");
+                context.AddFailure("Data de Nascimento inválido.");
             }
 
         }
+
+        private void ValidateDateExp(Domain.Entity.Client model, ValidationContext<Domain.Entity.Client> context)
+        {
+            DateTime dateExp = DateTime.Now;
+
+            if (DateTime.TryParse(model.DateExp, out dateExp))
+            {
+                if (dateExp == DateTime.MinValue)
+                {
+                    context.AddFailure("Data de Expedição inválido.");
+                }
+                else if (dateExp.Date > DateTime.Now.Date)
+                {
+                    context.AddFailure("Data de Expedição deve ser menor que a data atual.");
+                }
+            }
+            else
+            {
+                context.AddFailure("Data de Nascimento inválido.");
+            }
+
+        }
+
         private void ValidateCpf(Domain.Entity.Client model, ValidationContext<Domain.Entity.Client> context)
         {
             if (!Functions.IsCpf(model.CPF))
             {
-                context.AddFailure("CPF Inválido");
+                context.AddFailure("CPF Inválido.");
             }
         }
     }
