@@ -47,6 +47,11 @@ namespace GrupoSelect.Web.Controllers
                 dashboard.LstChart.Add(await MontarChartContratoSemanal());
                 dashboard.LstChart.Add(await MontarChartContratoMensal());
 
+                if (userProfile == Constants.PROFILE_REPRESENTANTE)
+                {
+                    dashboard.LstTile.Add(await MontarTileContratoCreditoMensal());
+                }
+
                 if (userProfile == Constants.PROFILE_DIRETOR || userProfile == Constants.PROFILE_GERENTE)
                 {
                     var userList = (await _userService.GetAll(new Domain.Entity.User())).Object.ToList();
@@ -190,6 +195,33 @@ namespace GrupoSelect.Web.Controllers
             return tile;
         }
 
+        private async Task<Tile> MontarTileContratoCreditoMensal()
+        {
+            int userId = Convert.ToInt32(User.GetId());
+
+            DateTime date = DateTime.Now;
+
+            var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
+            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+
+            var result = await _contractService.GetAllPaginate(new Contract { Status = Constants.CONTRACT_STATUS_CA, Proposal = new Proposal { UserId = userId } }, 1, 1000, firstDayOfMonth, lastDayOfMonth);
+
+            Tile tile = new Tile();
+
+            tile.Id = 1;
+            tile.BackgroundColor = Constants.SYSTEM_RGBA_WHITE;
+            tile.Icone = "fa-money";
+            tile.Descricao = string.Empty;
+            tile.Titulo = "Total de Vendas";
+            tile.Valor = result.Object.Count() > 0 ? string.Format("{0:C}", result.Object.Sum(x => Convert.ToDecimal(x.Proposal.CreditValue))) : "R$ 0,00";
+            tile.Controller = "Home";
+            tile.Action = "AtualizarTileContratoCreditoMensal";
+            tile.IntervaloAtualizacao = 5000;
+            tile.Filter = null;
+
+            return tile;
+        }
+
         public int CalculateOffset(DayOfWeek current, DayOfWeek desired)
         {
             int c = (int)current;
@@ -216,6 +248,12 @@ namespace GrupoSelect.Web.Controllers
             return Json(await MontarTileContratoMensal(id, Convert.ToInt32(filter)));
         }
 
+        [HttpPost]
+        public async Task<JsonResult> AtualizarTileContratoCreditoMensal()
+        {
+            return Json(await MontarTileContratoCreditoMensal());
+        }
+
         #endregion
 
         #region FINANCEIRO
@@ -230,6 +268,11 @@ namespace GrupoSelect.Web.Controllers
 
             if (userProfile != Constants.PROFILE_ADVOGADO && userProfile != Constants.PROFILE_TI)
             {
+                if (userProfile == Constants.PROFILE_DIRETOR)
+                {
+                    dashboard.LstTile.Add(await MontarTileContratoFinanceiroMensal());
+                }
+
                 dashboard.LstChartMoney.Add(await MontarChartContratoFinanceiroSemanal());
                 dashboard.LstChartMoney.Add(await MontarChartContratoFinanceiroMensal());
                 dashboard.LstChartMoney.Add(await MontarChartContratoFinanceiroTriMestral());
@@ -404,6 +447,33 @@ namespace GrupoSelect.Web.Controllers
             return contratosFinanceiroSemanal;
         }
 
+        private async Task<Tile> MontarTileContratoFinanceiroMensal()
+        {
+            string userProfile = User.GetProfile();
+
+            DateTime date = DateTime.Now;
+
+            var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
+            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+
+            var result = await _contractService.GetAllPaginate(new Contract { Status = Constants.CONTRACT_STATUS_CA, Proposal = new Proposal() }, 1, 1000, firstDayOfMonth, lastDayOfMonth);
+
+            Tile tile = new Tile();
+
+            tile.Id = 1;
+            tile.BackgroundColor = Constants.SYSTEM_RGBA_WHITE;
+            tile.Icone = "fa-money";
+            tile.Descricao = string.Empty;
+            tile.Titulo = "Faturamento Mensal";
+            tile.Valor = result.Object.Count() > 0 ? string.Format("{0:C}", result.Object.Sum(x => Convert.ToDecimal(x.Proposal.CreditTotalValue))) : "R$ 0,00"; 
+            tile.Controller = "Home";
+            tile.Action = "AtualizarTileContratoFinanceiroMensal";
+            tile.IntervaloAtualizacao = 5000;
+            tile.Filter = null;
+
+            return tile;
+        }
+
         [HttpPost]
         public async Task<JsonResult> AtualizarChartContratoFinanceiroSemanal()
         {
@@ -420,6 +490,12 @@ namespace GrupoSelect.Web.Controllers
         public async Task<JsonResult> AtualizarChartContratoFinanceiroTriMestral()
         {
             return Json(await MontarChartContratoFinanceiroTriMestral());
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> AtualizarTileContratoFinanceiroMensal()
+        {
+            return Json(await MontarTileContratoFinanceiroMensal());
         }
 
         #endregion

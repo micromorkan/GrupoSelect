@@ -9,7 +9,12 @@
 </div>*@
 
 <div class="clearfix"></div>
-
+<div class="row">
+@foreach (var item in Model.LstTile)
+{
+    @Html.Partial("Components/_Tile", item)
+}
+</div>
 <script src="~/js/chart/chart.min.js"></script>
 <div class="row">
 @foreach (var item in Model.LstChartMoney)
