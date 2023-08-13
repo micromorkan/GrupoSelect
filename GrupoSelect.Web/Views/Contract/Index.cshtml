@@ -27,7 +27,7 @@
                         <div class="form-group col-md-4 col-xs-12">
                             @Html.LabelFor(model => model.ClientId)
                             <select asp-for="ClientId" id="ddlClient" class="form-control js-example-responsive component-select" style="width: 100%">
-                                <option value="">-- Selecione --</option>
+                                <option value="">-- Todos --</option>
                             </select>
                         </div>
                     }
@@ -43,7 +43,7 @@
                     {
                         <div class="form-group col-md-4 col-xs-12">
                             @Html.LabelFor(model => model.Status)
-                            @Html.DropDownListFor(model => model.Status, GrupoSelect.Web.Util.UtilWeb.GetContractStatusList(Model.Status), new { @class = "form-control js-example-responsive component-select", @style = "width: 100%;" })
+                            @Html.DropDownListFor(model => model.Status, GrupoSelect.Web.Util.UtilWeb.GetContractStatusList(Model.Status, false, "-- Todos --"), new { @class = "form-control js-example-responsive component-select", @style = "width: 100%;" })
                         </div>
                     }
                 }

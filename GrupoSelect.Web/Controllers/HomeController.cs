@@ -118,7 +118,7 @@ namespace GrupoSelect.Web.Controllers
                 Controller = "Home",
                 Action = "AtualizarContratosSemanal",
                 BackgroundColor = "#FFF",
-                IntervaloAtualizacao = 8500 //600000
+                IntervaloAtualizacao = 60000 //1 minuto
             };
             return contratosSemanal;
         }
@@ -167,7 +167,7 @@ namespace GrupoSelect.Web.Controllers
                 Controller = "Home",
                 Action = "AtualizarContratosMensal",
                 BackgroundColor = "#FFF",
-                IntervaloAtualizacao = 8500 //600000
+                IntervaloAtualizacao = 60000 //600000
             };
             return contratosSemanal;
         }
@@ -193,7 +193,7 @@ namespace GrupoSelect.Web.Controllers
             tile.Valor = result.Object != null ? result.Object.Count().ToString() + " Contratos" : "0 Contratos";
             tile.Controller = "Home";
             tile.Action = "AtualizarTileContratoMensal";
-            tile.IntervaloAtualizacao = 5000;
+            tile.IntervaloAtualizacao = 60000;
             tile.Filter = userId;
 
             return tile;
@@ -220,7 +220,7 @@ namespace GrupoSelect.Web.Controllers
             tile.Valor = result.Object.Count() > 0 ? string.Format("{0:C}", result.Object.Sum(x => Convert.ToDecimal(x.Proposal.CreditValue))) : "R$ 0,00";
             tile.Controller = "Home";
             tile.Action = "AtualizarTileContratoCreditoMensal";
-            tile.IntervaloAtualizacao = 5000;
+            tile.IntervaloAtualizacao = 60000;
             tile.Filter = null;
 
             return tile;
@@ -336,7 +336,7 @@ namespace GrupoSelect.Web.Controllers
                 Controller = "Home",
                 Action = "AtualizarChartContratoFinanceiroSemanal",
                 BackgroundColor = "#FFF",
-                IntervaloAtualizacao = 8500
+                IntervaloAtualizacao = 60000
             };
 
             return contratosFinanceiroSemanal;
@@ -392,7 +392,7 @@ namespace GrupoSelect.Web.Controllers
                 Controller = "Home",
                 Action = "AtualizarChartContratoFinanceiroMensal",
                 BackgroundColor = "#FFF",
-                IntervaloAtualizacao = 8500
+                IntervaloAtualizacao = 60000
             };
 
             return contratosFinanceiroSemanal;
@@ -445,7 +445,7 @@ namespace GrupoSelect.Web.Controllers
                 Controller = "Home",
                 Action = "AtualizarChartContratoFinanceiroTriMestral",
                 BackgroundColor = "#FFF",
-                IntervaloAtualizacao = 8500
+                IntervaloAtualizacao = 60000
             };
 
             return contratosFinanceiroSemanal;
@@ -472,7 +472,7 @@ namespace GrupoSelect.Web.Controllers
             tile.Valor = result.Object.Count() > 0 ? string.Format("{0:C}", result.Object.Sum(x => Convert.ToDecimal(x.Proposal.CreditTotalValue))) : "R$ 0,00"; 
             tile.Controller = "Home";
             tile.Action = "AtualizarTileContratoFinanceiroMensal";
-            tile.IntervaloAtualizacao = 5000;
+            tile.IntervaloAtualizacao = 60000;
             tile.Filter = null;
 
             return tile;
@@ -524,7 +524,7 @@ namespace GrupoSelect.Web.Controllers
                 BarColor = "#0404B4",
                 Controller = "Home",
                 Action = "AtualizarFill",
-                IntervaloAtualizacao = 5500
+                IntervaloAtualizacao = 60000
             });
 
             lstBar.Add(new FillBar
@@ -537,7 +537,7 @@ namespace GrupoSelect.Web.Controllers
                 BarColor = "#FF0040",
                 Controller = "Home",
                 Action = "AtualizarFill",
-                IntervaloAtualizacao = 6500
+                IntervaloAtualizacao = 60000
             });
 
             lstBar.Add(new FillBar
@@ -550,7 +550,7 @@ namespace GrupoSelect.Web.Controllers
                 BarColor = "#74DF00",
                 Controller = "Home",
                 Action = "AtualizarFill",
-                IntervaloAtualizacao = 7500
+                IntervaloAtualizacao = 60000
             });
 
             lstBar.Add(new FillBar
@@ -565,7 +565,7 @@ namespace GrupoSelect.Web.Controllers
                 BadgeColor = "#000099",
                 Controller = "Home",
                 Action = "AtualizarFill",
-                IntervaloAtualizacao = 8500
+                IntervaloAtualizacao = 60000
             });
 
             index.LstFill = lstBar;
@@ -586,7 +586,7 @@ namespace GrupoSelect.Web.Controllers
                 Controller = "Home",
                 Action = "AtualizarChart",
                 BackgroundColor = "#FFF",
-                IntervaloAtualizacao = 8500
+                IntervaloAtualizacao = 60000
             };
 
             index.LstChart.Add(chart);
@@ -603,7 +603,7 @@ namespace GrupoSelect.Web.Controllers
                 Controller = "Home",
                 Action = "AtualizarChart2",
                 BackgroundColor = "#FFF",
-                IntervaloAtualizacao = 8500
+                IntervaloAtualizacao = 60000
             };
 
             index.LstChart.Add(chart2);
@@ -620,7 +620,7 @@ namespace GrupoSelect.Web.Controllers
                 Controller = "Home",
                 Action = "AtualizarChart3",
                 BackgroundColor = "#FFF",
-                IntervaloAtualizacao = 8500
+                IntervaloAtualizacao = 60000
             };
 
             index.LstChart.Add(chart3);
@@ -639,7 +639,7 @@ namespace GrupoSelect.Web.Controllers
             tile.Valor = "15";
             tile.Controller = "Home";
             tile.Action = "AtualizarTile";
-            tile.IntervaloAtualizacao = 5000;
+            tile.IntervaloAtualizacao = 60000;
 
             index.LstTile.Add(tile);
 
@@ -652,7 +652,7 @@ namespace GrupoSelect.Web.Controllers
             tile2.Valor = "234";
             tile2.Controller = "Home";
             tile2.Action = "AtualizarTile2";
-            tile2.IntervaloAtualizacao = 8000;
+            tile2.IntervaloAtualizacao = 60000;
 
             index.LstTile.Add(tile2);
 
@@ -665,7 +665,7 @@ namespace GrupoSelect.Web.Controllers
             tile3.Valor = "56";
             tile3.Controller = "Home";
             tile3.Action = "AtualizarTile3";
-            tile3.IntervaloAtualizacao = 6500;
+            tile3.IntervaloAtualizacao = 60000;
             index.LstTile.Add(tile3);
 
             #endregion
@@ -739,7 +739,7 @@ namespace GrupoSelect.Web.Controllers
             tile.Descricao = "Descrição";
             tile.Titulo = "Usuarios Cadastrados";
             tile.Valor = new Random().Next(6, 25).ToString();
-            tile.IntervaloAtualizacao = 5000;
+            tile.IntervaloAtualizacao = 60000;
 
             return Json(tile);
         }
@@ -753,7 +753,7 @@ namespace GrupoSelect.Web.Controllers
             tile2.Descricao = "Descrição";
             tile2.Titulo = "Casos abertos";
             tile2.Valor = new Random().Next(230, 250).ToString();
-            tile2.IntervaloAtualizacao = 10000;
+            tile2.IntervaloAtualizacao = 60000;
 
             return Json(tile2);
         }
@@ -768,7 +768,7 @@ namespace GrupoSelect.Web.Controllers
             tile3.Descricao = "Descrição";
             tile3.Titulo = "Arquivos Pendentes";
             tile3.Valor = new Random().Next(40, 68).ToString();
-            tile3.IntervaloAtualizacao = 6500;
+            tile3.IntervaloAtualizacao = 60000;
 
 
             return Json(tile3);

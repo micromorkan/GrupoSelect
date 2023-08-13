@@ -377,7 +377,7 @@ namespace GrupoSelect.Web.Controllers
             {
                 var contract = result.Object;
 
-                fileName = "VIDEO_" + contract.Proposal.Client.Name.Replace(" ", "_") + "." + contract.VideoAgreeFileType.Split("/")[1];
+                fileName = contract.ContractNum + "_" + contract.Proposal.Client.Name.Replace(" ", "_") + "." + contract.VideoAgreeFileType.Split("/")[1];
                 contentType = contract.VideoAgreeFileType;
                 bytes = contract.VideoAgree;
 

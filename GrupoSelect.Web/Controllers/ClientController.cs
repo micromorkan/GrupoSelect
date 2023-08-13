@@ -17,12 +17,15 @@ namespace GrupoSelect.Web.Controllers
     public class ClientController : Controller
     {
         private IClientService _clientService;
+        private IUserService _userService;
         public readonly IMapper _mapper;
 
         public ClientController(GSDbContext context, IClientService clientService,
+                                                     IUserService userService,
                                                      IMapper mapper)
         {
             _clientService = clientService;
+            _userService = userService;
             _mapper = mapper;
         }
 
@@ -134,6 +137,28 @@ namespace GrupoSelect.Web.Controllers
             catch (Exception)
             {
                 throw;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IEnumerable<SelectListItem>> GetUserList(User filter)
+        {
+            var result = await _userService.GetAll(filter);
+
+            if (result.Success)
+            {
+                IList<SelectListItem> items = new List<SelectListItem>();
+
+                foreach (User item in result.Object)
+                {
+                    items.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Representation, Selected = filter.Id == item.Id ? true : false });
+                }
+
+                return items;
+            }
+            else
+            {
+                return new List<SelectListItem>();
             }
         }
     }

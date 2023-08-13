@@ -163,7 +163,7 @@ function FillSelect(url, filter, selectId, selectedItem = null, compareValue = t
 //    })
 //}
 
-function Create(ignoreValidation = false, sendFiles = false, defaultSelectValue = "") {
+function Create(ignoreValidation = false, sendFiles = false, defaultSelectValue = "", callback = null) {
     if (sendFiles) {
         var formData = new FormData(jQuery('#create')[0]);
         var form = $("#create");
@@ -184,7 +184,10 @@ function Create(ignoreValidation = false, sendFiles = false, defaultSelectValue 
                 success: function (data) {
                     if (data.success) {
                         ClearAllInputs(defaultSelectValue);
-                        swal('Sucesso!', data.message, 'success');                        
+                        swal('Sucesso!', data.message, 'success');     
+                        if (callback != null) {
+                            callback();
+                        }
                     } else {
                         if (data.errors) {
                             ShowModalListWarning(data.errors);
@@ -216,7 +219,10 @@ function Create(ignoreValidation = false, sendFiles = false, defaultSelectValue 
                 success: function (data) {
                     if (data.success) {
                         ClearAllInputs(defaultSelectValue);
-                        swal('Sucesso!', data.message, 'success');                        
+                        swal('Sucesso!', data.message, 'success');         
+                        if (callback != null) {
+                            callback();
+                        }
                     } else {
                         if (data.errors) {
                             ShowModalListWarning(data.errors);

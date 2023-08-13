@@ -124,8 +124,14 @@
             $('.component-select').select2();
             MaskCnpj();
         });
+
+        function callback() {
+            $('#Active').select2().val("true").trigger("change");
+            $('#BranchWithoutAdm').select2().val("false").trigger("change");
+        }
+
         $(".submit").click(function (event) {
-            Create(false, false);
+            Create(false, false, "", callback);
         });
     </script>
 }

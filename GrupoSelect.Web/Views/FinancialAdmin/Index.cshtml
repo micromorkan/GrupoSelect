@@ -24,7 +24,7 @@
                     </div>
                     <div class="form-group col-md-6 col-xs-12">
                         @Html.LabelFor(model => model.Active)
-                        @Html.DropDownListFor(model => model.Active, GrupoSelect.Web.Util.UtilWeb.GetBooleanList(true, true), new { @class = "form-control js-example-responsive component-select", @style = "width: 100%;" })
+                        @Html.DropDownListFor(model => model.Active, GrupoSelect.Web.Util.UtilWeb.GetBooleanList(true, true, "-- Todos --"), new { @class = "form-control js-example-responsive component-select", @style = "width: 100%;" })
                     </div>
                 }
             </div>

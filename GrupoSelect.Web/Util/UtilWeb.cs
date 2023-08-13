@@ -13,13 +13,13 @@ namespace GrupoSelect.Web.Util
 {
     public class UtilWeb
     {
-        public static IEnumerable<SelectListItem> GetBooleanList(bool filter = true, bool addDefault = false)
+        public static IEnumerable<SelectListItem> GetBooleanList(bool filter = true, bool addDefault = false, string defaultText = "-- Selecione --")
         {
             IList<SelectListItem> items = new List<SelectListItem>();
 
             if (addDefault)
             {
-                items.Add(new SelectListItem() { Value = "", Text = "-- Selecione --", Selected = true });
+                items.Add(new SelectListItem() { Value = "", Text = defaultText, Selected = true });
                 items.Add(new SelectListItem() { Value = "true", Text = "Sim", Selected = false });
                 items.Add(new SelectListItem() { Value = "false", Text = "Não", Selected = false });
             }
@@ -32,11 +32,11 @@ namespace GrupoSelect.Web.Util
             return items;
         }
 
-        public static IEnumerable<SelectListItem> GetProposalStatusList(string filter)
+        public static IEnumerable<SelectListItem> GetProposalStatusList(string filter, string defaultText = "-- Selecione --")
         {
             IList<SelectListItem> items = new List<SelectListItem>();
 
-            items.Add(new SelectListItem() { Value = "", Text = "-- Selecione --", Selected = (string.IsNullOrEmpty(filter) ? true : false) });
+            items.Add(new SelectListItem() { Value = "", Text = defaultText, Selected = (string.IsNullOrEmpty(filter) ? true : false) });
             items.Add(new SelectListItem() { Value = Constants.PROPOSAL_STATUS_AC, Text = Constants.PROPOSAL_STATUS_AC, Selected = (filter == Constants.PROPOSAL_STATUS_AC ? true : false) });
             items.Add(new SelectListItem() { Value = Constants.PROPOSAL_STATUS_PC, Text = Constants.PROPOSAL_STATUS_PC, Selected = (filter == Constants.PROPOSAL_STATUS_PC ? true : false) });
             items.Add(new SelectListItem() { Value = Constants.PROPOSAL_STATUS_PF, Text = Constants.PROPOSAL_STATUS_PF, Selected = (filter == Constants.PROPOSAL_STATUS_PF ? true : false) });
@@ -46,11 +46,11 @@ namespace GrupoSelect.Web.Util
             return items;
         }
 
-        public static IEnumerable<SelectListItem> GetContractStatusList(string filter, bool checkContract = false)
+        public static IEnumerable<SelectListItem> GetContractStatusList(string filter, bool checkContract = false, string defaultText = "-- Selecione --")
         {
             IList<SelectListItem> items = new List<SelectListItem>();
 
-            items.Add(new SelectListItem() { Value = "", Text = "-- Selecione --", Selected = (string.IsNullOrEmpty(filter) ? true : false) });
+            items.Add(new SelectListItem() { Value = "", Text = defaultText, Selected = (string.IsNullOrEmpty(filter) ? true : false) });
             
             if (!checkContract)
             {

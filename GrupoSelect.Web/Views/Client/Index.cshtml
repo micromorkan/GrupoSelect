@@ -1,4 +1,5 @@
-﻿@model GrupoSelect.Web.ViewModel.ClientVM
+﻿@using GrupoSelect.Domain.Util;
+@model GrupoSelect.Web.ViewModel.ClientVM
 
 @{
     ViewData["Title"] = "Index";
@@ -18,13 +19,19 @@
             <div class="row">
                 @using (Html.BeginForm("Index", "Client", FormMethod.Post, new { @id = "search", @class = "form-horizontal col-md-12 col-xs-12" }))
                 {
-                    <div class="form-group col-md-6 col-xs-12">
+                    <div class="form-group col-md-4 col-xs-12">
                         @Html.LabelFor(x=>x.Name)
                         @Html.TextBoxFor(model => model.Name, new { @class = "form-control text-uppercase" })
                     </div>
-                    <div class="form-group col-md-6 col-xs-12">
+                    <div class="form-group col-md-4 col-xs-12">
                         @Html.LabelFor(x=>x.CPF)
                         @Html.TextBoxFor(model => model.CPF, new { @class = "form-control cpf" })
+                    </div>
+                    <div class="form-group col-md-4 col-xs-12">
+                        @Html.LabelFor(model => model.UserId)
+                        <select asp-for="UserId" id="ddlUser" class="form-control js-example-responsive component-select" style="width: 100%">
+                            <option value="">-- Todos --</option>
+                        </select>
                     </div>
                 }
             </div>
@@ -44,6 +51,7 @@
                                     <th class="column text-center" data-prefix="" data-sufix="" data-column="cpf" data-css="text-center">CPF</th>
                                     <th class="column text-center" data-prefix="" data-sufix="" data-column="contact" data-css="text-center">Contato</th>
                                     <th class="column text-center" data-prefix="" data-sufix="" data-column="email" data-css="text-center">Email</th>
+                                    <th class="column text-center" data-prefix="" data-sufix="" data-column="user.representation" data-css="text-center">Representante</th>
                                     <th class="column text-center" style="width:10%;" data-column="" data-css="text-center">Ação</th>
                                 </tr>
                             </thead>
@@ -62,6 +70,7 @@
     <script src="~/js/jquery.inputmask.bundle.min.js"></script>
     <script>
         $(document).ready(function () {
+            FillSelect("@Url.Action("GetUserList", "Client")", { Profile: '@Constants.PROFILE_REPRESENTANTE' }, "#ddlUser");
             MaskCpf();
             GetData();
         });

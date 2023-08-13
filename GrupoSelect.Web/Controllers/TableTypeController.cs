@@ -25,7 +25,7 @@ namespace GrupoSelect.Web.Controllers
         }
 
         [TypeFilter(typeof(ExceptionLog))]
-        [Authorize(Roles = Constants.PROFILE_DIRETOR)]
+        [Authorize(Roles = Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_TI)]
         public async Task<IActionResult> Index()
         {
             return View(new TableTypeVM());
@@ -33,7 +33,7 @@ namespace GrupoSelect.Web.Controllers
 
         [HttpPost]
         [TypeFilter(typeof(ExceptionLog))]
-        [Authorize(Roles = Constants.PROFILE_DIRETOR)]
+        [Authorize(Roles = Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_TI)]
         public async Task<IActionResult> Index(TableTypeVM modelVM, int page, int qtPage)
         {
             var result = new PaginateResult<IEnumerable<TableType>>();
@@ -53,7 +53,7 @@ namespace GrupoSelect.Web.Controllers
         }
 
         [TypeFilter(typeof(ExceptionLog))]
-        [Authorize(Roles = Constants.PROFILE_DIRETOR)]
+        [Authorize(Roles = Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_TI)]
         public IActionResult Create()
         {
             return View();
@@ -61,7 +61,7 @@ namespace GrupoSelect.Web.Controllers
 
         [HttpPost]
         [TypeFilter(typeof(ExceptionLog))]
-        [Authorize(Roles = Constants.PROFILE_DIRETOR)]
+        [Authorize(Roles = Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_TI)]
         public async Task<IActionResult> Create(TableTypeVM modelVM)
         {
             try
@@ -79,7 +79,7 @@ namespace GrupoSelect.Web.Controllers
         }
 
         [TypeFilter(typeof(ExceptionLog))]
-        [Authorize(Roles = Constants.PROFILE_DIRETOR)]
+        [Authorize(Roles = Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_TI)]
         public async Task<IActionResult> Edit(int id)
         {
             try
@@ -105,7 +105,7 @@ namespace GrupoSelect.Web.Controllers
 
         [HttpPost]
         [TypeFilter(typeof(ExceptionLog))]
-        [Authorize(Roles = Constants.PROFILE_DIRETOR)]
+        [Authorize(Roles = Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_TI)]
         public async Task<IActionResult> Edit(int id, TableTypeVM modelVM)
         {
             try
@@ -123,7 +123,7 @@ namespace GrupoSelect.Web.Controllers
         }
 
         [TypeFilter(typeof(ExceptionLog))]
-        [Authorize(Roles = Constants.PROFILE_DIRETOR)]
+        [Authorize(Roles = Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_TI)]
         public async Task<IActionResult> Delete(int id)
         {
             try

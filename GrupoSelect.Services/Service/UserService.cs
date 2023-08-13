@@ -20,21 +20,35 @@ namespace GrupoSelect.Services.Service
 
         public async Task<Result<IEnumerable<User>>> GetAll(User filter)
         {
+            var userList = _unitOfWork.Users.GetAll(f => (string.IsNullOrEmpty(filter.Name) || f.Name.Contains(filter.Name)) &&
+                                                       (string.IsNullOrEmpty(filter.Email) || f.Email.Contains(filter.Email)) &&
+                                                       (string.IsNullOrEmpty(filter.Profile) || f.Profile == filter.Profile)).ToList();
+
+            userList?.ForEach(x =>
+            {
+                x.Password = string.Empty;
+            });
+
             return new Result<IEnumerable<User>>
             {
                 Success = true,
-                Object = _unitOfWork.Users.GetAll(f => (string.IsNullOrEmpty(filter.Name) || f.Name.Contains(filter.Name)) && 
-                                                       (string.IsNullOrEmpty(filter.Email) || f.Email.Contains(filter.Email)) &&
-                                                       (string.IsNullOrEmpty(filter.Profile) || f.Profile == filter.Profile)),
+                Object = userList,
             };
         }
 
         public async Task<PaginateResult<IEnumerable<User>>> GetAllPaginate(User filter, int page, int qtPage)
         {
-            return _unitOfWork.Users.GetAllPaginate(f => (string.IsNullOrEmpty(filter.Name) || f.Name.Contains(filter.Name)) &&
+            var result = _unitOfWork.Users.GetAllPaginate(f => (string.IsNullOrEmpty(filter.Name) || f.Name.Contains(filter.Name)) &&
                                                          (string.IsNullOrEmpty(filter.Representation) || f.Representation.Contains(filter.Representation)) &&
                                                          (string.IsNullOrEmpty(filter.Login) || f.Login.Contains(filter.Login)) &&
                                                          (string.IsNullOrEmpty(filter.Cnpj) || f.Cnpj == filter.Cnpj), null, page, qtPage);
+
+            result.Object?.ToList().ForEach(x =>
+            {
+                x.Password = string.Empty;
+            });
+
+            return result;
         }
 
         public async Task<Result<User>> GetById(int id)
@@ -43,6 +57,8 @@ namespace GrupoSelect.Services.Service
 
             if (user != null)
             {
+                user.Password = string.Empty;
+
                 return new Result<User>
                 {
                     Success = true,

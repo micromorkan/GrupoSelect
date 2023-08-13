@@ -24,15 +24,16 @@ namespace GrupoSelect.Web.Controllers
             _mapper = mapper;
         }
 
-        [Authorize(Roles = Constants.PROFILE_DIRETOR)]
+        [TypeFilter(typeof(ExceptionLog))]
+        [Authorize(Roles = Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_TI)]
         public async Task<IActionResult> Index()
         {
             return View(new FinancialAdminVM());
         }
 
         [HttpPost]
-        [Authorize(Roles = Constants.PROFILE_DIRETOR)]
         [TypeFilter(typeof(ExceptionLog))]
+        [Authorize(Roles = Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_TI)]
         public async Task<IActionResult> Index(FinancialAdminVM modelVM, int page, int qtPage)
         {
             var result = new PaginateResult<IEnumerable<FinancialAdmin>>();
@@ -51,6 +52,8 @@ namespace GrupoSelect.Web.Controllers
             }
         }
 
+        [TypeFilter(typeof(ExceptionLog))]
+        [Authorize(Roles = Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_TI)]
         public IActionResult Create()
         {
             return View();
@@ -58,7 +61,7 @@ namespace GrupoSelect.Web.Controllers
 
         [HttpPost]
         [TypeFilter(typeof(ExceptionLog))]
-        [Authorize(Roles = Constants.PROFILE_DIRETOR)]
+        [Authorize(Roles = Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_TI)]
         public async Task<IActionResult> Create(FinancialAdminVM modelVM)
         {
             try
@@ -76,7 +79,7 @@ namespace GrupoSelect.Web.Controllers
         }
 
         [TypeFilter(typeof(ExceptionLog))]
-        [Authorize(Roles = Constants.PROFILE_DIRETOR)]
+        [Authorize(Roles = Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_TI)]
         public async Task<IActionResult> Edit(int id)
         {
             try
@@ -102,7 +105,7 @@ namespace GrupoSelect.Web.Controllers
 
         [HttpPost]
         [TypeFilter(typeof(ExceptionLog))]
-        [ValidateAntiForgeryToken]
+        [Authorize(Roles = Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_TI)]
         public async Task<IActionResult> Edit(int id, FinancialAdminVM modelVM)
         {
             try
@@ -120,7 +123,7 @@ namespace GrupoSelect.Web.Controllers
         }
 
         [TypeFilter(typeof(ExceptionLog))]
-        [Authorize(Roles = Constants.PROFILE_DIRETOR)]
+        [Authorize(Roles = Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_TI)]
         public async Task<IActionResult> Delete(int id)
         {
             try

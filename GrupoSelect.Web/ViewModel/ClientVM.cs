@@ -6,6 +6,8 @@ namespace GrupoSelect.Web.ViewModel
     public class ClientVM
     {
         public int Id { get; set; }
+
+        [Display(Name = "Representante")]
         public int UserId { get; set; }
 
         [Display(Name = "Nome")]

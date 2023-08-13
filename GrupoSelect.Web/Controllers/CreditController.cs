@@ -36,7 +36,7 @@ namespace GrupoSelect.Web.Controllers
         }
 
         [TypeFilter(typeof(ExceptionLog))]
-        [Authorize(Roles = Constants.PROFILE_DIRETOR)]
+        [Authorize(Roles = Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_TI)]
         public async Task<IActionResult> Index()
         {
             return View(new CreditVM());
@@ -44,7 +44,7 @@ namespace GrupoSelect.Web.Controllers
 
         [HttpPost]
         [TypeFilter(typeof(ExceptionLog))]
-        [Authorize(Roles = Constants.PROFILE_DIRETOR)]
+        [Authorize(Roles = Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_TI)]
         public async Task<IActionResult> Index(CreditVM creditVM, int page, int qtPage)
         {
             var result = new PaginateResult<IEnumerable<Credit>>();
@@ -64,7 +64,7 @@ namespace GrupoSelect.Web.Controllers
         }
 
         [TypeFilter(typeof(ExceptionLog))]
-        [Authorize(Roles = Constants.PROFILE_DIRETOR)]
+        [Authorize(Roles = Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_TI)]
         public IActionResult Create()
         {
             return View();
@@ -72,7 +72,7 @@ namespace GrupoSelect.Web.Controllers
 
         [HttpPost]
         [TypeFilter(typeof(ExceptionLog))]
-        [Authorize(Roles = Constants.PROFILE_DIRETOR)]
+        [Authorize(Roles = Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_TI)]
         public async Task<IActionResult> Create(CreditVM creditVM)
         {
             try
@@ -90,7 +90,7 @@ namespace GrupoSelect.Web.Controllers
         }
 
         [TypeFilter(typeof(ExceptionLog))]
-        [Authorize(Roles = Constants.PROFILE_DIRETOR)]
+        [Authorize(Roles = Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_TI)]
         public async Task<IActionResult> Edit(int id)
         {
             try
@@ -116,7 +116,7 @@ namespace GrupoSelect.Web.Controllers
 
         [HttpPost]
         [TypeFilter(typeof(ExceptionLog))]
-        [Authorize(Roles = Constants.PROFILE_DIRETOR)]
+        [Authorize(Roles = Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_TI)]
         public async Task<IActionResult> Edit(int id, CreditVM creditVM)
         {
             try
@@ -134,7 +134,7 @@ namespace GrupoSelect.Web.Controllers
         }
 
         [TypeFilter(typeof(ExceptionLog))]
-        [Authorize(Roles = Constants.PROFILE_DIRETOR)]
+        [Authorize(Roles = Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_TI)]
         public async Task<IActionResult> Delete(int id)
         {
             try
@@ -170,6 +170,7 @@ namespace GrupoSelect.Web.Controllers
                 return new List<SelectListItem>();
             }
         }
+
         [HttpPost]
         public async Task<IEnumerable<SelectListItem>> GetTableTypeList(TableType filter)
         {
@@ -196,6 +197,7 @@ namespace GrupoSelect.Web.Controllers
                 return new List<SelectListItem>();
             }
         }
+
         [HttpPost]
         public async Task<IEnumerable<SelectListItem>> GetFinancialAdminList(FinancialAdmin filter)
         {
