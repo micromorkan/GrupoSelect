@@ -6,8 +6,8 @@ namespace GrupoSelect.Domain.Interface
     {
         IBaseRepository<User> Users { get; }
         IBaseRepository<Profile> Profiles { get; }
-        IBaseRepository<SystemLog> SystemLogs { get; }
-        IBaseRepository<ErrorLog> ErrorLogs { get; }
+        IBaseRepository<LogSystem> SystemLogs { get; }
+        IBaseRepository<LogError> ErrorLogs { get; }
         IBaseRepository<FinancialAdmin> FinancialAdmins { get; }
         IBaseRepository<ProductType> ProductTypes { get; }
         IBaseRepository<TableType> TableTypes { get; }

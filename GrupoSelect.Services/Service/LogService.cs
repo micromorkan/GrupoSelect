@@ -25,7 +25,7 @@ namespace GrupoSelect.Services.Service
         {
             if (Convert.ToBoolean(_configuration.GetSection(Constants.SYSTEM_SETTINGS)[Constants.SYSTEM_SETTINGS_REGISTERERRORLOG]))
             {
-                ErrorLog log = new ErrorLog();
+                LogError log = new LogError();
 
                 log.Object = JsonSerializer.Serialize(ex.Data[Constants.SYSTEM_EXCEPTION_OBJ]);
                 log.Method = ex.TargetSite.DeclaringType?.FullName;

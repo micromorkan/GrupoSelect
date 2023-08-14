@@ -1,8 +1,8 @@
 ﻿namespace GrupoSelect.Domain.Entity
 {
-    public class SystemLog
+    public class LogSystem
     {
-        public SystemLog()
+        public LogSystem()
         {
             this.Date = DateTime.Now;
         }
@@ -15,9 +15,9 @@
 
         public string Username { get; set; }
 
-        public string OriginalValues { get; set; }
+        public string? OriginalValues { get; set; }
 
-        public string NewValues { get; set; }
+        public string? NewValues { get; set; }
 
         public DateTime Date { get; set; }
     }

@@ -48,7 +48,7 @@ namespace GrupoSelect.Web.Helpers
 
             if (Convert.ToBoolean(_configuration.GetSection(Constants.SYSTEM_SETTINGS)[Constants.SYSTEM_SETTINGS_REGISTERERRORLOG]))
             {
-                ErrorLog log = new ErrorLog();
+                LogError log = new LogError();
 
                 var stringBuilder = new StringBuilder();
                 stringBuilder.Append("{");

@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GrupoSelect.Data.Mapping
 {
-    public class SystemLogMap : IEntityTypeConfiguration<SystemLog>
+    public class LogSystemMap : IEntityTypeConfiguration<LogSystem>
     {
-        public void Configure(EntityTypeBuilder<SystemLog> builder)
+        public void Configure(EntityTypeBuilder<LogSystem> builder)
         {
-            builder.ToTable("SystemLog");
+            builder.ToTable("LogSystem");
             builder.HasKey(c => c.Id);
 
             builder.Property(c => c.Id).HasColumnName("Id").IsRequired().ValueGeneratedOnAdd();

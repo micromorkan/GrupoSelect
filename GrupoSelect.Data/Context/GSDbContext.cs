@@ -16,8 +16,8 @@ namespace GrupoSelect.Data.Context
         private readonly IConfiguration _configuration;
         private UserSession _userSession;
 
-        public DbSet<ErrorLog> ErrorLogs { get; set; }
-        public DbSet<SystemLog> SystemLogs { get; set; }
+        public DbSet<LogError> ErrorLogs { get; set; }
+        public DbSet<LogSystem> SystemLogs { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<FinancialAdmin> FinancialAdmins { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
@@ -45,8 +45,8 @@ namespace GrupoSelect.Data.Context
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new UserMap());
-            modelBuilder.ApplyConfiguration(new SystemLogMap());
-            modelBuilder.ApplyConfiguration(new ErrorLogMap());
+            modelBuilder.ApplyConfiguration(new LogSystemMap());
+            modelBuilder.ApplyConfiguration(new LogErrorMap());
             modelBuilder.ApplyConfiguration(new ProfileMap());
             modelBuilder.ApplyConfiguration(new FinancialAdminMap());
             modelBuilder.ApplyConfiguration(new ProductTypeMap());
@@ -63,7 +63,7 @@ namespace GrupoSelect.Data.Context
         {
             var connString = _configuration.GetConnectionString(Constants.SYSTEM_CONN_STRING);
 
-            optionsBuilder.UseLazyLoadingProxies().ConfigureWarnings(warnings => warnings.Ignore(CoreEventId.DetachedLazyLoadingWarning)).UseSqlServer(connString);
+            optionsBuilder.UseLazyLoadingProxies().ConfigureWarnings(warnings => warnings.Ignore(CoreEventId.DetachedLazyLoadingWarning)).UseMySql(connString, ServerVersion.AutoDetect(connString));
             //optionsBuilder.UseSqlServer(@"Server=DESKTOP-CMHO5R3\MSSQLSERVER2022;Database=GrupoSelect;User Id=sa;Password=diegoand;encrypt=yes;trustservercertificate=true;");
         }
 
@@ -72,11 +72,11 @@ namespace GrupoSelect.Data.Context
             if (Convert.ToBoolean(_configuration.GetSection(Constants.SYSTEM_SETTINGS)[Constants.SYSTEM_SETTINGS_REGISTERSYSTEMLOG]))
             {
                 var entries = DetectEntries();
-                List<SystemLog> logs = new List<SystemLog>(entries.Count());
+                List<LogSystem> logs = new List<LogSystem>(entries.Count());
 
                 foreach (var entry in entries)
                 {
-                    SystemLog newLog = GetLog(entry);
+                    LogSystem newLog = GetLog(entry);
 
                     if (newLog != null && !Constants.SYSTEM_IGNORE_AUDIT_TABLES.Contains(newLog.Object))
                     {
@@ -98,12 +98,12 @@ namespace GrupoSelect.Data.Context
             return ChangeTracker.Entries().Where(e => (e.State == EntityState.Modified ||
                                                         e.State == EntityState.Added ||
                                                         e.State == EntityState.Deleted) &&
-                                                        e.Entity.GetType() != typeof(SystemLog));
+                                                        e.Entity.GetType() != typeof(LogSystem));
         }
 
-        private SystemLog GetLog(EntityEntry entry)
+        private LogSystem GetLog(EntityEntry entry)
         {
-            SystemLog returnValue = null;
+            LogSystem returnValue = null;
 
             if (entry.State == EntityState.Added)
             {
@@ -121,9 +121,9 @@ namespace GrupoSelect.Data.Context
             return returnValue;
         }
 
-        private SystemLog GetInsertLog(EntityEntry entry)
+        private LogSystem GetInsertLog(EntityEntry entry)
         {
-            SystemLog log = new SystemLog();
+            LogSystem log = new LogSystem();
 
             log.Action = Constants.SYSTEM_LOG_INSERT;
             log.Object = entry.Entity.GetType().Name;
@@ -134,9 +134,9 @@ namespace GrupoSelect.Data.Context
             return log;
         }
 
-        private SystemLog GetDeleteLog(EntityEntry entry)
+        private LogSystem GetDeleteLog(EntityEntry entry)
         {
-            SystemLog log = new SystemLog();
+            LogSystem log = new LogSystem();
 
             log.Action = Constants.SYSTEM_LOG_DELETE;
             log.Object = entry.Entity.GetType().Name;
@@ -147,7 +147,7 @@ namespace GrupoSelect.Data.Context
             return log;
         }
 
-        private SystemLog GetUpdateLog(EntityEntry entry)
+        private LogSystem GetUpdateLog(EntityEntry entry)
         {
             object originalValue = null;
 
@@ -160,7 +160,7 @@ namespace GrupoSelect.Data.Context
                 originalValue = entry.GetDatabaseValues().ToObject();
             }
 
-            SystemLog log = new SystemLog();
+            LogSystem log = new LogSystem();
 
             log.Action = Constants.SYSTEM_LOG_UPDATE;
             log.Object = entry.Entity.GetType().BaseType.Name;
