@@ -154,6 +154,12 @@ namespace GrupoSelect.Web.Controllers
                         return RedirectToAction(nameof(Index));
                     }
 
+                    if (result.Object.UserId != Convert.ToInt32(User.GetId()))
+                    {
+                        TempData[Constants.SYSTEM_ERROR_KEY] = "Esse registro não pode ser editado pois é de outro representante";
+                        return RedirectToAction(nameof(Index));
+                    }
+
                     var proposalVM = _mapper.Map<ProposalVM>(result.Object);
                     var resultFinancialAdmin = await _financialAdminService.GetAll(new FinancialAdmin { Name = proposalVM.FinancialAdminName });
                     proposalVM.FinancialAdminId = resultFinancialAdmin.Object.First().Id;

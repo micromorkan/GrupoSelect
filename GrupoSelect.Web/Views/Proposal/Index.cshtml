@@ -151,6 +151,7 @@
                     if (data.success) {
                         if (!$.fn.DataTable.isDataTable($('table'))) {
                             $('table').DataTable({
+                                order: [],
                                 paging: false,
                                 searching: true,
                                 lengthChange: false,

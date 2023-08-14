@@ -100,6 +100,12 @@ namespace GrupoSelect.Web.Controllers
                         return RedirectToAction(nameof(Index));
                     }
 
+                    if (result.Object.Proposal.UserId != Convert.ToInt32(User.GetId()))
+                    {
+                        TempData[Constants.SYSTEM_ERROR_KEY] = "Esse registro não pode ser editado pois é de outro representante";
+                        return RedirectToAction(nameof(Index));
+                    }
+
                     var proposalVM = _mapper.Map<ContractVM>(result.Object);
 
                     return View(proposalVM);
