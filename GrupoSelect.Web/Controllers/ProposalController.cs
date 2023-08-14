@@ -190,7 +190,6 @@ namespace GrupoSelect.Web.Controllers
 
         [HttpPost]
         [TypeFilter(typeof(ExceptionLog))]
-        [ValidateAntiForgeryToken]
         [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_GERENTE)]
         public async Task<IActionResult> Edit(int id, ProposalVM proposalVM)
         {
