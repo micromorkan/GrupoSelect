@@ -71,6 +71,7 @@
     <script>
         $(document).ready(function () {
             FillSelect("@Url.Action("GetUserList", "Client")", { Profile: '@Constants.PROFILE_REPRESENTANTE' }, "#ddlUser");
+            $('.component-select').select2();
             MaskCpf();
             GetData();
         });

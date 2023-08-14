@@ -40,6 +40,8 @@ namespace GrupoSelect.Services.FluentValidation
             RuleSet(Constants.FLUENT_DELETE, () =>
             {
                 RuleFor(x => x.Id).GreaterThan(0).WithMessage("O id do usuário é inválido.");
+
+                RuleFor(x => x).Custom(DeleteBlockRole);
             });
 
             RuleSet(Constants.FLUENT_AUTHENTICATE, () =>
@@ -51,8 +53,8 @@ namespace GrupoSelect.Services.FluentValidation
 
         private void InsertUniqueCnpjLoginNameEmail(Domain.Entity.User model, ValidationContext<Domain.Entity.User> context)
         {
-            var result = _unitOfWork.Users.GetAll(filter => filter.Cnpj == model.Cnpj || 
-                                                            filter.Name == model.Name || 
+            var result = _unitOfWork.Users.GetAll(filter => filter.Cnpj == model.Cnpj ||
+                                                            filter.Name == model.Name ||
                                                             filter.Login == model.Login ||
                                                             filter.Email == model.Email);
 
@@ -64,12 +66,12 @@ namespace GrupoSelect.Services.FluentValidation
                 {
                     context.AddFailure("Já existe um Cnpj cadastrado");
                 }
-                
+
                 if (existUser.Name == model.Name)
                 {
                     context.AddFailure("Já existe um Nome cadastrado");
                 }
-                
+
                 if (existUser.Login == model.Login)
                 {
                     context.AddFailure("Já existe um Login cadastrado");
@@ -112,6 +114,25 @@ namespace GrupoSelect.Services.FluentValidation
                 if (existUser.Email == model.Email)
                 {
                     context.AddFailure("Já existe um Email cadastrado");
+                }
+            }
+        }
+        private void DeleteBlockRole(Domain.Entity.User model, ValidationContext<Domain.Entity.User> context)
+        {
+            var proposals = _unitOfWork.Proposals.GetAll(filter => filter.UserId == model.Id ||
+                                                                filter.UserChecked == model.Id);
+
+            if (proposals.Any())
+            {
+                context.AddFailure("Este Usuário está em uso no banco de dados.");
+            }
+            else
+            {
+                var contracts = _unitOfWork.Contracts.GetAll(filter => filter.UserIdAproved == model.Id);
+
+                if (contracts.Any())
+                {
+                    context.AddFailure("Este Usuário está em uso no banco de dados.");
                 }
             }
         }
