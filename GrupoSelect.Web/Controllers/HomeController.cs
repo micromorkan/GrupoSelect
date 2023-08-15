@@ -2,14 +2,18 @@
 using GrupoSelect.Domain.Models;
 using GrupoSelect.Domain.Util;
 using GrupoSelect.Services.Interface;
+using GrupoSelect.Services.Service;
 using GrupoSelect.Web.Helpers;
 using GrupoSelect.Web.Util;
 using GrupoSelect.Web.ViewModel;
 using GrupoSelect.Web.Views.Shared.Components.Models;
+using GrupoSelect.Web.Views.Shared.Reports.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RazorEngine;
+using RazorEngine.Templating;
 using System.Diagnostics;
 using System.Globalization;
 
@@ -31,7 +35,7 @@ namespace GrupoSelect.Web.Controllers
             _userService = userService;
         }
 
-        #region Index
+        #region INDEX
         public async Task<IActionResult> Index()
         {
             ComponentsVM dashboard = new ComponentsVM();
@@ -275,7 +279,7 @@ namespace GrupoSelect.Web.Controllers
 
                 dashboard.LstChartMoney.Add(await MontarChartContratoFinanceiroSemanal());
                 dashboard.LstChartMoney.Add(await MontarChartContratoFinanceiroMensal());
-                dashboard.LstChartMoney.Add(await MontarChartContratoFinanceiroTriMestral());
+                dashboard.LstChartMoney.Add(await MontarChartContratoFinanceiroSemestral());
             }
 
             return View(dashboard);
@@ -315,8 +319,9 @@ namespace GrupoSelect.Web.Controllers
 
             for (int i = 0; i < users.Length; i++)
             {
-                string rgb = (220 - (i * 20)).ToString();
-                colors[i] = "rgba(" + rgb + ", " + rgb + ", " + rgb + ", 1)";
+                string rgb1 = (185 - (i * 15)).ToString();
+                string rgb2 = (154 - (i * 15)).ToString();
+                colors[i] = "rgba(38, " + rgb1 + ", " + rgb2 + ", 0.31)";
                 values[i] = listContracts.Where(x => x.Proposal.User.Representation == users[i]).Sum(x => Convert.ToDecimal(x.Proposal.CreditValue));
             }
 
@@ -371,8 +376,9 @@ namespace GrupoSelect.Web.Controllers
 
             for (int i = 0; i < users.Length; i++)
             {
-                string rgb = (220 - (i * 20)).ToString();
-                colors[i] = "rgba(" + rgb + ", " + rgb + ", " + rgb + ", 1)";
+                string rgb1 = (185 - (i * 15)).ToString();
+                string rgb2 = (154 - (i * 15)).ToString();
+                colors[i] = "rgba(38, " + rgb1 + ", " + rgb2 + ", 0.31)";
                 values[i] = listContracts.Where(x => x.Proposal.User.Representation == users[i]).Sum(x => Convert.ToDecimal(x.Proposal.CreditValue));
             }
 
@@ -394,7 +400,7 @@ namespace GrupoSelect.Web.Controllers
             return contratosFinanceiroSemanal;
         }
 
-        private async Task<ChartMoney> MontarChartContratoFinanceiroTriMestral()
+        private async Task<ChartMoney> MontarChartContratoFinanceiroSemestral()
         {
             string userProfile = User.GetProfile();
             int userId = Convert.ToInt32(User.GetId());
@@ -403,17 +409,15 @@ namespace GrupoSelect.Web.Controllers
 
             var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
 
-            string[] months = new string[3];
-            string[] colors = new string[3];
-            decimal[] values = new decimal[3];
+            string[] months = new string[6];
+            decimal[] values = new decimal[6];
 
-            for (int i = -2; i < 1; i++)
+            for (int i = -5; i < 1; i++)
             {
                 var firstMonth = firstDayOfMonth.AddMonths(i);
                 var lastDayOfMonth = firstMonth.AddMonths(1).AddDays(-1);
 
-                months[i + 2] = firstMonth.ToString("MMMM", CultureInfo.CreateSpecificCulture("pt-BR")).ToUpper();
-                colors[i + 2] = "rgba(221, 221, 221, 1)";
+                months[i + 5] = firstMonth.ToString("MMMM", CultureInfo.CreateSpecificCulture("pt-BR")).ToUpper();
 
                 PaginateResult<IEnumerable<Contract>> result = await _contractService.GetAllPaginate(new Contract { Proposal = new Proposal(), Status = Constants.CONTRACT_STATUS_CA }, 1, 1000, firstMonth, lastDayOfMonth);
 
@@ -421,31 +425,82 @@ namespace GrupoSelect.Web.Controllers
                 {
                     List<Contract> listContracts = result.Object.ToList();
 
-                    values[i + 2] = listContracts.Sum(x => Convert.ToDecimal(x.Proposal.CreditValue));
+                    values[i + 5] = listContracts.Sum(x => Convert.ToDecimal(x.Proposal.CreditValue));
                 }
                 else
                 {
-                    values[i + 2] = 0;
+                    values[i + 5] = 0;
                 }
             }
 
             ChartMoney contratosFinanceiroSemanal = new ChartMoney
             {
                 Id = 3,
-                Titulo = "Renda Bruta dos últimos 3 meses",
-                Cores = colors,
+                Titulo = "Renda Bruta dos últimos 6 meses",
                 Textos = months,
                 Valores = values,
                 PermiteMinimizar = true,
-                TipoChart = UtilWeb.GetEnumDescription(UtilWebEnums.TipoChart.BarraVertical),
-                Controller = "Home",
-                Action = "AtualizarChartContratoFinanceiroTriMestral",
-                BackgroundColor = "#FFF",
-                IntervaloAtualizacao = 60000
+                TipoChart = UtilWeb.GetEnumDescription(UtilWebEnums.TipoChart.Linha),
+                Controller = "",
+                Action = "",
+                IntervaloAtualizacao = 0
             };
 
             return contratosFinanceiroSemanal;
         }
+
+        //private async Task<ChartMoney> MontarChartContratoFinanceiroTriMestral()
+        //{
+        //    string userProfile = User.GetProfile();
+        //    int userId = Convert.ToInt32(User.GetId());
+
+        //    DateTime date = DateTime.Now;
+
+        //    var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
+
+        //    string[] months = new string[3];
+        //    string[] colors = new string[3];
+        //    decimal[] values = new decimal[3];
+
+        //    for (int i = -2; i < 1; i++)
+        //    {
+        //        var firstMonth = firstDayOfMonth.AddMonths(i);
+        //        var lastDayOfMonth = firstMonth.AddMonths(1).AddDays(-1);
+
+        //        months[i + 2] = firstMonth.ToString("MMMM", CultureInfo.CreateSpecificCulture("pt-BR")).ToUpper();
+        //        colors[i + 2] = "rgba(221, 221, 221, 1)";
+
+        //        PaginateResult<IEnumerable<Contract>> result = await _contractService.GetAllPaginate(new Contract { Proposal = new Proposal(), Status = Constants.CONTRACT_STATUS_CA }, 1, 1000, firstMonth, lastDayOfMonth);
+
+        //        if (result.Object.Count() > 0)
+        //        {
+        //            List<Contract> listContracts = result.Object.ToList();
+
+        //            values[i + 2] = listContracts.Sum(x => Convert.ToDecimal(x.Proposal.CreditValue));
+        //        }
+        //        else
+        //        {
+        //            values[i + 2] = 0;
+        //        }
+        //    }
+
+        //    ChartMoney contratosFinanceiroSemanal = new ChartMoney
+        //    {
+        //        Id = 3,
+        //        Titulo = "Renda Bruta dos últimos 3 meses",
+        //        Cores = colors,
+        //        Textos = months,
+        //        Valores = values,
+        //        PermiteMinimizar = true,
+        //        TipoChart = UtilWeb.GetEnumDescription(UtilWebEnums.TipoChart.BarraVertical),
+        //        Controller = "Home",
+        //        Action = "AtualizarChartContratoFinanceiroTriMestral",
+        //        BackgroundColor = "#FFF",
+        //        IntervaloAtualizacao = 60000
+        //    };
+
+        //    return contratosFinanceiroSemanal;
+        //}
 
         private async Task<Tile> MontarTileContratoFinanceiroMensal()
         {
@@ -465,7 +520,7 @@ namespace GrupoSelect.Web.Controllers
             tile.Icone = "fa-money";
             tile.Descricao = string.Empty;
             tile.Titulo = "Faturamento Mensal";
-            tile.Valor = result.Object.Count() > 0 ? string.Format("{0:C}", result.Object.Sum(x => Convert.ToDecimal(x.Proposal.CreditTotalValue))) : "R$ 0,00"; 
+            tile.Valor = result.Object.Count() > 0 ? string.Format("{0:C}", result.Object.Sum(x => Convert.ToDecimal(x.Proposal.CreditTotalValue))) : "R$ 0,00";
             tile.Controller = "Home";
             tile.Action = "AtualizarTileContratoFinanceiroMensal";
             tile.IntervaloAtualizacao = 60000;
@@ -487,9 +542,9 @@ namespace GrupoSelect.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> AtualizarChartContratoFinanceiroTriMestral()
+        public async Task<JsonResult> AtualizarChartContratoFinanceiroSemestral()
         {
-            return Json(await MontarChartContratoFinanceiroTriMestral());
+            return Json(await MontarChartContratoFinanceiroSemestral());
         }
 
         [HttpPost]
