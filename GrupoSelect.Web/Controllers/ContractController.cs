@@ -15,7 +15,7 @@ using RazorEngine.Templating;
 
 namespace GrupoSelect.Web.Controllers
 {
-    [Authorize]
+    [ServiceFilter(typeof(SecurityAttribute))]
     public class ContractController : Controller
     {
         private IContractService _contractService;

@@ -4,7 +4,6 @@ using GrupoSelect.Domain.Entity;
 using GrupoSelect.Domain.Models;
 using GrupoSelect.Domain.Util;
 using GrupoSelect.Services.Interface;
-using GrupoSelect.Services.Service;
 using GrupoSelect.Web.Helpers;
 using GrupoSelect.Web.ViewModel;
 using Microsoft.AspNetCore.Authorization;
@@ -13,7 +12,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace GrupoSelect.Web.Controllers
 {
-    [Authorize]
+    [ServiceFilter(typeof(SecurityAttribute))]
     public class ClientController : Controller
     {
         private IClientService _clientService;

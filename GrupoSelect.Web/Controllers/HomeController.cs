@@ -2,24 +2,20 @@
 using GrupoSelect.Domain.Models;
 using GrupoSelect.Domain.Util;
 using GrupoSelect.Services.Interface;
-using GrupoSelect.Services.Service;
 using GrupoSelect.Web.Helpers;
 using GrupoSelect.Web.Util;
 using GrupoSelect.Web.ViewModel;
 using GrupoSelect.Web.Views.Shared.Components.Models;
-using GrupoSelect.Web.Views.Shared.Reports.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RazorEngine;
-using RazorEngine.Templating;
 using System.Diagnostics;
 using System.Globalization;
 
 namespace GrupoSelect.Web.Controllers
 {
-    [Authorize]
+    [ServiceFilter(typeof(SecurityAttribute))]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

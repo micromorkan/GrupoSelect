@@ -11,8 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace GrupoSelect.Web.Controllers
-{    
-    [Authorize]
+{
+    [ServiceFilter(typeof(SecurityAttribute))]
     public class UsersController : Controller
     {
         private IUserService _userService;
