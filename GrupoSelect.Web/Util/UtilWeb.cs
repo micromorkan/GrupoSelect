@@ -181,6 +181,8 @@ namespace GrupoSelect.Web.Util
             BarraVertical = 2,
             [Description("horizontalBar")]
             BarraHorizontal = 3,
+            [Description("line")]
+            Linha = 4,
         }
 
         public enum CorEvento
