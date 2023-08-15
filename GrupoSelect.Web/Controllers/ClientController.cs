@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace GrupoSelect.Web.Controllers
 {
-    [Authorize]
+    [ServiceFilter(typeof(SecurityAttribute))]
     public class ClientController : Controller
     {
         private IClientService _clientService;

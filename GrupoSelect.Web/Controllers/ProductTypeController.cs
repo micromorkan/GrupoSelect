@@ -8,11 +8,10 @@ using GrupoSelect.Web.Helpers;
 using GrupoSelect.Web.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace GrupoSelect.Web.Controllers
 {
-    [Authorize]
+    [ServiceFilter(typeof(SecurityAttribute))]
     public class ProductTypeController : Controller
     {
         private IProductTypeService _productTypeService;

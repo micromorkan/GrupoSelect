@@ -4,7 +4,6 @@ using GrupoSelect.Domain.Entity;
 using GrupoSelect.Domain.Models;
 using GrupoSelect.Domain.Util;
 using GrupoSelect.Services.Interface;
-using GrupoSelect.Services.Service;
 using GrupoSelect.Web.Helpers;
 using GrupoSelect.Web.ViewModel;
 using GrupoSelect.Web.Views.Shared.Reports.Models;
@@ -13,12 +12,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using RazorEngine;
 using RazorEngine.Templating;
-using System.Globalization;
-using System.Security.Claims;
 
 namespace GrupoSelect.Web.Controllers
 {
-    [Authorize]
+    [ServiceFilter(typeof(SecurityAttribute))]
     public class BorderoController : Controller
     {
         private IUserService _userService;

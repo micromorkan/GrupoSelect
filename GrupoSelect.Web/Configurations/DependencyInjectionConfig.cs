@@ -5,6 +5,7 @@ using GrupoSelect.Domain.Models;
 using GrupoSelect.Services.FluentValidation;
 using GrupoSelect.Services.Interface;
 using GrupoSelect.Services.Service;
+using GrupoSelect.Web.Helpers;
 
 namespace GrupoSelect.Web.Configurations
 {
@@ -27,7 +28,8 @@ namespace GrupoSelect.Web.Configurations
 
             services.AddScoped<ISessionProvider, SessionProvider>();
             services.AddValidatorsFromAssemblyContaining<UserValidator>();
-            
+            services.AddTransient<SecurityAttribute>();
+
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<ILogService, LogService>();

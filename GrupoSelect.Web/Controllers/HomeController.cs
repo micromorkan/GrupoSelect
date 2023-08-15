@@ -19,7 +19,7 @@ using System.Globalization;
 
 namespace GrupoSelect.Web.Controllers
 {
-    [Authorize]
+    [ServiceFilter(typeof(SecurityAttribute))]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
