@@ -8,7 +8,7 @@ using GrupoSelect.Domain.Models;
 
 namespace GrupoSelect.Services.Service
 {
-    public class LogService : ILogService
+    public class LogService : IDisposable, ILogService
     {
         private readonly IConfiguration _configuration;
         private readonly IUnitOfWork _unitOfWork;
@@ -34,7 +34,13 @@ namespace GrupoSelect.Services.Service
 
                 _unitOfWork.ErrorLogs.Insert(log);
                 _unitOfWork.ErrorLogs.Save();
+                _unitOfWork.Dispose();
             }
+        }
+
+        public void Dispose()
+        {
+            _unitOfWork.Dispose();
         }
     }
 }

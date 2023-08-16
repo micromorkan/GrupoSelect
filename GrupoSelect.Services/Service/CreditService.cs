@@ -7,7 +7,7 @@ using GrupoSelect.Services.Interface;
 
 namespace GrupoSelect.Services.Service
 {
-    public class CreditService : ICreditService
+    public class CreditService : IDisposable, ICreditService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IValidator<Credit> _validator;
@@ -76,6 +76,7 @@ namespace GrupoSelect.Services.Service
 
             _unitOfWork.Credits.Insert(model);
             _unitOfWork.Credits.Save();
+            _unitOfWork.Dispose();
 
             return new Result<Credit>
             {
@@ -103,6 +104,7 @@ namespace GrupoSelect.Services.Service
 
             _unitOfWork.Credits.Update(model);
             _unitOfWork.Credits.Save();
+            _unitOfWork.Dispose();
 
             return new Result<Credit>
             {
@@ -129,6 +131,7 @@ namespace GrupoSelect.Services.Service
 
             _unitOfWork.Credits.Delete(model);
             _unitOfWork.Credits.Save();
+            _unitOfWork.Dispose();
 
             return new Result<Credit>
             {
@@ -136,6 +139,11 @@ namespace GrupoSelect.Services.Service
                 Object = model,
                 Message = Constants.SYSTEM_SUCCESS_MSG
             };
-        }        
+        }
+
+        public void Dispose()
+        {
+            _unitOfWork.Dispose();
+        }
     }
 }

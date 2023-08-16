@@ -72,6 +72,7 @@ namespace GrupoSelect.Web.Helpers
 
                 _unitOfWork.ErrorLogs.Insert(log);
                 _unitOfWork.ErrorLogs.Save();
+                _unitOfWork.Dispose();
             }
 
             var tempData = _tempDataDictionaryFactory.GetTempData(context.HttpContext);

@@ -6,7 +6,7 @@ using GrupoSelect.Domain.Models;
 
 namespace GrupoSelect.Services.Service
 {
-    public class ProfileService : IProfileService
+    public class ProfileService : IDisposable, IProfileService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogService _logService;
@@ -71,6 +71,11 @@ namespace GrupoSelect.Services.Service
                     Message = ex.Message
                 };
             }
+        }
+
+        public void Dispose()
+        {
+            _unitOfWork.Dispose();
         }
     }
 }

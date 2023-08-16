@@ -7,7 +7,7 @@ using GrupoSelect.Services.Interface;
 
 namespace GrupoSelect.Services.Service
 {
-    public class AccessService : IAccessService
+    public class AccessService : IDisposable, IAccessService
     {
         private readonly IValidator<User> _validator;
         private readonly ILogService _logExceptions;
@@ -37,7 +37,7 @@ namespace GrupoSelect.Services.Service
                     };
                 }
 
-                var result = await _unitOfWork.Users.GetAll(f => f.Login == user.Login && f.Password == user.Password);
+                var result = _unitOfWork.Users.GetAll(f => f.Login == user.Login && f.Password == user.Password);
 
                 if (result.Count() > 0)
                 {
@@ -79,6 +79,11 @@ namespace GrupoSelect.Services.Service
                     Message = Constants.SYSTEM_ERROR_MSG
                 };
             }
+        }
+
+        public void Dispose()
+        {
+            _unitOfWork.Dispose();
         }
     }
 }

@@ -7,7 +7,7 @@ using GrupoSelect.Services.Interface;
 
 namespace GrupoSelect.Services.Service
 {
-    public class TableTypeService : ITableTypeService
+    public class TableTypeService : IDisposable, ITableTypeService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IValidator<TableType> _validator;
@@ -72,6 +72,7 @@ namespace GrupoSelect.Services.Service
 
             _unitOfWork.TableTypes.Insert(model);
             _unitOfWork.TableTypes.Save();
+            _unitOfWork.Dispose();
 
             return new Result<TableType>
             {
@@ -99,6 +100,7 @@ namespace GrupoSelect.Services.Service
 
             _unitOfWork.TableTypes.Update(model);
             _unitOfWork.TableTypes.Save();
+            _unitOfWork.Dispose();
 
             return new Result<TableType>
             {
@@ -125,6 +127,7 @@ namespace GrupoSelect.Services.Service
 
             _unitOfWork.TableTypes.Delete(model);
             _unitOfWork.TableTypes.Save();
+            _unitOfWork.Dispose();
 
             return new Result<TableType>
             {
@@ -132,6 +135,11 @@ namespace GrupoSelect.Services.Service
                 Object = model,
                 Message = Constants.SYSTEM_SUCCESS_MSG
             };
+        }
+
+        public void Dispose()
+        {
+            _unitOfWork.Dispose();
         }
     }
 }

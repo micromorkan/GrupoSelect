@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace GrupoSelect.Services.Service
 {
-    public class ContractService : IContractService
+    public class ContractService : IDisposable, IContractService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IValidator<Contract> _validator;
@@ -209,6 +209,11 @@ namespace GrupoSelect.Services.Service
                 Object = contract,
                 Message = Constants.SYSTEM_SUCCESS_MSG
             };
+        }
+
+        public void Dispose()
+        {
+            _unitOfWork.Dispose();
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace GrupoSelect.Services.Service
 {
-    public class BorderoService : IBorderoService
+    public class BorderoService : IDisposable, IBorderoService
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -89,6 +89,11 @@ namespace GrupoSelect.Services.Service
                                                            f.DateAproved >= startDate &&
                                                            f.DateAproved <= endDate.AddDays(1).AddSeconds(-1), o => o.OrderBy(x => x.ContractNum), i => i.Proposal.User, i => i.Proposal.Client),
             };
+        }
+
+        public void Dispose()
+        {
+            _unitOfWork.Dispose();
         }
     }
 }

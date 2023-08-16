@@ -7,7 +7,7 @@ using GrupoSelect.Services.Interface;
 
 namespace GrupoSelect.Services.Service
 {
-    public class ProposalService : IProposalService
+    public class ProposalService : IDisposable, IProposalService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IValidator<Proposal> _validator;
@@ -84,6 +84,7 @@ namespace GrupoSelect.Services.Service
 
             _unitOfWork.Proposals.Insert(model);
             _unitOfWork.Proposals.Save();
+            _unitOfWork.Dispose();
 
             return new Result<Proposal>
             {
@@ -109,6 +110,7 @@ namespace GrupoSelect.Services.Service
 
             _unitOfWork.Proposals.Update(model);
             _unitOfWork.Proposals.Save();
+            _unitOfWork.Dispose();
 
             return new Result<Proposal>
             {
@@ -134,8 +136,8 @@ namespace GrupoSelect.Services.Service
             }
 
             _unitOfWork.Proposals.Delete(model);
-
             _unitOfWork.Proposals.Save();
+            _unitOfWork.Dispose();
 
             return new Result<Proposal>
             {
@@ -196,6 +198,11 @@ namespace GrupoSelect.Services.Service
                 Object = null,
                 Message = Constants.SYSTEM_SUCCESS_MSG
             };
+        }
+
+        public void Dispose()
+        {
+            _unitOfWork.Dispose();
         }
     }
 }

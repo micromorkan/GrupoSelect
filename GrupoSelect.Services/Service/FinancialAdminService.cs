@@ -7,7 +7,7 @@ using GrupoSelect.Services.Interface;
 
 namespace GrupoSelect.Services.Service
 {
-    public class FinancialAdminService : IFinancialAdminService
+    public class FinancialAdminService : IDisposable, IFinancialAdminService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IValidator<FinancialAdmin> _validator;
@@ -72,6 +72,7 @@ namespace GrupoSelect.Services.Service
 
             _unitOfWork.FinancialAdmins.Insert(model);
             _unitOfWork.FinancialAdmins.Save();
+            _unitOfWork.Dispose();
 
             return new Result<FinancialAdmin>
             {
@@ -99,6 +100,7 @@ namespace GrupoSelect.Services.Service
 
             _unitOfWork.FinancialAdmins.Update(model);
             _unitOfWork.FinancialAdmins.Save();
+            _unitOfWork.Dispose();
 
             return new Result<FinancialAdmin>
             {
@@ -125,6 +127,7 @@ namespace GrupoSelect.Services.Service
 
             _unitOfWork.FinancialAdmins.Delete(model);
             _unitOfWork.FinancialAdmins.Save();
+            _unitOfWork.Dispose();
 
             return new Result<FinancialAdmin>
             {
@@ -132,6 +135,11 @@ namespace GrupoSelect.Services.Service
                 Object = model,
                 Message = Constants.SYSTEM_SUCCESS_MSG
             };
+        }
+
+        public void Dispose()
+        {
+            _unitOfWork.Dispose();
         }
     }
 }

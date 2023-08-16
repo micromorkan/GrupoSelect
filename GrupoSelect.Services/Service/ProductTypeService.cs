@@ -7,7 +7,7 @@ using GrupoSelect.Services.Interface;
 
 namespace GrupoSelect.Services.Service
 {
-    public class ProductTypeService : IProductTypeService
+    public class ProductTypeService : IDisposable, IProductTypeService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IValidator<ProductType> _validator;
@@ -72,6 +72,7 @@ namespace GrupoSelect.Services.Service
 
             _unitOfWork.ProductTypes.Insert(model);
             _unitOfWork.ProductTypes.Save();
+            _unitOfWork.Dispose();
 
             return new Result<ProductType>
             {
@@ -99,6 +100,7 @@ namespace GrupoSelect.Services.Service
 
             _unitOfWork.ProductTypes.Update(model);
             _unitOfWork.ProductTypes.Save();
+            _unitOfWork.Dispose();
 
             return new Result<ProductType>
             {
@@ -125,6 +127,7 @@ namespace GrupoSelect.Services.Service
 
             _unitOfWork.ProductTypes.Delete(model);
             _unitOfWork.ProductTypes.Save();
+            _unitOfWork.Dispose();
 
             return new Result<ProductType>
             {
@@ -132,6 +135,11 @@ namespace GrupoSelect.Services.Service
                 Object = model,
                 Message = Constants.SYSTEM_SUCCESS_MSG
             };
+        }
+
+        public void Dispose()
+        {
+            _unitOfWork.Dispose();
         }
     }
 }

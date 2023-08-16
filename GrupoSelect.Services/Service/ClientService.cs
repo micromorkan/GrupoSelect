@@ -7,7 +7,7 @@ using GrupoSelect.Services.Interface;
 
 namespace GrupoSelect.Services.Service
 {
-    public class ClientService : IClientService
+    public class ClientService : IDisposable, IClientService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IValidator<Client> _validator;
@@ -86,6 +86,7 @@ namespace GrupoSelect.Services.Service
 
             _unitOfWork.Clients.Insert(model);
             _unitOfWork.Clients.Save();
+            _unitOfWork.Dispose();
 
             return new Result<Client>
             {
@@ -124,6 +125,7 @@ namespace GrupoSelect.Services.Service
 
             _unitOfWork.Clients.Update(model);
             _unitOfWork.Clients.Save();
+            _unitOfWork.Dispose();
 
             return new Result<Client>
             {
@@ -150,6 +152,7 @@ namespace GrupoSelect.Services.Service
 
             _unitOfWork.Clients.Delete(model);
             _unitOfWork.Clients.Save();
+            _unitOfWork.Dispose();
 
             return new Result<Client>
             {
@@ -157,6 +160,11 @@ namespace GrupoSelect.Services.Service
                 Object = model,
                 Message = Constants.SYSTEM_SUCCESS_MSG
             };
+        }
+
+        public void Dispose()
+        {
+            _unitOfWork.Dispose();
         }
     }
 }
