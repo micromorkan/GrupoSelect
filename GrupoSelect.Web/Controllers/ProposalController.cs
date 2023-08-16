@@ -407,7 +407,7 @@ namespace GrupoSelect.Web.Controllers
 
                 RegistrationForm registrationForm = new RegistrationForm(proposal.Client, proposal, proposal.User);
 
-                string cshtmlContent = System.IO.File.ReadAllText("Views\\Shared\\Reports\\RegistrationForm.cshtml");
+                string cshtmlContent = System.IO.File.ReadAllText("..\\..\\www\\gruposelect\\wwwroot\\reports\\RegistrationForm.cshtml");
                 string renderedContent = Engine.Razor.RunCompile(cshtmlContent, Guid.NewGuid().ToString(), typeof(RegistrationForm), registrationForm);
 
                 return Content(renderedContent, "text/html");
