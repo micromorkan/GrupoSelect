@@ -1,12 +1,12 @@
 ﻿using GrupoSelect.Data.Context;
 using GrupoSelect.Domain.Entity;
 using GrupoSelect.Domain.Interface;
-using Microsoft.EntityFrameworkCore;
 
 namespace GrupoSelect.Data.Repository
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IDisposable, IUnitOfWork
     {
+        private bool _disposed;
         private readonly GSDbContext _context;
         private IBaseRepository<LogSystem> _systemLogs;
         private IBaseRepository<LogError> _errorLogs;
@@ -46,9 +46,22 @@ namespace GrupoSelect.Data.Repository
             _context.SaveChanges();
         }
 
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _context.Dispose();
+                }
+            }
+            _disposed = true;
+        }
+
         public void Dispose()
         {
-            _context.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

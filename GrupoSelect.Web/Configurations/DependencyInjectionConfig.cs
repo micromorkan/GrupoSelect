@@ -30,7 +30,6 @@ namespace GrupoSelect.Web.Configurations
             services.AddValidatorsFromAssemblyContaining<UserValidator>();
             services.AddTransient<SecurityAttribute>();
 
-            services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<ILogService, LogService>();
 

@@ -3,22 +3,22 @@ using GrupoSelect.Domain.Entity;
 using GrupoSelect.Domain.Interface;
 using GrupoSelect.Domain.Models;
 using GrupoSelect.Domain.Util;
-using GrupoSelect.Services.FluentValidation;
 using GrupoSelect.Services.Interface;
 
 namespace GrupoSelect.Services.Service
 {
     public class AccessService : IAccessService
     {
-        private readonly IUserRepository _userRepository;
         private readonly IValidator<User> _validator;
         private readonly ILogService _logExceptions;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public AccessService(IUserRepository userRepository, IValidator<User> validator, ILogService logExceptions)
+        public AccessService(IValidator<User> validator, ILogService logExceptions,
+            IUnitOfWork unitOfWork)
         {
-            _userRepository = userRepository;
             _validator = validator;
             _logExceptions = logExceptions;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Result<User>> Authenticate(User user)
@@ -37,16 +37,18 @@ namespace GrupoSelect.Services.Service
                     };
                 }
 
-                User login = await _userRepository.Authenticate(user);
+                var result = await _unitOfWork.Users.GetAll(f => f.Login == user.Login && f.Password == user.Password);
 
-                if (login != null)
+                if (result.Count() > 0)
                 {
+                    User login = result.FirstOrDefault();
+
                     if (login.Active)
                     {
                         return new Result<User>
                         {
                             Success = true,
-                            Object = await _userRepository.Authenticate(user)
+                            Object = login
                         };
                     }
                     else
