@@ -69,7 +69,7 @@
                             @Html.LabelFor(model => model.Sex) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            @Html.DropDownListFor(model => model.Sex, GrupoSelect.Web.Util.UtilWeb.GetSexList(), new { @class = "form-control js-example-responsive", @style = "width: 100%;" })
+                            @Html.DropDownListFor(model => model.Sex, GrupoSelect.Web.Util.UtilWeb.GetSexList(), new { @class = "form-control js-example-responsive component-select", @style = "width: 100%;" })
                             @Html.ValidationMessageFor(model => model.Sex, null, new { @class = "text-danger" })
                         </div>
                     </div>
@@ -105,7 +105,7 @@
                             @Html.LabelFor(model => model.MaritalStatus) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            @Html.DropDownListFor(model => model.MaritalStatus, GrupoSelect.Web.Util.UtilWeb.GetMaritalStatusList(), new { @class = "form-control js-example-responsive", @style = "width: 100%;" })
+                            @Html.DropDownListFor(model => model.MaritalStatus, GrupoSelect.Web.Util.UtilWeb.GetMaritalStatusList(), new { @class = "form-control js-example-responsive component-select", @style = "width: 100%;" })
                             @Html.ValidationMessageFor(model => model.MaritalStatus, null, new { @class = "text-danger" })
                         </div>
                     </div>                    
@@ -159,7 +159,7 @@
                             @Html.LabelFor(model => model.State) <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                            @Html.DropDownListFor(model => model.State, GrupoSelect.Web.Util.UtilWeb.GetStateList(), new { @class = "form-control js-example-responsive", @disabled="disabled", @style = "width: 100%;" })
+                            @Html.DropDownListFor(model => model.State, GrupoSelect.Web.Util.UtilWeb.GetStateList(), new { @class = "form-control js-example-responsive component-select", @disabled="disabled", @style = "width: 100%;" })
                             @Html.ValidationMessageFor(model => model.State, null, new { @class = "text-danger" })
                         </div>
                     </div>
