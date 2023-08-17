@@ -92,7 +92,7 @@ namespace GrupoSelect.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + ","  + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_GERENTE)]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_GERENTE)]
         [TypeFilter(typeof(ExceptionLog))]
         public async Task<IActionResult> Create(ProposalVM proposalVM)
         {
@@ -136,7 +136,7 @@ namespace GrupoSelect.Web.Controllers
             }
         }
 
-        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + ","  + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_GERENTE)]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_GERENTE)]
         public async Task<IActionResult> Edit(int id)
         {
             try
@@ -151,7 +151,7 @@ namespace GrupoSelect.Web.Controllers
                         return RedirectToAction(nameof(Index));
                     }
 
-                    if (result.Object.UserId != Convert.ToInt32(User.GetId()))
+                    if (result.Object.UserId != Convert.ToInt32(User.GetId()) && User.GetProfile() == Constants.PROFILE_REPRESENTANTE)
                     {
                         TempData[Constants.SYSTEM_ERROR_KEY] = "Esse registro não pode ser editado pois é de outro representante";
                         return RedirectToAction(nameof(Index));

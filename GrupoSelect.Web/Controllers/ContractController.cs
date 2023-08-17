@@ -23,7 +23,7 @@ namespace GrupoSelect.Web.Controllers
 
         public readonly IMapper _mapper;
 
-        public ContractController(GSDbContext context, IContractService contractService, 
+        public ContractController(GSDbContext context, IContractService contractService,
                                                        IClientService clientService,
                                                        IMapper mapper)
         {
@@ -40,7 +40,7 @@ namespace GrupoSelect.Web.Controllers
             if (HttpContext.User.GetProfile() == Constants.PROFILE_ADMINISTRATIVO)
             {
                 proposal.Status = Constants.CONTRACT_STATUS_PA;
-            }            
+            }
 
             return View(proposal);
         }
@@ -93,7 +93,7 @@ namespace GrupoSelect.Web.Controllers
                         return RedirectToAction(nameof(Index));
                     }
 
-                    if (result.Object.Proposal.UserId != Convert.ToInt32(User.GetId()))
+                    if (result.Object.Proposal.UserId != Convert.ToInt32(User.GetId()) && User.GetProfile() == Constants.PROFILE_REPRESENTANTE)
                     {
                         TempData[Constants.SYSTEM_ERROR_KEY] = "Esse registro não pode ser editado pois é de outro representante";
                         return RedirectToAction(nameof(Index));
@@ -134,8 +134,8 @@ namespace GrupoSelect.Web.Controllers
                         return Json(new Result<Contract> { Success = false, Message = "Esse registro não pode ser editado pois possui o status de " + contract.Status });
                     }
 
-                    if (contractVM.ContractConsultancyFormFile == null || 
-                        contractVM.ContractFinancialAdminFormFile == null || 
+                    if (contractVM.ContractConsultancyFormFile == null ||
+                        contractVM.ContractFinancialAdminFormFile == null ||
                         (contract.Proposal.User.BranchWithoutAdm && contractVM.VideoAgreeFormFile == null))
                     {
                         return Json(new Result<Contract> { Success = false, Message = "Selecione todos os arquivos antes salvar!" });
@@ -294,7 +294,7 @@ namespace GrupoSelect.Web.Controllers
             {
                 throw;
             }
-        }        
+        }
 
         [TypeFilter(typeof(ExceptionLog))]
         [Authorize(Roles = Constants.PROFILE_ADVOGADO)]
