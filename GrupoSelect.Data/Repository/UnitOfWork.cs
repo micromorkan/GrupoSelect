@@ -44,6 +44,7 @@ namespace GrupoSelect.Data.Repository
         public void SaveAllChanges()
         {
             _context.SaveChanges();
+            Dispose();
         }
 
         protected virtual void Dispose(bool disposing)

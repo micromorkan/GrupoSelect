@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace GrupoSelect.Data.Repository
 {
-    public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
+    public class BaseRepository<TEntity> : IDisposable, IBaseRepository<TEntity> where TEntity : class
     {
         internal GSDbContext _context;
         internal DbSet<TEntity> _dbSet;
@@ -125,10 +125,30 @@ namespace GrupoSelect.Data.Repository
             return result;
         }
 
-
         public void Save()
         {
             _context.SaveChanges();
+        }
+
+        private bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    _context.Dispose();
+                }
+            }
+
+            this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

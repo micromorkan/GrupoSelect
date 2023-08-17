@@ -142,7 +142,7 @@ namespace GrupoSelect.Services.Service
             return new Result<Proposal>
             {
                 Success = true,
-                Object = model,
+                Object = null, //model,
                 Message = Constants.SYSTEM_SUCCESS_MSG
             };
         }

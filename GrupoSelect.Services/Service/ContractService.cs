@@ -12,19 +12,29 @@ namespace GrupoSelect.Services.Service
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IValidator<Contract> _validator;
+        private readonly IContractRepository _contractRepository;
 
-        public ContractService(IUnitOfWork unitOfWork, IValidator<Contract> validator)
+        public ContractService(IUnitOfWork unitOfWork, IValidator<Contract> validator, IContractRepository contractRepository)
         {
             _unitOfWork = unitOfWork;
             _validator = validator;
+            _contractRepository = contractRepository;
         }
 
         public async Task<Result<IEnumerable<Contract>>> GetAll(Contract filter)
         {
+            //return new Result<IEnumerable<Contract>>
+            //{
+            //    Success = true,
+            //    Object = _unitOfWork.Contracts.GetAll(f => (filter.Proposal.UserId == 0 || f.Proposal.UserId == filter.Proposal.UserId) &&
+            //                                             (filter.Proposal.ClientId == 0 || f.Proposal.ClientId == filter.Proposal.ClientId) &&
+            //                                             (string.IsNullOrEmpty(filter.Status) || f.Status == filter.Status)),
+            //};
+
             return new Result<IEnumerable<Contract>>
             {
                 Success = true,
-                Object = _unitOfWork.Contracts.GetAll(f => (filter.Proposal.UserId == 0 || f.Proposal.UserId == filter.Proposal.UserId) &&
+                Object = await _contractRepository.GetAll(f => (filter.Proposal.UserId == 0 || f.Proposal.UserId == filter.Proposal.UserId) &&
                                                          (filter.Proposal.ClientId == 0 || f.Proposal.ClientId == filter.Proposal.ClientId) &&
                                                          (string.IsNullOrEmpty(filter.Status) || f.Status == filter.Status)),
             };
@@ -32,11 +42,17 @@ namespace GrupoSelect.Services.Service
 
         public async Task<PaginateResult<IEnumerable<Contract>>> GetAllPaginate(Contract filter, int page, int qtPage, DateTime startDate, DateTime endDate)
         {
-            return _unitOfWork.Contracts.GetAllPaginate(f => (filter.Proposal.UserId == 0 || f.Proposal.UserId == filter.Proposal.UserId) &&
+            //return _unitOfWork.Contracts.GetAllPaginate(f => (filter.Proposal.UserId == 0 || f.Proposal.UserId == filter.Proposal.UserId) &&
+            //                                             (filter.Proposal.ClientId == 0 || f.Proposal.ClientId == filter.Proposal.ClientId) &&
+            //                                             (string.IsNullOrEmpty(filter.Status) || f.Status == filter.Status) &&
+            //                                             (string.IsNullOrEmpty(filter.ContractNum) || f.ContractNum.Contains(filter.ContractNum)) &&
+            //                                             (f.DateCreate.Date >= startDate.Date && f.DateCreate.Date <= endDate.Date), o => o.OrderByDescending(x => x.DateStatus), page, qtPage, i => i.Proposal.Client, i => i.Proposal.User);
+
+            return await _contractRepository.GetAllPaginate(f => (filter.Proposal.UserId == 0 || f.Proposal.UserId == filter.Proposal.UserId) &&
                                                          (filter.Proposal.ClientId == 0 || f.Proposal.ClientId == filter.Proposal.ClientId) &&
                                                          (string.IsNullOrEmpty(filter.Status) || f.Status == filter.Status) &&
                                                          (string.IsNullOrEmpty(filter.ContractNum) || f.ContractNum.Contains(filter.ContractNum)) &&
-                                                         (f.DateCreate.Date >= startDate.Date && f.DateCreate.Date <= endDate.Date), o => o.OrderByDescending(x => x.DateStatus), page, qtPage, i => i.Proposal.Client, i => i.Proposal.User);
+                                                         (f.DateCreate.Date >= startDate.Date && f.DateCreate.Date <= endDate.Date), page, qtPage);
         }
 
         public async Task<Result<Contract>> GetById(int id)
@@ -70,7 +86,7 @@ namespace GrupoSelect.Services.Service
                 return new Result<Contract>
                 {
                     Success = false,
-                    Object = model,
+                    Object = null, //model,
                     Errors = resultValidation.Errors
                 };
             }
@@ -95,7 +111,7 @@ namespace GrupoSelect.Services.Service
             return new Result<Contract>
             {
                 Success = true,
-                Object = model,
+                Object = null, //model,
                 Message = Constants.SYSTEM_SUCCESS_MSG
             };
         }
@@ -109,7 +125,7 @@ namespace GrupoSelect.Services.Service
                 return new Result<Contract>
                 {
                     Success = false,
-                    Object = model,
+                    Object = null, //model,
                     Errors = resultValidation.Errors
                 };
             }
@@ -162,7 +178,7 @@ namespace GrupoSelect.Services.Service
             return new Result<Contract>
             {
                 Success = true,
-                Object = contract,
+                Object = null, //contract,
                 Message = Constants.SYSTEM_SUCCESS_MSG
             };
         }
@@ -206,7 +222,7 @@ namespace GrupoSelect.Services.Service
             return new Result<Contract>
             {
                 Success = true,
-                Object = contract,
+                Object = null, //contract,
                 Message = Constants.SYSTEM_SUCCESS_MSG
             };
         }

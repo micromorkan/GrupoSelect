@@ -11,10 +11,12 @@ namespace GrupoSelect.Services.Service
     public class BorderoService : IDisposable, IBorderoService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IContractRepository _contractRepository;
 
-        public BorderoService(IUnitOfWork unitOfWork)
+        public BorderoService(IUnitOfWork unitOfWork, IContractRepository contractRepository)
         {
             _unitOfWork = unitOfWork;
+            _contractRepository = contractRepository;
         }
 
         public async Task<Result<IEnumerable<Contract>>> GetAll(int userId, DateTime startDate, DateTime endDate)
@@ -47,10 +49,7 @@ namespace GrupoSelect.Services.Service
             return new Result<IEnumerable<Contract>>
             {
                 Success = true,
-                Object = _unitOfWork.Contracts.GetAll(f => f.Proposal.UserId == userId &&
-                                                           f.Status == Constants.CONTRACT_STATUS_CA &&
-                                                           f.DateAproved >= startDate && 
-                                                           f.DateAproved <= endDate, o => o.OrderBy(x => x.ContractNum), i => i.Proposal.User, i => i.Proposal.Client),
+                Object = await _contractRepository.GetAllBordero(userId, startDate, endDate.AddDays(1).AddSeconds(-1)),
             };
         }
 
@@ -84,10 +83,7 @@ namespace GrupoSelect.Services.Service
             return new Result<IEnumerable<Contract>>
             {
                 Success = true,
-                Object = _unitOfWork.Contracts.GetAll(f => (f.Proposal.UserId == userId || f.Proposal.User.Profile == Constants.PROFILE_REPRESENTANTE) &&
-                                                           f.Status == Constants.CONTRACT_STATUS_CA &&
-                                                           f.DateAproved >= startDate &&
-                                                           f.DateAproved <= endDate.AddDays(1).AddSeconds(-1), o => o.OrderBy(x => x.ContractNum), i => i.Proposal.User, i => i.Proposal.Client),
+                Object = await _contractRepository.GetAllBorderoManager(userId, startDate, endDate.AddDays(1).AddSeconds(-1)),
             };
         }
 

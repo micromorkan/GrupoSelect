@@ -70,13 +70,6 @@ namespace GrupoSelect.Web.Controllers
 
                 var result = await _contractService.GetAllPaginate(filter, page, qtPage, contractVM.StartDate, contractVM.EndDate);
 
-                foreach (var item in result.Object) 
-                {
-                    item.ContractConsultancy = null;
-                    item.ContractFinancialAdmin = null;
-                    item.VideoAgree = null;
-                }
-
                 return Json(result);
             }
             catch (Exception)
