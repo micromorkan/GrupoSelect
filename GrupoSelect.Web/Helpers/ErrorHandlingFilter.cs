@@ -61,9 +61,13 @@ namespace GrupoSelect.Web.Helpers
                 stringBuilder.Append("}");
 
                 //log.Object = JsonSerializer.Serialize(ex.Data[Constants.SYSTEM_EXCEPTION_OBJ]);
+                //log.Method = ex.TargetSite.DeclaringType?.FullName;
                 log.Object = stringBuilder.ToString();
-                log.Method = ex.TargetSite.DeclaringType?.FullName;
                 log.Message = ex.Message.Length > 2000 ? ex.Message.Substring(0, 2000) : ex.Message;
+                
+                var s = new StackTrace(context.Exception);
+                var r = s.GetFrame(0);
+                log.Method = GetMethodName(r.GetMethod());
 
                 if (_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
                 {

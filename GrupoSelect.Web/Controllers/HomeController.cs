@@ -274,7 +274,8 @@ namespace GrupoSelect.Web.Controllers
             {
                 if (userProfile == Constants.PROFILE_DIRETOR)
                 {
-                    dashboard.LstTile.Add(await MontarTileContratoFinanceiroMensal());
+                    dashboard.LstTile.Add(await MontarTileAdesaoParcelaFinanceiroMensal());
+                    dashboard.LstTile.Add(await MontarTileAdesaoFinanceiroMensal());
                 }
 
                 dashboard.LstChartMoney.Add(await MontarChartContratoFinanceiroSemanal());
@@ -502,7 +503,7 @@ namespace GrupoSelect.Web.Controllers
         //    return contratosFinanceiroSemanal;
         //}
 
-        private async Task<Tile> MontarTileContratoFinanceiroMensal()
+        private async Task<Tile> MontarTileAdesaoParcelaFinanceiroMensal()
         {
             string userProfile = User.GetProfile();
 
@@ -522,7 +523,34 @@ namespace GrupoSelect.Web.Controllers
             tile.Titulo = "Faturamento Mensal";
             tile.Valor = result.Object.Count() > 0 ? string.Format("{0:C}", result.Object.Sum(x => Convert.ToDecimal(x.Proposal.CreditTotalValue))) : "R$ 0,00"; 
             tile.Controller = "Home";
-            tile.Action = "AtualizarTileContratoFinanceiroMensal";
+            tile.Action = "AtualizarTileAdesaoParcelaFinanceiroMensal";
+            tile.IntervaloAtualizacao = 60000;
+            tile.Filter = null;
+
+            return tile;
+        }
+
+        private async Task<Tile> MontarTileAdesaoFinanceiroMensal()
+        {
+            string userProfile = User.GetProfile();
+
+            DateTime date = DateTime.Now;
+
+            var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
+            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+
+            var result = await _contractService.GetAllPaginate(new Contract { Status = Constants.CONTRACT_STATUS_CA, Proposal = new Proposal() }, 1, 1000, firstDayOfMonth, lastDayOfMonth);
+
+            Tile tile = new Tile();
+
+            tile.Id = 2;
+            tile.BackgroundColor = Constants.SYSTEM_RGBA_WHITE;
+            tile.Icone = "fa-money";
+            tile.Descricao = string.Empty;
+            tile.Titulo = "Total Consultoria Mensal";
+            tile.Valor = result.Object.Count() > 0 ? string.Format("{0:C}", result.Object.Sum(x => Convert.ToDecimal(x.Proposal.CreditMembershipValue))) : "R$ 0,00";
+            tile.Controller = "Home";
+            tile.Action = "AtualizarTileAdesaoFinanceiroMensal";
             tile.IntervaloAtualizacao = 60000;
             tile.Filter = null;
 
@@ -548,9 +576,15 @@ namespace GrupoSelect.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> AtualizarTileContratoFinanceiroMensal()
+        public async Task<JsonResult> AtualizarTileAdesaoParcelaFinanceiroMensal()
         {
-            return Json(await MontarTileContratoFinanceiroMensal());
+            return Json(await MontarTileAdesaoParcelaFinanceiroMensal());
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> AtualizarTileAdesaoFinanceiroMensal()
+        {
+            return Json(await MontarTileAdesaoFinanceiroMensal());
         }
 
         #endregion
