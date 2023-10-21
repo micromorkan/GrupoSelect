@@ -1499,7 +1499,7 @@ body .container.body .right_col {
 }
 
 body {
-    color: #73879C;
+    color: #35A032;
     background: #2A3F54;
     font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
     font-size: 13px;
@@ -4867,7 +4867,7 @@ ul.project_files li {
     }
 
 .login {
-    background: #F7F7F7
+    background: #DEFFDD
 }
 
     .login .fa-paw {
