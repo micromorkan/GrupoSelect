@@ -285,7 +285,7 @@ namespace GrupoSelect.Web.Controllers
 
                 ContractForm contractForm = new ContractForm(contract.Proposal.Client, contract.Proposal, contract.Proposal.User, contract);
 
-                string cshtmlContent = System.IO.File.ReadAllText("..\\..\\www\\gruposelect\\wwwroot\\reports\\ContractForm.cshtml");
+                string cshtmlContent = System.IO.File.ReadAllText("..\\GrupoSelect.Web\\Views\\Shared\\Reports\\ContractForm.cshtml");
                 string renderedContent = Engine.Razor.RunCompile(cshtmlContent, Guid.NewGuid().ToString(), typeof(ContractForm), contractForm);
 
                 return Content(renderedContent, "text/html");

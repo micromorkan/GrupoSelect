@@ -117,7 +117,7 @@ namespace GrupoSelect.Web.Controllers
 
                     BorderoForm borderoForm = new BorderoForm(contracts, userResult.Object, Convert.ToDateTime(startDate), Convert.ToDateTime(endDate));
 
-                    string cshtmlContent = System.IO.File.ReadAllText("..\\..\\www\\gruposelect\\wwwroot\\reports\\BorderoForm.cshtml");
+                    string cshtmlContent = System.IO.File.ReadAllText("..\\GrupoSelect.Web\\Views\\Shared\\Reports\\BorderoForm.cshtml");
                     string renderedContent = Engine.Razor.RunCompile(cshtmlContent, Guid.NewGuid().ToString(), typeof(BorderoForm), borderoForm);
 
                     return Content(renderedContent, "text/html");
@@ -128,7 +128,7 @@ namespace GrupoSelect.Web.Controllers
 
                     BorderoForm borderoForm = new BorderoForm(contracts, userResult.Object, Convert.ToDateTime(startDate), Convert.ToDateTime(endDate));
 
-                    string cshtmlContent = System.IO.File.ReadAllText("..\\..\\www\\gruposelect\\wwwroot\\reports\\BorderoForm.cshtml");
+                    string cshtmlContent = System.IO.File.ReadAllText("..\\GrupoSelect.Web\\Views\\Shared\\Reports\\BorderoForm.cshtml");
                     string renderedContent = Engine.Razor.RunCompile(cshtmlContent, Guid.NewGuid().ToString(), typeof(BorderoForm), borderoForm);
 
                     return Content(renderedContent, "text/html");
