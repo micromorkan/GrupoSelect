@@ -1064,7 +1064,7 @@
 }
 
 .left_col {
-    background: #2A3F54
+    background: #0D260D
 }
 
 .container {
@@ -1338,7 +1338,7 @@ body .container.body .right_col {
 .nav_title {
     width: 230px;
     float: left;
-    background: #2A3F54;
+    background: #0D260D;
     border-radius: 0;
     height: 57px;
     padding: 0px
@@ -1499,8 +1499,8 @@ body .container.body .right_col {
 }
 
 body {
-    color: #73879C;
-    background: #2A3F54;
+    color: #000000;
+    background: #0D260D;
     font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
     font-size: 13px;
     font-weight: 400;
@@ -1807,8 +1807,8 @@ a {
 
 .nav.side-menu > li.active > a {
     text-shadow: rgba(0,0,0,0.25) 0 -1px 0;
-    background: -webkit-gradient(linear, left top, left bottom, from(#334556), to(#2C4257)),#2A3F54;
-    background: linear-gradient(#334556, #2C4257),#2A3F54;
+    background: -webkit-gradient(linear, left top, left bottom, from(#0D290D), to(#0D270D)),#0D290D;
+    background: linear-gradient(#0D290D, #0D270D),#0D290D;
     -webkit-box-shadow: rgba(0,0,0,0.25) 0 1px 0,inset rgba(255,255,255,0.16) 0 1px 0;
     box-shadow: rgba(0,0,0,0.25) 0 1px 0,inset rgba(255,255,255,0.16) 0 1px 0
 }
@@ -2827,7 +2827,7 @@ span.right {
     padding: 5px 0 0 0;
     position: fixed;
     width: 230px;
-    background: #2A3F54
+    background: #0D260D
 }
 
     .sidebar-footer a {
@@ -4867,7 +4867,7 @@ ul.project_files li {
     }
 
 .login {
-    background: #F7F7F7
+    background: #DEFFDD
 }
 
     .login .fa-paw {
