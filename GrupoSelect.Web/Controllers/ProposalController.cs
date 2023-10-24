@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using RazorEngine;
 using RazorEngine.Templating;
+using System.Configuration;
 
 namespace GrupoSelect.Web.Controllers
 {
@@ -24,6 +25,7 @@ namespace GrupoSelect.Web.Controllers
         private IFinancialAdminService _financialAdminService;
         private IProposalService _proposalService;
         private IClientService _clientService;
+        private IConfiguration _configuration;
 
         public readonly IMapper _mapper;
 
@@ -33,7 +35,8 @@ namespace GrupoSelect.Web.Controllers
                                                      IFinancialAdminService financialAdminService,
                                                      IProposalService proposalService,
                                                      IClientService clientService,
-                                                     IMapper mapper)
+                                                     IMapper mapper,
+                                                     IConfiguration configuration)
         {
             _creditService = creditService;
             _productTypeService = productTypeService;
@@ -42,6 +45,7 @@ namespace GrupoSelect.Web.Controllers
             _proposalService = proposalService;
             _clientService = clientService;
             _mapper = mapper;
+            _configuration = configuration;
         }
 
         [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_GERENTE)]
@@ -407,7 +411,7 @@ namespace GrupoSelect.Web.Controllers
 
                 RegistrationForm registrationForm = new RegistrationForm(proposal.Client, proposal, proposal.User);
 
-                string cshtmlContent = System.IO.File.ReadAllText("..\\GrupoSelect.Web\\Views\\Shared\\Reports\\RegistrationForm.cshtml");
+                string cshtmlContent = System.IO.File.ReadAllText(_configuration["ReportConfig:Folder"] + "RegistrationForm.cshtml");
                 string renderedContent = Engine.Razor.RunCompile(cshtmlContent, Guid.NewGuid().ToString(), typeof(RegistrationForm), registrationForm);
 
                 return Content(renderedContent, "text/html");

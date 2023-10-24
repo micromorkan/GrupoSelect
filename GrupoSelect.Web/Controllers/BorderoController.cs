@@ -20,16 +20,18 @@ namespace GrupoSelect.Web.Controllers
     {
         private IUserService _userService;
         private IBorderoService _borderoService;
+        private IConfiguration _configuration;
 
         public readonly IMapper _mapper;
 
         public BorderoController(GSDbContext context, IUserService userService,
                                                       IBorderoService borderoService,
-                                                      IMapper mapper)
+                                                      IMapper mapper, IConfiguration configuration)
         {
             _userService = userService;
             _borderoService = borderoService;
             _mapper = mapper;
+            _configuration = configuration;
         }
 
         [Authorize(Roles = Constants.PROFILE_DIRETOR)]
@@ -117,7 +119,7 @@ namespace GrupoSelect.Web.Controllers
 
                     BorderoForm borderoForm = new BorderoForm(contracts, userResult.Object, Convert.ToDateTime(startDate), Convert.ToDateTime(endDate));
 
-                    string cshtmlContent = System.IO.File.ReadAllText("..\\GrupoSelect.Web\\Views\\Shared\\Reports\\BorderoForm.cshtml");
+                    string cshtmlContent = System.IO.File.ReadAllText(_configuration["ReportConfig:Folder"] + "BorderoForm.cshtml");
                     string renderedContent = Engine.Razor.RunCompile(cshtmlContent, Guid.NewGuid().ToString(), typeof(BorderoForm), borderoForm);
 
                     return Content(renderedContent, "text/html");
@@ -128,7 +130,7 @@ namespace GrupoSelect.Web.Controllers
 
                     BorderoForm borderoForm = new BorderoForm(contracts, userResult.Object, Convert.ToDateTime(startDate), Convert.ToDateTime(endDate));
 
-                    string cshtmlContent = System.IO.File.ReadAllText("..\\GrupoSelect.Web\\Views\\Shared\\Reports\\BorderoForm.cshtml");
+                    string cshtmlContent = System.IO.File.ReadAllText(_configuration["ReportConfig:Folder"] + "BorderoForm.cshtml");
                     string renderedContent = Engine.Razor.RunCompile(cshtmlContent, Guid.NewGuid().ToString(), typeof(BorderoForm), borderoForm);
 
                     return Content(renderedContent, "text/html");

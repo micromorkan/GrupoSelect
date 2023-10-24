@@ -20,16 +20,18 @@ namespace GrupoSelect.Web.Controllers
     {
         private IContractService _contractService;
         private IClientService _clientService;
+        private IConfiguration _configuration;
 
         public readonly IMapper _mapper;
 
         public ContractController(GSDbContext context, IContractService contractService,
                                                        IClientService clientService,
-                                                       IMapper mapper)
+                                                       IMapper mapper, IConfiguration configuration)
         {
             _contractService = contractService;
             _clientService = clientService;
             _mapper = mapper;
+            _configuration = configuration;
         }
 
         [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_ADVOGADO)]
@@ -285,7 +287,7 @@ namespace GrupoSelect.Web.Controllers
 
                 ContractForm contractForm = new ContractForm(contract.Proposal.Client, contract.Proposal, contract.Proposal.User, contract);
 
-                string cshtmlContent = System.IO.File.ReadAllText("..\\GrupoSelect.Web\\Views\\Shared\\Reports\\ContractForm.cshtml");
+                string cshtmlContent = System.IO.File.ReadAllText(_configuration["ReportConfig:Folder"] + "ContractForm.cshtml");
                 string renderedContent = Engine.Razor.RunCompile(cshtmlContent, Guid.NewGuid().ToString(), typeof(ContractForm), contractForm);
 
                 return Content(renderedContent, "text/html");
