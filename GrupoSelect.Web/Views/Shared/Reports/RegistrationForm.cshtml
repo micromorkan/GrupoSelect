@@ -200,7 +200,7 @@
                 </tr>
                 <tr>
                     <td class="bold">VENDEDOR</td>
-                    <td>@Model.User.Name</td>
+                    <td>@(string.IsNullOrEmpty(Model.Proposal.Seller) ? Model.User.Name : Model.Proposal.Seller)</td>
                     <td class="bold">TOTAL PAGO R$</td>
                     <td>R$ @Model.Proposal.CreditTotalValue</td>
                 </tr>

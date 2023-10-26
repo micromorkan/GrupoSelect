@@ -61,6 +61,8 @@ namespace GrupoSelect.Web.ViewModel
         public bool Aproved { get; set; }
 
         public DateTime StartDate { get; set; }
+        [Display(Name = "Vendedor")]
+        public string Seller { get; set; }
 
         public DateTime EndDate { get; set; }
         public UserVM User { get; set; }

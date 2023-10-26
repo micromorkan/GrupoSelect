@@ -32,6 +32,7 @@ namespace GrupoSelect.Data.Mapping
             builder.Property(c => c.UserChecked).HasColumnName("UserChecked");
             builder.Property(c => c.Aproved).HasColumnName("Aproved").IsRequired();
             builder.Property(c => c.Status).HasColumnName("Status").IsRequired();
+            builder.Property(c => c.Seller).HasColumnName("Seller");
 
             builder.HasOne(s => s.Client).WithMany().HasForeignKey(s => s.ClientId);
             builder.HasOne(s => s.User).WithMany().HasForeignKey(s => s.UserId);

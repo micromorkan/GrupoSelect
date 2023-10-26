@@ -79,6 +79,7 @@ namespace GrupoSelect.Services.Service
                 };
             }
 
+            model.Seller = string.IsNullOrEmpty(model.Seller) ? null : model.Seller.ToUpper();
             model.DateCreate = DateTime.Now;
             model.Aproved = false;
 
@@ -108,6 +109,7 @@ namespace GrupoSelect.Services.Service
                 };
             }
 
+            model.Seller = string.IsNullOrEmpty(model.Seller) ? null : model.Seller.ToUpper();
             _unitOfWork.Proposals.Update(model);
             _unitOfWork.Proposals.Save();
             _unitOfWork.Dispose();
