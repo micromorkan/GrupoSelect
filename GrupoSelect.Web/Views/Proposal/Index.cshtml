@@ -275,7 +275,7 @@
 
                 },
                 error: function (xhr, status, error) {
-                    ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador.');
+                    ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador. ' + status + '. ' + error);
                 }
             });
         }
@@ -313,7 +313,7 @@
                         SearchProposal(pagina);
                     },
                     error: function (xhr, status, error) {
-                        ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador.');
+                        ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador. ' + status + '. ' + error);
                     }
                 });
             }, function (dismiss) {
@@ -356,7 +356,7 @@
                         SearchProposal(pagina);
                     },
                     error: function (xhr, status, error) {
-                        ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador.');
+                        ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador. ' + status + '. ' + error);
                     }
                 });
             }, function (dismiss) {

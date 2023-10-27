@@ -197,7 +197,7 @@ function Create(ignoreValidation = false, sendFiles = false, defaultSelectValue 
                     }
                 },
                 error: function (xhr, status, error) {
-                    ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador.');
+                    ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador. ' + status + '. ' + error);
                 }
             });
         } else {
@@ -232,7 +232,7 @@ function Create(ignoreValidation = false, sendFiles = false, defaultSelectValue 
                     }
                 },
                 error: function (xhr, status, error) {
-                    ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador.');
+                    ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador. ' + status + '. ' + error);
                 }
             });
         } else {
@@ -271,7 +271,7 @@ function Edit(urlSucesso, ignoreValidation = false, sendFiles = false) {
                     }
                 },
                 error: function (xhr, status, error) {
-                    ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador.');
+                    ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador. ' + status + '. ' + error);
                 }
             });
         } else {
@@ -301,7 +301,7 @@ function Edit(urlSucesso, ignoreValidation = false, sendFiles = false) {
                     }
                 },
                 error: function (xhr, status, error) {
-                    ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador.');
+                    ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador. ' + status + '. ' + error);
                 }
             });
         } else {
@@ -442,7 +442,7 @@ function Search(editar, urlEditar, excluir, urlExlcuir, pagina) {
           
         },
         error: function (xhr, status, error) {
-            ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador.');
+            ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador. ' + status + '. ' + error);
         }
     });
 }
@@ -541,7 +541,7 @@ function DeleteConfirm(idExclusao, urlExclusao, editar, urlEditar, excluir, urlE
                 Search(editar, urlEditar, excluir, urlExlcuir, pagina, qtdPagina);
             },
             error: function (xhr, status, error) {
-                ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador.');
+                ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador. ' + status + '. ' + error);
             }
         });
     }, function (dismiss) {
