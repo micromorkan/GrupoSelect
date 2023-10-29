@@ -41,7 +41,7 @@ namespace GrupoSelect.Web.Controllers
 
             if (HttpContext.User.GetProfile() == Constants.PROFILE_ADMINISTRATIVO)
             {
-                proposal.Status = Constants.CONTRACT_STATUS_PA;
+                //proposal.Status = Constants.CONTRACT_STATUS_PA;
             }
 
             return View(proposal);
@@ -299,7 +299,7 @@ namespace GrupoSelect.Web.Controllers
         }
 
         [TypeFilter(typeof(ExceptionLog))]
-        [Authorize(Roles = Constants.PROFILE_ADVOGADO)]
+        [Authorize(Roles = Constants.PROFILE_ADVOGADO + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_DIRETOR)]
         public async Task<IActionResult> Detail(int id)
         {
             try
@@ -388,7 +388,7 @@ namespace GrupoSelect.Web.Controllers
         }
 
         [TypeFilter(typeof(ExceptionLog))]
-        [Authorize(Roles = Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
+        [Authorize(Roles = Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_ADMINISTRATIVO)]
         public async Task<IActionResult> Cancel(int id, string reason)
         {
             try

@@ -55,7 +55,7 @@ namespace GrupoSelect.Web.Controllers
 
             if (HttpContext.User.IsInRole(Constants.PROFILE_ADMINISTRATIVO))
             {
-                proposal.Status = Constants.PROPOSAL_STATUS_AC;
+                //proposal.Status = Constants.PROPOSAL_STATUS_AC;
             }
 
             return View(proposal);
