@@ -316,7 +316,7 @@
                             }
                         },
                         error: function (xhr, status, error) {
-                            ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador.');
+                            ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador. ' + status + '. ' + error);
                         }
                     });
                 } else {
@@ -346,7 +346,7 @@
                             }
                         },
                         error: function (xhr, status, error) {
-                            ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador.');
+                            ShowModalError('Não foi possível acessar o servidor. Entre em contato com o Administrador. ' + status + '. ' + error);
                         }
                     });
                 } else {
