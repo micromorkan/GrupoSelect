@@ -120,6 +120,7 @@ namespace GrupoSelect.Web.Controllers
 
         [HttpPost]
         [TypeFilter(typeof(ExceptionLog))]
+        [RequestSizeLimit(100_000_000)]
         [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
         public async Task<IActionResult> Edit(int id, ContractVM contractVM)
         {
@@ -229,6 +230,7 @@ namespace GrupoSelect.Web.Controllers
 
         [HttpPost]
         [TypeFilter(typeof(ExceptionLog))]
+        [RequestSizeLimit(100_000_000)]
         [Authorize(Roles = Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
         public async Task<IActionResult> Check(int id, ContractVM contractVM)
         {
