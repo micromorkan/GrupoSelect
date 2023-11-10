@@ -63,7 +63,7 @@
                                     @{
                                         if (User.GetProfile() == Constants.PROFILE_ADMINISTRATIVO || User.GetProfile() == Constants.PROFILE_GERENTE || User.GetProfile() == Constants.PROFILE_DIRETOR || User.GetProfile() == Constants.PROFILE_ADVOGADO)
                                         {
-                                            <th class="column text-center" data-prefix="" data-sufix="" data-column="proposal.user.representation" data-css="text-center">Representação</th>
+                                                <th class="column text-center" data-prefix="" data-sufix="" data-column="proposal.user.representation" data-css="text-center">Representação</th>
                                         }
                                     }
                                     <th class="column text-center" data-prefix="" data-sufix="" data-column="contractNum" data-css="text-center">Nº Contrato</th>
@@ -247,12 +247,19 @@
                                     if (item['status'] !== '@Constants.CONTRACT_STATUS_CC' && item['status'] !== '@Constants.CONTRACT_STATUS_CA') {
                                         actionButtons += "<a title='Cancelar Contrato' class='btn btn-xs btn-danger' onclick='CancelContract(" + item.id + ", " + pagina + ");'><span class='glyphicon glyphicon-remove' style='color:white; cursor: pointer;' aria-hidden='true'></span></a>"
                                     }
-                                } else if ('@User.GetProfile()' === '@Constants.PROFILE_DIRETOR' || '@User.GetProfile()' === '@Constants.PROFILE_GERENTE') {
+                                } else if ('@User.GetProfile()' === '@Constants.PROFILE_DIRETOR') {
                                     if (item['status'] === '@Constants.CONTRACT_STATUS_AD' || item['status'] === '@Constants.CONTRACT_STATUS_CR') {
                                         actionButtons += "<a title='Editar' class='btn btn-xs btn-warning' href='" + '@Url.Action("Edit", "Contract")' + "\/" + item.id + "'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></a>";
                                     }
                                     if (item['status'] === '@Constants.CONTRACT_STATUS_PA') {
                                         actionButtons += "<a title='Conferir Contrato' class='btn btn-xs btn-success' href='" + '@Url.Action("Check", "Contract")' + "\/" + item.id + "'><span class='glyphicon glyphicon-eye-open' style='color:white; cursor: pointer;' aria-hidden='true'></span></a>";
+                                    }
+                                    if (item['status'] !== '@Constants.CONTRACT_STATUS_CC' && item['status'] !== '@Constants.CONTRACT_STATUS_CA') {
+                                        actionButtons += "<a title='Cancelar Contrato' class='btn btn-xs btn-danger' onclick='CancelContract(" + item.id + ", " + pagina + ");'><span class='glyphicon glyphicon-remove' style='color:white; cursor: pointer;' aria-hidden='true'></span></a>"
+                                    }
+                                } else if ('@User.GetProfile()' === '@Constants.PROFILE_GERENTE') {
+                                    if (item['status'] === '@Constants.CONTRACT_STATUS_AD' || item['status'] === '@Constants.CONTRACT_STATUS_CR') {
+                                        actionButtons += "<a title='Editar' class='btn btn-xs btn-warning' href='" + '@Url.Action("Edit", "Contract")' + "\/" + item.id + "'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></a>";
                                     }
                                     if (item['status'] !== '@Constants.CONTRACT_STATUS_CC' && item['status'] !== '@Constants.CONTRACT_STATUS_CA') {
                                         actionButtons += "<a title='Cancelar Contrato' class='btn btn-xs btn-danger' onclick='CancelContract(" + item.id + ", " + pagina + ");'><span class='glyphicon glyphicon-remove' style='color:white; cursor: pointer;' aria-hidden='true'></span></a>"
