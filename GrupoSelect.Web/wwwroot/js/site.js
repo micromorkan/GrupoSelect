@@ -112,6 +112,10 @@
 
 })(jQuery, ResponsiveBootstrapToolkit);
 
+$.ajaxSetup({
+    timeout: 1000000
+});
+
 function FillSelect(url, filter, selectId, selectedItem = null, compareValue = true) {
     $.ajax({
         dataType: 'json',
