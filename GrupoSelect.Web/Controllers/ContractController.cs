@@ -130,6 +130,8 @@ namespace GrupoSelect.Web.Controllers
 
                 if (resultContract.Success)
                 {
+                    long totalFileSize = 0;
+
                     Contract contract = resultContract.Object;
 
                     if (contract.Status != Constants.CONTRACT_STATUS_AD && contract.Status != Constants.CONTRACT_STATUS_CR)
@@ -148,17 +150,9 @@ namespace GrupoSelect.Web.Controllers
                     {
                         await contractVM.ContractConsultancyFormFile.CopyToAsync(fichaMS);
 
-                        // Upload the file if less than 2 MB
-                        //if (fichaMS.Length < 2097152)
-                        //{
-
                         contract.ContractConsultancy = fichaMS.ToArray();
                         contract.ContractConsultancyFileType = contractVM.ContractConsultancyFormFile.ContentType;
-                        //}
-                        //else
-                        //{
-                        //    ModelState.AddModelError("File", "The file is too large.");
-                        //}
+                        totalFileSize += fichaMS.Length;
                     }
 
                     using (var docMS = new MemoryStream())
@@ -167,6 +161,7 @@ namespace GrupoSelect.Web.Controllers
 
                         contract.ContractFinancialAdmin = docMS.ToArray();
                         contract.ContractFinancialAdminFileType = contractVM.ContractFinancialAdminFormFile.ContentType;
+                        totalFileSize += docMS.Length;
                     }
 
                     if (contract.Proposal.User.BranchWithoutAdm)
@@ -177,7 +172,13 @@ namespace GrupoSelect.Web.Controllers
 
                             contract.VideoAgree = videoMS.ToArray();
                             contract.VideoAgreeFileType = contractVM.VideoAgreeFormFile.ContentType;
+                            totalFileSize += videoMS.Length;
                         }
+                    }
+
+                    if (totalFileSize > 67008864)
+                    {
+                        return Json(new Result<Contract> { Success = false, Message = "Seus arquivos ultrapassam o limite de 64MB!" });
                     }
 
                     var result = _contractService.Update(contract);
