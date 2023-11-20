@@ -7,5 +7,6 @@ namespace GrupoSelect.Services.Interface
     {
         Task<Result<IEnumerable<Contract>>> GetAll(int userId, DateTime startDate, DateTime endDate);
         Task<Result<IEnumerable<Contract>>> GetAllManager(int userId, DateTime startDate, DateTime endDate);
+        Task<Result<IEnumerable<Contract>>> GetAllLawyer(int userId, DateTime startDate, DateTime endDate);
     }
 }

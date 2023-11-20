@@ -86,7 +86,7 @@ namespace GrupoSelect.Web.Controllers
 
                 foreach (User item in result.Object)
                 {
-                    if (item.Profile == Constants.PROFILE_GERENTE || item.Profile == Constants.PROFILE_REPRESENTANTE)
+                    if (item.Profile == Constants.PROFILE_GERENTE || item.Profile == Constants.PROFILE_REPRESENTANTE || item.Profile == Constants.PROFILE_ADVOGADO)
                     {
                         items.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Representation + " - " + item.Profile, Selected = filter.Id == item.Id ? true : false });
                     }
@@ -110,7 +110,7 @@ namespace GrupoSelect.Web.Controllers
 
                 if (!userResult.Success)
                 {
-                    throw new Exception("Nenhum represente foi selecionado!");
+                    throw new Exception("Nenhum representante foi selecionado!");
                 }
 
                 if (userResult.Object.Profile == Constants.PROFILE_GERENTE)
@@ -120,6 +120,17 @@ namespace GrupoSelect.Web.Controllers
                     BorderoForm borderoForm = new BorderoForm(contracts, userResult.Object, Convert.ToDateTime(startDate), Convert.ToDateTime(endDate));
 
                     string cshtmlContent = System.IO.File.ReadAllText(_configuration["ReportConfig:Folder"] + "BorderoForm.cshtml");
+                    string renderedContent = Engine.Razor.RunCompile(cshtmlContent, Guid.NewGuid().ToString(), typeof(BorderoForm), borderoForm);
+
+                    return Content(renderedContent, "text/html");
+                }
+                else if (userResult.Object.Profile == Constants.PROFILE_ADVOGADO)
+                {
+                    IEnumerable<Contract> contracts = (await _borderoService.GetAllLawyer(userId, Convert.ToDateTime(startDate), Convert.ToDateTime(endDate))).Object;
+
+                    BorderoForm borderoForm = new BorderoForm(contracts, userResult.Object, Convert.ToDateTime(startDate), Convert.ToDateTime(endDate));
+
+                    string cshtmlContent = System.IO.File.ReadAllText(_configuration["ReportConfig:Folder"] + "LawyerForm.cshtml");
                     string renderedContent = Engine.Razor.RunCompile(cshtmlContent, Guid.NewGuid().ToString(), typeof(BorderoForm), borderoForm);
 
                     return Content(renderedContent, "text/html");

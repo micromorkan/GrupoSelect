@@ -87,6 +87,40 @@ namespace GrupoSelect.Services.Service
             };
         }
 
+        public async Task<Result<IEnumerable<Contract>>> GetAllLawyer(int userId, DateTime startDate, DateTime endDate)
+        {
+            string messageError = string.Empty;
+
+            if (userId == 0)
+            {
+                messageError = "Selecione um Advogado!";
+            }
+            else if (startDate == DateTime.MinValue)
+            {
+                messageError = "Data Início é inválida.";
+            }
+            else if (endDate == DateTime.MinValue)
+            {
+                messageError = "Data Fim é inválida.";
+            }
+
+            if (!string.IsNullOrEmpty(messageError))
+            {
+                return new Result<IEnumerable<Contract>>
+                {
+                    Success = false,
+                    Object = null,
+                    Message = messageError
+                };
+            }
+
+            return new Result<IEnumerable<Contract>>
+            {
+                Success = true,
+                Object = await _contractRepository.GetAllBorderoManager(userId, startDate, endDate.AddDays(1).AddSeconds(-1)),
+            };
+        }
+
         public void Dispose()
         {
             _unitOfWork.Dispose();
