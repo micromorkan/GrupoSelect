@@ -58,7 +58,7 @@ namespace GrupoSelect.Web.Controllers
                     result = new Result<IEnumerable<Contract>> { Success = false, Message = "Nenhum represente foi selecionado!" };
                 }
 
-                if (userResult.Object.Profile == Constants.PROFILE_GERENTE)
+                if (userResult.Object.Profile == Constants.PROFILE_GERENTE || userResult.Object.Profile == Constants.PROFILE_ADVOGADO)
                 {
                     result = await _borderoService.GetAllManager(proposalVM.UserId, proposalVM.StartDate, proposalVM.EndDate);
                 }

@@ -113,31 +113,28 @@
                         <th class="text-center">Comissão R$</th>
                         <th class="text-center">Produto</th>
                     </tr>
-                </thead> 
+                </thead>
                 <tbody>
                     @foreach (var item in Model.Contracts)
                     {
-                        if (item.Proposal.UserId == Model.User.Id)
-                        {
-                            totalCredito += Convert.ToDecimal(item.Proposal.CreditValue);
-                            totalComissao += Convert.ToDecimal(item.Proposal.CreditValue) * (1 / 100);
+                        totalCredito += Convert.ToDecimal(item.Proposal.CreditValue);
+                        totalComissao += Convert.ToDecimal(item.Proposal.CreditValue) * ((decimal) 1 / 100);
 
-                            <tr>
-                                <td class="text-center noBorder">@item.ContractNum</td>
-                                <td class="text-center noBorder">@item.Proposal.ProductTypeName</td>
-                                <td class="text-center noBorder">@item.DateAproved.ToString().Split(" ")[0]</td>
-                                <td class="text-center noBorder">@item.Proposal.Client.Name</td>
-                                <td class="text-center noBorder">@item.Proposal.CreditValue</td>
-                                <td class="text-center noBorder">@item.Proposal.TableTypeTax</td>
-                                <td class="text-center noBorder">@item.Proposal.TableTypeCommission</td>
-                                <td class="text-center noBorder">
-                                    @(
-                                    string.Format("{0:C}", Convert.ToDecimal(item.Proposal.CreditValue) * Convert.ToDecimal(item.Proposal.TableTypeCommission) / 100)
-                                        )
-                                </td>
-                                <td class="text-center noBorder">CONSULTORIA</td>
-                            </tr>
-                        }
+                        <tr>
+                            <td class="text-center noBorder">@item.ContractNum</td>
+                            <td class="text-center noBorder">@item.Proposal.ProductTypeName</td>
+                            <td class="text-center noBorder">@item.DateAproved.ToString().Split(" ")[0]</td>
+                            <td class="text-center noBorder">@item.Proposal.Client.Name</td>
+                            <td class="text-center noBorder">@item.Proposal.CreditValue</td>
+                            <td class="text-center noBorder">@item.Proposal.TableTypeTax</td>
+                            <td class="text-center noBorder">1</td>
+                            <td class="text-center noBorder">
+                                @(
+                                string.Format("{0:C}", Convert.ToDecimal(item.Proposal.CreditValue) * ((decimal)1 / 100))
+                                    )
+                            </td>
+                            <td class="text-center noBorder">CONSULTORIA</td>
+                        </tr>
                     }
                     <tr class="bold">
                         <td class="border" colspan="3"></td>
