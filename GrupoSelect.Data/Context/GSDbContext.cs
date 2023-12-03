@@ -28,6 +28,10 @@ namespace GrupoSelect.Data.Context
         public DbSet<Contract> Contracts { get; set; }
         public DbSet<ContractHistoric> ContractHistorics { get; set; }
         public DbSet<ContractConfig> ContractConfigs { get; set; }
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<GroupManager> GroupManagers { get; set; }
+        public DbSet<GroupRepresentative> GroupReprentatives { get; set; }
+
 
         public GSDbContext(IConfiguration configuration)
         {
@@ -57,6 +61,9 @@ namespace GrupoSelect.Data.Context
             modelBuilder.ApplyConfiguration(new ContractMap());
             modelBuilder.ApplyConfiguration(new ContractHistoricMap());
             modelBuilder.ApplyConfiguration(new ContractConfigMap());
+            modelBuilder.ApplyConfiguration(new GroupMap());
+            modelBuilder.ApplyConfiguration(new GroupManagerMap());
+            modelBuilder.ApplyConfiguration(new GroupRepresentativeMap());
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
