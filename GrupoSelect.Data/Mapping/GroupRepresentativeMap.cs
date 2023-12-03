@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GrupoSelect.Data.Mapping
 {
-    public class GroupRepresentativeMap
+    public class GroupRepresentativeMap : IEntityTypeConfiguration<Domain.Entity.GroupRepresentative>
     {
         public void Configure(EntityTypeBuilder<GroupRepresentative> builder)
         {

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GrupoSelect.Data.Mapping
 {
-    public class GroupManagerMap
+    public class GroupManagerMap : IEntityTypeConfiguration<Domain.Entity.GroupManager>
     {
         public void Configure(EntityTypeBuilder<GroupManager> builder)
         {

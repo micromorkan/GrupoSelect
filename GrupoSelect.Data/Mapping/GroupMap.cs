@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace GrupoSelect.Data.Mapping
 {
-    public class GroupMap
+    public class GroupMap : IEntityTypeConfiguration<Domain.Entity.Group>
     {
         public void Configure(EntityTypeBuilder<Domain.Entity.Group> builder)
         {

@@ -11,7 +11,7 @@ namespace GrupoSelect.Domain.Entity
         public int Id { get; set; }
         public int GroupId { get; set; }
         public int RepresentativeId { get; set; }
-        public Group Group { get; set; }
-        public User Representative { get; set; }
+        public virtual Group Group { get; set; }
+        public virtual User Representative { get; set; }
     }
 }

@@ -11,7 +11,7 @@ namespace GrupoSelect.Domain.Entity
         public int Id { get; set; }
         public int GroupId { get; set; }
         public int ManagerId { get; set; }
-        public Group Group  { get; set; }
-        public User Manager { get; set; }
+        public virtual Group Group  { get; set; }
+        public virtual User Manager { get; set; }
     }
 }
