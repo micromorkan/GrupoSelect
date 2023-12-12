@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace GrupoSelect.Domain.Entity
 {
-    public class GroupRepresentative
+    public class GroupUser
     {
         public int Id { get; set; }
         public int GroupId { get; set; }
-        public int RepresentativeId { get; set; }
-        public virtual Group Group { get; set; }
-        public virtual User Representative { get; set; }
+        public int UserId { get; set; }
+        public virtual Group Group  { get; set; }
+        public virtual User User { get; set; }
     }
 }

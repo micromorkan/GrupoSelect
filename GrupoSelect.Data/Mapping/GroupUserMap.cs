@@ -9,19 +9,19 @@ using System.Threading.Tasks;
 
 namespace GrupoSelect.Data.Mapping
 {
-    public class GroupManagerMap : IEntityTypeConfiguration<Domain.Entity.GroupManager>
+    public class GroupUserMap : IEntityTypeConfiguration<Domain.Entity.GroupUser>
     {
-        public void Configure(EntityTypeBuilder<GroupManager> builder)
+        public void Configure(EntityTypeBuilder<GroupUser> builder)
         {
-            builder.ToTable("GroupManager");
+            builder.ToTable("GroupUser");
             builder.HasKey(c => c.Id);
 
             builder.Property(c => c.Id).HasColumnName("Id").IsRequired().ValueGeneratedOnAdd();
             builder.Property(c => c.GroupId).HasColumnName("GroupId").IsRequired();
-            builder.Property(c => c.ManagerId).HasColumnName("ManagerId").IsRequired();
+            builder.Property(c => c.UserId).HasColumnName("UserId").IsRequired();
 
             builder.HasOne(s => s.Group).WithMany().HasForeignKey(s => s.GroupId);
-            builder.HasOne(s => s.Manager).WithMany().HasForeignKey(s => s.ManagerId);
+            builder.HasOne(s => s.User).WithMany().HasForeignKey(s => s.UserId);
         }
     }
 }

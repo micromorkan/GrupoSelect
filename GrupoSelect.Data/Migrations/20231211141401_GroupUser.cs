@@ -6,11 +6,17 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace GrupoSelect.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class RelacaoGrupoUsuarios : Migration
+    public partial class GroupUser : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<int>(
+                name: "GroupUserId",
+                table: "Users",
+                type: "int",
+                nullable: true);
+
             migrationBuilder.AlterColumn<string>(
                 name: "Seller",
                 table: "Proposal",
@@ -47,53 +53,26 @@ namespace GrupoSelect.Data.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "GroupManager",
+                name: "GroupUser",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     GroupId = table.Column<int>(type: "int", nullable: false),
-                    ManagerId = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GroupManager", x => x.Id);
+                    table.PrimaryKey("PK_GroupUser", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_GroupManager_Group_GroupId",
+                        name: "FK_GroupUser_Group_GroupId",
                         column: x => x.GroupId,
                         principalTable: "Group",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_GroupManager_Users_ManagerId",
-                        column: x => x.ManagerId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "GroupRepresentative",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    GroupId = table.Column<int>(type: "int", nullable: false),
-                    RepresentativeId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GroupRepresentative", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_GroupRepresentative_Group_GroupId",
-                        column: x => x.GroupId,
-                        principalTable: "Group",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_GroupRepresentative_Users_RepresentativeId",
-                        column: x => x.RepresentativeId,
+                        name: "FK_GroupUser_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -101,37 +80,48 @@ namespace GrupoSelect.Data.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GroupManager_GroupId",
-                table: "GroupManager",
+                name: "IX_Users_GroupUserId",
+                table: "Users",
+                column: "GroupUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GroupUser_GroupId",
+                table: "GroupUser",
                 column: "GroupId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GroupManager_ManagerId",
-                table: "GroupManager",
-                column: "ManagerId");
+                name: "IX_GroupUser_UserId",
+                table: "GroupUser",
+                column: "UserId");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_GroupRepresentative_GroupId",
-                table: "GroupRepresentative",
-                column: "GroupId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_GroupRepresentative_RepresentativeId",
-                table: "GroupRepresentative",
-                column: "RepresentativeId");
+            migrationBuilder.AddForeignKey(
+                name: "FK_Users_GroupUser_GroupUserId",
+                table: "Users",
+                column: "GroupUserId",
+                principalTable: "GroupUser",
+                principalColumn: "Id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "GroupManager");
+            migrationBuilder.DropForeignKey(
+                name: "FK_Users_GroupUser_GroupUserId",
+                table: "Users");
 
             migrationBuilder.DropTable(
-                name: "GroupRepresentative");
+                name: "GroupUser");
 
             migrationBuilder.DropTable(
                 name: "Group");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Users_GroupUserId",
+                table: "Users");
+
+            migrationBuilder.DropColumn(
+                name: "GroupUserId",
+                table: "Users");
 
             migrationBuilder.UpdateData(
                 table: "Proposal",

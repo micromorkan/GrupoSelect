@@ -407,7 +407,7 @@ namespace GrupoSelect.Data.Migrations
                     b.ToTable("Group", (string)null);
                 });
 
-            modelBuilder.Entity("GrupoSelect.Domain.Entity.GroupManager", b =>
+            modelBuilder.Entity("GrupoSelect.Domain.Entity.GroupUser", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -418,41 +418,17 @@ namespace GrupoSelect.Data.Migrations
                         .HasColumnType("int")
                         .HasColumnName("GroupId");
 
-                    b.Property<int>("ManagerId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int")
-                        .HasColumnName("ManagerId");
+                        .HasColumnName("UserId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("GroupId");
 
-                    b.HasIndex("ManagerId");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("GroupManager", (string)null);
-                });
-
-            modelBuilder.Entity("GrupoSelect.Domain.Entity.GroupRepresentative", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("Id");
-
-                    b.Property<int>("GroupId")
-                        .HasColumnType("int")
-                        .HasColumnName("GroupId");
-
-                    b.Property<int>("RepresentativeId")
-                        .HasColumnType("int")
-                        .HasColumnName("RepresentativeId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GroupId");
-
-                    b.HasIndex("RepresentativeId");
-
-                    b.ToTable("GroupRepresentative", (string)null);
+                    b.ToTable("GroupUser", (string)null);
                 });
 
             modelBuilder.Entity("GrupoSelect.Domain.Entity.LogError", b =>
@@ -740,6 +716,10 @@ namespace GrupoSelect.Data.Migrations
                         .HasColumnType("varchar(200)")
                         .HasColumnName("Email");
 
+                    b.Property<int?>("GroupUserId")
+                        .HasColumnType("int")
+                        .HasColumnName("GroupUserId");
+
                     b.Property<string>("Login")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -771,6 +751,8 @@ namespace GrupoSelect.Data.Migrations
                         .HasColumnName("Representation");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GroupUserId");
 
                     b.ToTable("Users", (string)null);
                 });
@@ -824,7 +806,7 @@ namespace GrupoSelect.Data.Migrations
                     b.Navigation("TableType");
                 });
 
-            modelBuilder.Entity("GrupoSelect.Domain.Entity.GroupManager", b =>
+            modelBuilder.Entity("GrupoSelect.Domain.Entity.GroupUser", b =>
                 {
                     b.HasOne("GrupoSelect.Domain.Entity.Group", "Group")
                         .WithMany()
@@ -832,34 +814,15 @@ namespace GrupoSelect.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GrupoSelect.Domain.Entity.User", "Manager")
+                    b.HasOne("GrupoSelect.Domain.Entity.User", "User")
                         .WithMany()
-                        .HasForeignKey("ManagerId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Group");
 
-                    b.Navigation("Manager");
-                });
-
-            modelBuilder.Entity("GrupoSelect.Domain.Entity.GroupRepresentative", b =>
-                {
-                    b.HasOne("GrupoSelect.Domain.Entity.Group", "Group")
-                        .WithMany()
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("GrupoSelect.Domain.Entity.User", "Representative")
-                        .WithMany()
-                        .HasForeignKey("RepresentativeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Group");
-
-                    b.Navigation("Representative");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("GrupoSelect.Domain.Entity.Proposal", b =>
@@ -879,6 +842,15 @@ namespace GrupoSelect.Data.Migrations
                     b.Navigation("Client");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("GrupoSelect.Domain.Entity.User", b =>
+                {
+                    b.HasOne("GrupoSelect.Domain.Entity.GroupUser", "GroupUser")
+                        .WithMany()
+                        .HasForeignKey("GroupUserId");
+
+                    b.Navigation("GroupUser");
                 });
 #pragma warning restore 612, 618
         }

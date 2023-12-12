@@ -12,5 +12,7 @@
         public string Profile { get; set; }
         public bool Active { get; set; }
         public bool BranchWithoutAdm { get; set; }
+        public int? GroupUserId { get; set; }
+        public virtual GroupUser GroupUser { get; set; }
     }
 }

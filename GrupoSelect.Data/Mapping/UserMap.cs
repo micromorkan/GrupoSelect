@@ -21,6 +21,9 @@ namespace GrupoSelect.Data.Mapping
             builder.Property(c => c.Password).HasColumnName("Password").HasMaxLength(50).IsRequired();
             builder.Property(c => c.Active).HasColumnName("Active").IsRequired();
             builder.Property(c => c.BranchWithoutAdm).HasColumnName("BranchWithoutAdm").IsRequired();
+            builder.Property(c => c.GroupUserId).HasColumnName("GroupUserId");
+
+            builder.HasOne(s => s.GroupUser).WithMany().HasForeignKey(s => s.GroupUserId);
         }
     }
 }
