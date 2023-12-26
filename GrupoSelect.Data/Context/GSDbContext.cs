@@ -132,7 +132,7 @@ namespace GrupoSelect.Data.Context
 
             log.Action = Constants.SYSTEM_LOG_INSERT;
             log.Object = entry.Entity.GetType().Name;
-            log.Username = _userSession.UserName;
+            log.Username = _userSession.UserName == null ? "SYSTEM" : _userSession.UserName;
             log.OriginalValues = null;
             log.NewValues = JsonSerializer.Serialize(entry.Entity);
 
@@ -145,7 +145,7 @@ namespace GrupoSelect.Data.Context
 
             log.Action = Constants.SYSTEM_LOG_DELETE;
             log.Object = entry.Entity.GetType().Name;
-            log.Username = _userSession.UserName;
+            log.Username = _userSession.UserName == null ? "SYSTEM" : _userSession.UserName;
             log.OriginalValues = JsonSerializer.Serialize(entry.Entity);
             log.NewValues = null;
 
@@ -169,7 +169,7 @@ namespace GrupoSelect.Data.Context
 
             log.Action = Constants.SYSTEM_LOG_UPDATE;
             log.Object = entry.Entity.GetType().BaseType.Name;
-            log.Username = _userSession.UserName;
+            log.Username = _userSession.UserName == null ? "SYSTEM" : _userSession.UserName;
             log.OriginalValues = JsonSerializer.Serialize(originalValue);
             log.NewValues = JsonSerializer.Serialize(entry.Entity);
 

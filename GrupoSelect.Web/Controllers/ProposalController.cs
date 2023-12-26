@@ -68,6 +68,7 @@ namespace GrupoSelect.Web.Controllers
         {
             try
             {
+                var groupId = 0;
                 var filter = _mapper.Map<Proposal>(proposalVM);
 
                 if (HttpContext.User.IsInRole(Constants.PROFILE_REPRESENTANTE))
@@ -75,11 +76,16 @@ namespace GrupoSelect.Web.Controllers
                     filter.UserId = Convert.ToInt32(User.GetId());
                 }
 
+                if (HttpContext.User.IsInRole(Constants.PROFILE_GERENTE))
+                {
+                    groupId = Convert.ToInt32(User.GetGroupId());
+                }
+
                 filter.FinancialAdminName = proposalVM.FinancialAdminId > 0 ? (await _financialAdminService.GetById(proposalVM.FinancialAdminId)).Object.Name : string.Empty;
                 filter.TableTypeTax = proposalVM.TableTypeId > 0 ? (await _tableTypeService.GetById(proposalVM.TableTypeId)).Object.TableTax : string.Empty;
                 filter.ProductTypeName = proposalVM.ProductTypeId > 0 ? (await _productTypeService.GetById(proposalVM.ProductTypeId)).Object.ProductName : string.Empty;
 
-                var result = await _proposalService.GetAllPaginate(filter, page, qtPage, proposalVM.StartDate, proposalVM.EndDate);
+                var result = await _proposalService.GetAllPaginate(filter, page, qtPage, proposalVM.StartDate, proposalVM.EndDate, groupId);
 
                 return Json(result);
             }

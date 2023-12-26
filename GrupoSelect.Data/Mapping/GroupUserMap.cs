@@ -21,7 +21,6 @@ namespace GrupoSelect.Data.Mapping
             builder.Property(c => c.UserId).HasColumnName("UserId").IsRequired();
 
             builder.HasOne(s => s.Group).WithMany().HasForeignKey(s => s.GroupId);
-            builder.HasOne(s => s.User).WithMany().HasForeignKey(s => s.UserId);
         }
     }
 }

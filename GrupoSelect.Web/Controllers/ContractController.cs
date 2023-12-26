@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using RazorEngine;
 using RazorEngine.Templating;
+using System.Text.RegularExpressions;
 
 namespace GrupoSelect.Web.Controllers
 {
@@ -54,6 +55,7 @@ namespace GrupoSelect.Web.Controllers
         {
             try
             {
+                var groupId = 0;
                 var filter = _mapper.Map<Contract>(contractVM);
 
                 filter.Proposal = new Proposal();
@@ -67,10 +69,14 @@ namespace GrupoSelect.Web.Controllers
                     filter.Proposal.ClientId = contractVM.ClientId;
                     filter.Status = Constants.CONTRACT_STATUS_CA;
                 }
+                if (HttpContext.User.IsInRole(Constants.PROFILE_GERENTE))
+                {
+                    groupId = Convert.ToInt32(User.GetGroupId());
+                }
 
                 filter.ContractNum = string.IsNullOrEmpty(filter.ContractNum) ? string.Empty : filter.ContractNum.ToUpper();
 
-                var result = await _contractService.GetAllPaginate(filter, page, qtPage, contractVM.StartDate, contractVM.EndDate);
+                var result = await _contractService.GetAllPaginate(filter, page, qtPage, contractVM.StartDate, contractVM.EndDate, groupId);
 
                 return Json(result);
             }

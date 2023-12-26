@@ -16,6 +16,6 @@ namespace GrupoSelect.Services.Interface
         Task<Result<Proposal>> GetById(int id);
         Task<Result<Proposal>> Check(int id, int userId);
         Task<Result<IEnumerable<Proposal>>> GetAll(Proposal filter);
-        Task<PaginateResult<IEnumerable<Proposal>>> GetAllPaginate(Proposal filter, int page, int qtPage, DateTime startDate, DateTime endDate);
+        Task<PaginateResult<IEnumerable<Proposal>>> GetAllPaginate(Proposal filter, int page, int qtPage, DateTime startDate, DateTime endDate, int groupId= 0);
     }
 }
