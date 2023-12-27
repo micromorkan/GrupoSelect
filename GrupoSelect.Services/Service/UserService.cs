@@ -22,7 +22,7 @@ namespace GrupoSelect.Services.Service
         {
             var userList = _unitOfWork.Users.GetAll(f => (string.IsNullOrEmpty(filter.Name) || f.Name.Contains(filter.Name)) &&
                                                        (string.IsNullOrEmpty(filter.Email) || f.Email.Contains(filter.Email)) &&
-                                                       (string.IsNullOrEmpty(filter.Profile) || f.Profile == filter.Profile), null, i => i.GroupUser).ToList();
+                                                       (string.IsNullOrEmpty(filter.Profile) || f.Profile == filter.Profile), null, i => i.GroupUsers).ToList();
 
             userList?.ForEach(x =>
             {

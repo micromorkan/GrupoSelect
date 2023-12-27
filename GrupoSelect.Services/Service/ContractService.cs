@@ -57,7 +57,7 @@ namespace GrupoSelect.Services.Service
                                                          (string.IsNullOrEmpty(filter.Status) || f.Status == filter.Status) &&
                                                          (string.IsNullOrEmpty(filter.ContractNum) || f.ContractNum.Contains(filter.ContractNum)) &&
                                                          (f.DateCreate.Date >= startDate.Date && f.DateCreate.Date <= endDate.Date) &&
-                                                         f.Proposal.User.GroupUser.GroupId == groupId, page, qtPage);
+                                                         f.Proposal.User.GroupUsers.Any(x=> x.GroupId == groupId), page, qtPage);
             }
             
         }

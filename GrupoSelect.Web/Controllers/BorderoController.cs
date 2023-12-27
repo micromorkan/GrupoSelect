@@ -10,6 +10,7 @@ using GrupoSelect.Web.Views.Shared.Reports.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 using RazorEngine;
 using RazorEngine.Templating;
 
@@ -67,7 +68,19 @@ namespace GrupoSelect.Web.Controllers
                     result = await _borderoService.GetAll(proposalVM.UserId, proposalVM.StartDate, proposalVM.EndDate);
                 }
 
-                return Json(result);
+                foreach (var item in result.Object) 
+                {
+                    item.Proposal.Client.User = null;
+                    item.Proposal.User.GroupUsers = null;
+                }
+
+                return Json(new
+                {
+                    Success = result.Success,
+                    Message = result.Message,
+                    Object = result.Object,
+                    Errors = result.Errors
+                });
             }
             catch (Exception)
             {

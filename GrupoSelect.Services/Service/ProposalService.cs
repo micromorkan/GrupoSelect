@@ -54,7 +54,7 @@ namespace GrupoSelect.Services.Service
                                                              (filter.UserChecked == null || f.UserChecked == filter.UserChecked) &&
                                                              (filter.Status == null || f.Status == filter.Status) &&
                                                              (f.DateCreate.Date >= startDate.Date && f.DateCreate.Date <= endDate.Date) &&
-                                                              f.User.GroupUser.GroupId == groupId, o => o.OrderByDescending(x => x.DateCreate), page, qtPage, i => i.User.GroupUser, i => i.Client);
+                                                              f.User.GroupUsers.Any(x=> x.GroupId == groupId), o => o.OrderByDescending(x => x.DateCreate), page, qtPage, i => i.User.GroupUsers, i => i.Client);
             }
 
         }

@@ -75,7 +75,7 @@ namespace GrupoSelect.Web.Controllers
                     for (int i = 0; i < userList.Count(); i++)
                     {
                         if ((userList[i].Profile == Constants.PROFILE_REPRESENTANTE || userList[i].Profile == Constants.PROFILE_GERENTE)
-                            && userList[i].GroupUser.GroupId == grupoId)
+                            && userList[i].GroupUsers.Any(x=> x.GroupId == grupoId))
                         {
                             dashboard.LstTile.Add(await MontarTileContratoMensal(i + 1, userList[i].Id));
                         }

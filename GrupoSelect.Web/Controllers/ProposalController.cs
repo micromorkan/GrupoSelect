@@ -87,7 +87,19 @@ namespace GrupoSelect.Web.Controllers
 
                 var result = await _proposalService.GetAllPaginate(filter, page, qtPage, proposalVM.StartDate, proposalVM.EndDate, groupId);
 
-                return Json(result);
+                foreach (var item in result.Object)
+                {
+                    item.Client.User = null;
+                    item.User.GroupUsers = null;
+                }
+
+                return Json(new
+                {
+                    Success = result.Success,
+                    Message = result.Message,
+                    Object = result.Object,
+                    Errors = result.Errors
+                });               
             }
             catch (Exception)
             {

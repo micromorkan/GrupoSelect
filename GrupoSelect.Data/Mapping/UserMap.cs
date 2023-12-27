@@ -23,7 +23,7 @@ namespace GrupoSelect.Data.Mapping
             builder.Property(c => c.BranchWithoutAdm).HasColumnName("BranchWithoutAdm").IsRequired();
             builder.Property(c => c.GroupUserId).HasColumnName("GroupUserId");
 
-            builder.HasOne(s => s.GroupUser).WithMany().HasForeignKey(s => s.GroupUserId);
+            builder.HasMany(s => s.GroupUsers).WithOne(s => s.User).HasForeignKey(s => s.UserId);
         }
     }
 }
