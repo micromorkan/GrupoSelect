@@ -134,7 +134,7 @@ namespace GrupoSelect.Data.Context
             log.Object = entry.Entity.GetType().Name;
             log.Username = _userSession.UserName == null ? "SYSTEM" : _userSession.UserName;
             log.OriginalValues = null;
-            log.NewValues = JsonSerializer.Serialize(entry.Entity);
+            //log.NewValues = JsonSerializer.Serialize(entry.Entity);
 
             return log;
         }
@@ -171,7 +171,7 @@ namespace GrupoSelect.Data.Context
             log.Object = entry.Entity.GetType().BaseType.Name;
             log.Username = _userSession.UserName == null ? "SYSTEM" : _userSession.UserName;
             log.OriginalValues = JsonSerializer.Serialize(originalValue);
-            log.NewValues = JsonSerializer.Serialize(entry.Entity);
+            //log.NewValues = JsonSerializer.Serialize(entry.Entity);
 
             return log;
         }
