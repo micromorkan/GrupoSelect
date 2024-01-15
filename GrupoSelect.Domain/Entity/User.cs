@@ -1,4 +1,6 @@
-﻿namespace GrupoSelect.Domain.Entity
+﻿using System.Text.Json.Serialization;
+
+namespace GrupoSelect.Domain.Entity
 {
     public class User
     {
@@ -12,5 +14,9 @@
         public string Profile { get; set; }
         public bool Active { get; set; }
         public bool BranchWithoutAdm { get; set; }
+        public int? GroupUserId { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+        public virtual List<GroupUser> GroupUsers { get; set; }
+        
     }
 }

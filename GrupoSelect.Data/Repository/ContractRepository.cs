@@ -54,7 +54,7 @@ namespace GrupoSelect.Data.Repository
                                              }).AsNoTracking().ToListAsync()).Count();
 
             result.Object = await _dbContext.Contracts.Include(x => x.Proposal.Client)
-                                             .Include(x => x.Proposal.User)
+                                             .Include(x => x.Proposal.User.GroupUsers)
                                              .Where(filter)
                                              .OrderByDescending(x => x.DateStatus)
                                              .Select(x => new Contract
@@ -102,12 +102,14 @@ namespace GrupoSelect.Data.Repository
 
         public async Task<IEnumerable<Contract>> GetAllBorderoManager(int userId, DateTime startDate, DateTime endDate)
         {
+            var grupoUsuario = await _dbContext.GroupUsers.Where(i => i.UserId == userId).FirstOrDefaultAsync();
             return await _dbContext.Contracts.Include(x => x.Proposal.Client)
-                                             .Include(x => x.Proposal.User)
+                                             .Include(x => x.Proposal.User.GroupUsers)
                                              .Where(f => (f.Proposal.User.Profile == Constants.PROFILE_GERENTE || f.Proposal.User.Profile == Constants.PROFILE_REPRESENTANTE) &&
                                                            f.Status == Constants.CONTRACT_STATUS_CA &&
                                                            f.DateAproved >= startDate &&
-                                                           f.DateAproved <= endDate)
+                                                           f.DateAproved <= endDate && 
+                                                           f.Proposal.User.GroupUsers.Any(x=> x.GroupId==grupoUsuario.GroupId))
                                              .OrderBy(x => x.ContractNum)
                                              .Select(x => new Contract
                                              {

@@ -16,5 +16,11 @@ namespace GrupoSelect.Web.Helpers
             var claim = ((ClaimsIdentity)user.Identity).FindFirst(ClaimTypes.NameIdentifier);
             return claim?.Value;
         }
+
+        public static string GetGroupId(this IPrincipal user)
+        {
+            var claim = ((ClaimsIdentity)user.Identity).FindFirst(ClaimTypes.GroupSid);
+            return claim?.Value;
+        }
     }
 }

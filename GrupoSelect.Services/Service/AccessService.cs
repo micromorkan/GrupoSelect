@@ -37,7 +37,7 @@ namespace GrupoSelect.Services.Service
                     };
                 }
 
-                var result = _unitOfWork.Users.GetAll(f => f.Login == user.Login && f.Password == user.Password);
+                var result = _unitOfWork.Users.GetAll(f => f.Login == user.Login && f.Password == user.Password, null, i=>i.GroupUsers);
 
                 if (result.Count() > 0)
                 {

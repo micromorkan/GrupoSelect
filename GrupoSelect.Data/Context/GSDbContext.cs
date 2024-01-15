@@ -28,6 +28,9 @@ namespace GrupoSelect.Data.Context
         public DbSet<Contract> Contracts { get; set; }
         public DbSet<ContractHistoric> ContractHistorics { get; set; }
         public DbSet<ContractConfig> ContractConfigs { get; set; }
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<GroupUser> GroupUsers { get; set; }
+
 
         public GSDbContext(IConfiguration configuration)
         {
@@ -57,6 +60,8 @@ namespace GrupoSelect.Data.Context
             modelBuilder.ApplyConfiguration(new ContractMap());
             modelBuilder.ApplyConfiguration(new ContractHistoricMap());
             modelBuilder.ApplyConfiguration(new ContractConfigMap());
+            modelBuilder.ApplyConfiguration(new GroupMap());
+            modelBuilder.ApplyConfiguration(new GroupUserMap());
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -127,9 +132,9 @@ namespace GrupoSelect.Data.Context
 
             log.Action = Constants.SYSTEM_LOG_INSERT;
             log.Object = entry.Entity.GetType().Name;
-            log.Username = _userSession.UserName;
+            log.Username = _userSession.UserName == null ? "SYSTEM" : _userSession.UserName;
             log.OriginalValues = null;
-            log.NewValues = JsonSerializer.Serialize(entry.Entity);
+            //log.NewValues = JsonSerializer.Serialize(entry.Entity);
 
             return log;
         }
@@ -140,7 +145,7 @@ namespace GrupoSelect.Data.Context
 
             log.Action = Constants.SYSTEM_LOG_DELETE;
             log.Object = entry.Entity.GetType().Name;
-            log.Username = _userSession.UserName;
+            log.Username = _userSession.UserName == null ? "SYSTEM" : _userSession.UserName;
             log.OriginalValues = JsonSerializer.Serialize(entry.Entity);
             log.NewValues = null;
 
@@ -164,9 +169,9 @@ namespace GrupoSelect.Data.Context
 
             log.Action = Constants.SYSTEM_LOG_UPDATE;
             log.Object = entry.Entity.GetType().BaseType.Name;
-            log.Username = _userSession.UserName;
+            log.Username = _userSession.UserName == null ? "SYSTEM" : _userSession.UserName;
             log.OriginalValues = JsonSerializer.Serialize(originalValue);
-            log.NewValues = JsonSerializer.Serialize(entry.Entity);
+            //log.NewValues = JsonSerializer.Serialize(entry.Entity);
 
             return log;
         }

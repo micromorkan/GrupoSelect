@@ -16,6 +16,7 @@ using RazorEngine;
 using RazorEngine.Templating;
 using System.Diagnostics;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace GrupoSelect.Web.Controllers
 {
@@ -52,7 +53,7 @@ namespace GrupoSelect.Web.Controllers
                     dashboard.LstTile.Add(await MontarTileContratoCreditoMensal());
                 }
 
-                if (userProfile == Constants.PROFILE_DIRETOR || userProfile == Constants.PROFILE_GERENTE)
+                if (userProfile == Constants.PROFILE_DIRETOR)
                 {
                     var userList = (await _userService.GetAll(new Domain.Entity.User())).Object.ToList();
 
@@ -64,6 +65,23 @@ namespace GrupoSelect.Web.Controllers
                         }
                     }
                 }
+
+                if (userProfile == Constants.PROFILE_GERENTE)
+                {                    
+                    var grupoId = Convert.ToInt32(User.GetGroupId());
+
+                    var userList = (await _userService.GetAll(new Domain.Entity.User())).Object.ToList();
+
+                    for (int i = 0; i < userList.Count(); i++)
+                    {
+                        if ((userList[i].Profile == Constants.PROFILE_REPRESENTANTE || userList[i].Profile == Constants.PROFILE_GERENTE)
+                            && userList[i].GroupUsers.Any(x=> x.GroupId == grupoId))
+                        {
+                            dashboard.LstTile.Add(await MontarTileContratoMensal(i + 1, userList[i].Id));
+                        }
+                    }
+                }
+
             }
             else if (userProfile == Constants.PROFILE_ADVOGADO)
             {
@@ -88,7 +106,12 @@ namespace GrupoSelect.Web.Controllers
 
             if (userProfile == Constants.PROFILE_DIRETOR || userProfile == Constants.PROFILE_GERENTE || userProfile == Constants.PROFILE_ADMINISTRATIVO)
             {
-                result = await _contractService.GetAllPaginate(new Contract { Proposal = new Proposal() }, 1, 1000, startOfWeek, startOfWeek.AddDays(6));
+                var grupoId = 0;
+                if(userProfile == Constants.PROFILE_GERENTE)
+                {
+                    grupoId = Convert.ToInt32(User.GetGroupId());
+                }
+                result = await _contractService.GetAllPaginate(new Contract { Proposal = new Proposal() }, 1, 1000, startOfWeek, startOfWeek.AddDays(6), grupoId);
             }
             else if (userProfile == Constants.PROFILE_REPRESENTANTE)
             {
@@ -137,7 +160,12 @@ namespace GrupoSelect.Web.Controllers
 
             if (userProfile == Constants.PROFILE_DIRETOR || userProfile == Constants.PROFILE_GERENTE || userProfile == Constants.PROFILE_ADMINISTRATIVO)
             {
-                result = await _contractService.GetAllPaginate(new Contract { Proposal = new Proposal() }, 1, 1000, firstDayOfMonth, lastDayOfMonth);
+                var grupoId = 0;
+                if (userProfile == Constants.PROFILE_GERENTE)
+                {
+                    grupoId = Convert.ToInt32(User.GetGroupId());
+                }
+                result = await _contractService.GetAllPaginate(new Contract { Proposal = new Proposal() }, 1, 1000, firstDayOfMonth, lastDayOfMonth, grupoId);
             }
             else if (userProfile == Constants.PROFILE_REPRESENTANTE)
             {

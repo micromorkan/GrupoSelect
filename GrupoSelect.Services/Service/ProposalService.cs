@@ -31,9 +31,11 @@ namespace GrupoSelect.Services.Service
             };
         }
 
-        public async Task<PaginateResult<IEnumerable<Proposal>>> GetAllPaginate(Proposal filter, int page, int qtPage, DateTime startDate, DateTime endDate)
+        public async Task<PaginateResult<IEnumerable<Proposal>>> GetAllPaginate(Proposal filter, int page, int qtPage, DateTime startDate, DateTime endDate, int groupId= 0)
         {
-            return _unitOfWork.Proposals.GetAllPaginate(f => (filter.UserId == 0 || f.UserId == filter.UserId) &&
+            if (groupId == 0)
+            {
+                return _unitOfWork.Proposals.GetAllPaginate(f => (filter.UserId == 0 || f.UserId == filter.UserId) &&
                                                          (filter.ClientId == 0 || f.ClientId == filter.ClientId) &&
                                                          (string.IsNullOrEmpty(filter.ProductTypeName) || f.ProductTypeName == filter.ProductTypeName) &&
                                                          (string.IsNullOrEmpty(filter.TableTypeTax) || f.TableTypeTax == filter.TableTypeTax) &&
@@ -41,6 +43,20 @@ namespace GrupoSelect.Services.Service
                                                          (filter.UserChecked == null || f.UserChecked == filter.UserChecked) &&
                                                          (filter.Status == null || f.Status == filter.Status) &&
                                                          (f.DateCreate.Date >= startDate.Date && f.DateCreate.Date <= endDate.Date), o => o.OrderByDescending(x => x.DateCreate), page, qtPage, i => i.User, i => i.Client);
+            }
+            else
+            {
+                return _unitOfWork.Proposals.GetAllPaginate(f => (filter.UserId == 0 || f.UserId == filter.UserId) &&
+                                                             (filter.ClientId == 0 || f.ClientId == filter.ClientId) &&
+                                                             (string.IsNullOrEmpty(filter.ProductTypeName) || f.ProductTypeName == filter.ProductTypeName) &&
+                                                             (string.IsNullOrEmpty(filter.TableTypeTax) || f.TableTypeTax == filter.TableTypeTax) &&
+                                                             (string.IsNullOrEmpty(filter.FinancialAdminName) || f.FinancialAdminName == filter.FinancialAdminName) &&
+                                                             (filter.UserChecked == null || f.UserChecked == filter.UserChecked) &&
+                                                             (filter.Status == null || f.Status == filter.Status) &&
+                                                             (f.DateCreate.Date >= startDate.Date && f.DateCreate.Date <= endDate.Date) &&
+                                                              f.User.GroupUsers.Any(x=> x.GroupId == groupId), o => o.OrderByDescending(x => x.DateCreate), page, qtPage, i => i.User.GroupUsers, i => i.Client);
+            }
+
         }
 
         public async Task<Result<Proposal>> GetById(int id)

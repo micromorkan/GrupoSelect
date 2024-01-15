@@ -49,6 +49,7 @@ namespace GrupoSelect.Web.Controllers
                     new Claim(ClaimTypes.NameIdentifier, result.Object.Id.ToString()),
                     new Claim(ClaimTypes.Name, result.Object.Name),
                     new Claim(ClaimTypes.Role, result.Object.Profile),
+                    new Claim(ClaimTypes.GroupSid, result.Object.GroupUsers.Count > 0 ? result.Object.GroupUsers.First().GroupId.ToString() : string.Empty),
                 };
 
                 ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

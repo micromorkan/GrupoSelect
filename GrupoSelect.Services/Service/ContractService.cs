@@ -40,19 +40,26 @@ namespace GrupoSelect.Services.Service
             };
         }
 
-        public async Task<PaginateResult<IEnumerable<Contract>>> GetAllPaginate(Contract filter, int page, int qtPage, DateTime startDate, DateTime endDate)
+        public async Task<PaginateResult<IEnumerable<Contract>>> GetAllPaginate(Contract filter, int page, int qtPage, DateTime startDate, DateTime endDate, int groupId= 0)
         {
-            //return _unitOfWork.Contracts.GetAllPaginate(f => (filter.Proposal.UserId == 0 || f.Proposal.UserId == filter.Proposal.UserId) &&
-            //                                             (filter.Proposal.ClientId == 0 || f.Proposal.ClientId == filter.Proposal.ClientId) &&
-            //                                             (string.IsNullOrEmpty(filter.Status) || f.Status == filter.Status) &&
-            //                                             (string.IsNullOrEmpty(filter.ContractNum) || f.ContractNum.Contains(filter.ContractNum)) &&
-            //                                             (f.DateCreate.Date >= startDate.Date && f.DateCreate.Date <= endDate.Date), o => o.OrderByDescending(x => x.DateStatus), page, qtPage, i => i.Proposal.Client, i => i.Proposal.User);
-
-            return await _contractRepository.GetAllPaginate(f => (filter.Proposal.UserId == 0 || f.Proposal.UserId == filter.Proposal.UserId) &&
+            if(groupId == 0)
+            {
+                return await _contractRepository.GetAllPaginate(f => (filter.Proposal.UserId == 0 || f.Proposal.UserId == filter.Proposal.UserId) &&
                                                          (filter.Proposal.ClientId == 0 || f.Proposal.ClientId == filter.Proposal.ClientId) &&
                                                          (string.IsNullOrEmpty(filter.Status) || f.Status == filter.Status) &&
                                                          (string.IsNullOrEmpty(filter.ContractNum) || f.ContractNum.Contains(filter.ContractNum)) &&
                                                          (f.DateCreate.Date >= startDate.Date && f.DateCreate.Date <= endDate.Date), page, qtPage);
+            }
+            else
+            {
+                return await _contractRepository.GetAllPaginate(f => (filter.Proposal.UserId == 0 || f.Proposal.UserId == filter.Proposal.UserId) &&
+                                                         (filter.Proposal.ClientId == 0 || f.Proposal.ClientId == filter.Proposal.ClientId) &&
+                                                         (string.IsNullOrEmpty(filter.Status) || f.Status == filter.Status) &&
+                                                         (string.IsNullOrEmpty(filter.ContractNum) || f.ContractNum.Contains(filter.ContractNum)) &&
+                                                         (f.DateCreate.Date >= startDate.Date && f.DateCreate.Date <= endDate.Date) &&
+                                                         f.Proposal.User.GroupUsers.Any(x=> x.GroupId == groupId), page, qtPage);
+            }
+            
         }
 
         public async Task<Result<Contract>> GetById(int id)
