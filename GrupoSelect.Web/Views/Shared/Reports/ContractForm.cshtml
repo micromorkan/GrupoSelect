@@ -10,148 +10,171 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Contrato - @Model.Contract.ContractNum</title>
 
-    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
-    <link href="~/css/nprogress.css" rel="stylesheet" />
-    <link href="~/css/animate.min.css" rel="stylesheet" />
-
-    <meta name="robots" content="noindex, follow">
-
-    <style type="text/css">
-        table, th, td {
-            border: 1px solid black;
-            border-collapse: collapse;
-            font-size: 12px;
-        }
-
-        p, span {
-            font-size: 12px;
-        }
-
-        .text-center {
-            text-align: center !important;
-        }
-
-        .bold {
-            font-weight: bold;
-        }
-
-        .contractNumber {
-            position: absolute;
-            top: -1%;
-            left: 80%;
-        }
-
-        .watermark {
-            position: absolute;
-            top: 77%;
-            left: 60%;            
-            display: none;
-            width: 30%;
-        }
-
+    <style>
         @@media print {
-            .watermark {
-                display: block !important;
+            .pagebreak {
+                page-break-before: always;
+            }
+
+            @@media screen {
+                div.divFooter {
+                    display: none;
+                }
+            }
+
+            @@media print {
+                div.divFooter {
+                    position: fixed;
+                    bottom: 0;
+                }
             }
         }
     </style>
 </head>
-<body style="height: 1000px;">
-    <img class="watermark" src="data:image/png;base64,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" />
-    <p class="contractNumber"><b>CONTRATO @Model.Contract.ContractNum</b></p>
-    <div class="text-center" style="margin-right: 10px; margin-left: 10px;">
-        <h3 class="bold">CONTRATO DE CONSULTORIA FINANCEIRA</h3>
-        <p>(TÍTULO EXECUTIVO EXTRAJUDICIAL)</p>
-    </div>
-    <div style="margin-right: 10px; margin-left: 10px">
-        <span>Por meio do presente instrumento particular, de um lado o cliente / consumidor:</span>
-        <table style="width: 100%; border-top: none; border-left: none; border-right: none;">
-            <thead style="border: none !important">
-                <tr style="border: none !important">
-                    <th style="border: none !important; width: 23%;"></th>
-                    <th style="border: none !important"></th>
-                    <th style="border: none !important; width: 20%;"></th>
-                    <th style="border: none !important"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td style="font-weight: bold;">Nome/Razão Social do Cliente</td>
-                    <td>@Model.Client.Name</td>
-                    <td style="font-weight: bold;">Sexo</td>
-                    <td>@Model.Client.Sex</td>
-                </tr>
-                <tr>
-                    <td style="font-weight: bold;">CPF/CNPJ</td>
-                    <td>@Model.Client.CPF</td>
-                    <td style="font-weight: bold;">RG/Insc. Estadual</td>
-                    <td>@Model.Client.RG</td>
-                </tr>
-                <tr>
-                    <td style="font-weight: bold;">Órgão Epx./UF</td>
-                    <td>@Model.Client.OrganExp</td>
-                    <td style="font-weight: bold;">Data de nasc./Fundação</td>
-                    <td>@Model.Client.DateBirth</td>
-                </tr>
-                <tr>
-                    <td style="font-weight: bold;">Endereço</td>
-                    <td colspan="3">@Model.Client.Address, @Model.Client.Complement - @Model.Client.City / @Model.Client.State</td>
-                </tr>
-            </tbody>
+<body>
+    <img />
+    <center><h3>CONTRATO DE PRESTAÇÃO DE SERVIÇOS DE CONSULTORIA FINANCEIRA</h3></center>
+    <div>
+        <table border=1 width="100%">
+            <tr>
+                <td style="width: 25%">NOME FANTASIA:</td>
+                <td style="width: 75%">@Model.User.Representation</td>
+            </tr>
+            <tr>
+                <td>CNPJ:</td>
+                <td>@Model.User.Cnpj</td>
+            </tr>
+            <tr>
+                <td>DOC.Nº:</td>
+                <td>@Model.Contract.ContractNum</td>
+            </tr>
         </table>
-        <span>doravante denominada CONTRATANTE, e de outro lado:</span>
-        <p style="text-align:justify">
-            <b>BRASCON - Brasil Consultoria</b>, sociedade empresarial de direito privado, regularmente inscrita no Cadastro Nacional da Pessoa Jurídica (CNPJ) sob o nº 53.161.146/0001-85, com sede na Av. Santos Dumont, nº 6061, Edfício André Guimarães Helitower, Sala:621, Portão, Lauro de Freitas/BA, CEP 42.712-740, através de seu representante legal doravante denominada CONTRATADA, acordam o presente contrato.<br />
-        </p>
-        <p style="text-align:justify">
-            <b>CLÁUSULA PRIMEIRA.</b> Constitui objeto do presente instrumento a prestação de serviços intelectuais de consultoria financeira, que será realizada pela CONTRATADA para o CONTRATANTE, e em decorrência a CONTRATADA orientará a CONTRATANTE sobre a realização de financiamentos, consórcios, empréstimos etc. O investimento a ser realizado pela CONTRATANTE junto a um Banco ou Financeira ou Administradora de Consórcios, seja na modalidade de consórcio, financiamento, empréstimo ou outra modalidade, é de inteira responsabilidade do CONTRATANTE.<br />
-            <b>CLÁUSULA SEGUNDA.</b> A CONTRATADA receberá a título de honorários pela consultoria financeira, em parcela única, o percentual de <b> @Model.Proposal.TableTypeFee% </b>sobre o valor do crédito total pretendido pelo CONTRATANTE.CLÁUSULA TERCEIRA. O pagamento dos honorários pela consultoria financeira é <span style="text-decoration: underline; font-weight: bold">absolutamente independente</span> do investimento financeiro a ser realizado junto a qualquer Banco ou Administradora de Consórcios pelo CONTRATANTE.<br />
-            <b>CLÁUSULA TERCEIRA.</b> O pagamento dos honorários pela consultoria financeira é absolutamente independente do investimento financeiro a ser realizado junto a qualquer Banco ou Administradora de Consórcios pelo CONTRATANTE.<br />
-            <b style="text-align:justify;">CLÁUSULA QUARTA. A CONTRATANTE concorda que a remuneração pela consultoria (honorários) será devida em sua integralidade, e ainda que o CONTRATANTE se arrependa do negócio entabulado, seja por qualquer motivo, <span style="text-decoration: underline;">NÃO HAVERÁ DEVOLUÇÃO EM HIPÓTESE ALGUMA</span>.</b><br />
-            <b>CLÁUSULA QUINTA.</b> Em havendo a orientação para aquisição de cota de consórcio, deve o contratante observar o disposto nos artigos 22 e 30 da LEI FEDERAL 11.795/2008, que trata da forma de devolução através de sorteios mensais para os casos de quotistas excluídos ou desistentes, ou ao final do grupo no prazo de 30 dias do seu encerramento, junto à Administradora de Consórcios escolhida, e estas disposições em nada se relacionam com os valores pagos a título de honorários pela consultoria financeira prestada.<br />
-            <b>CLÁUSULA SEXTA.</b> A CONTRATANTE autoriza a CONTRATADA a receber, inclusive em espécie, e realizar a transferência dos valores no prazo de 48 horas para Administradora de Consórcio devidamente autorizada pelo Banco Central, referente a aquisição da cota de consórcio em nome do consorciado.<br />
-            <b>CLÁUSULA SÉTIMA.</b> A CONTRATANTE, ao assinar o presente instrumento, declara e ratifica que leu na íntegra, compreendeu e concorda com os direitos e obrigações que passa a ter e assumir, aceitando, sem restrições, de forma livre e consciente, as condições ora estabelecidas.<br />
-            <b>CLÁUSULA OITAVA.</b> Não faz parte do presente instrumento ou da avença por ele expressa nenhuma eventual promessa ou informação escrita ou verbal do consultor ou qualquer outra pessoa que seja divergente deste contrato, devendo ser desconsiderado todo e qualquer instrumento que não seja parte integrante deste contrato.<br />
-            <b>CLÁUSULA NONA.</b> A CONTRATANTE autoriza, a título gratuito, o uso de minha imagem e voz em fotos e/ou filmagens, com ou sem finalidade comercial por parte da CONTRATADA, em todo território nacional, em todas as suas modalidades, inclusive para exposição em redes sociais.<br />
-            <b>CLÁUSULA DÉCIMA.</b> As partes elegem a foro da comarca de Salvador/Bahia para resolução de eventuais conflitos e por estarem assim justos e contratados, reputam o avençado por bom, firme e valioso, e firmam o presente instrumento em 02 (duas) vias de igual teor, ficando desde já estabelecida multa no importe de R$ 2.000,00 (dois mil reais) para cada ato que, ao invés das vias legais, busque as vias ilegais, tais como publicações ofensivas, difamação ou calúnia na internet.
-        </p>
-    </div>
-    <div class="text-center" style="margin-right: 10px; margin-left: 10px; margin-top: 20px;">
-        <p>Cidade_________________________________________________________, _________/__________/__________</p>
-        <h4 style="color: red; font-weight: bolder;">NÃO ASSINE SEM LER</h4>
-    </div>
-    <div style="margin-right: 10px; margin-left: 10px">
-        <table style="border: none !important; width: 100%;">
-            <thead style="border: none !important">
-                <tr style="border: none !important">
-                    <th style="border: none !important; width: 50%;"></th>
-                    <th style="border: none !important; width: 50%;"></th>
-                </tr>
-            </thead>
-            <tbody style="border: none !important">
-                <tr class="text-center" style="border: none !important">
-                    <td style="border: none !important">_________________________________________________<br />CONTRATANTE<br />(Declaro que li e concordei com todas as cláusulas)</td>
-                    <td style="border: none !important">_________________________________________________<br />CONTRATADA<br />&nbsp;</td>
-                </tr>
-            </tbody>
-        </table>
-        <br />
-        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Testemunhas</span>
-        <table style="border: none !important; width: 100%;">
-            <thead style="border: none !important">
-                <tr style="border: none !important">
-                    <th style="border: none !important; width: 50%;"></th>
-                    <th style="border: none !important; width: 50%;"></th>
-                </tr>
-            </thead>
-            <tbody style="border: none !important">
-                <tr class="text-center" style="border: none !important">
-                    <td style="border: none !important">_________________________________________________<br />CPF</td>
-                    <td style="border: none !important">_________________________________________________<br />CPF</td>
-                </tr>
-            </tbody>
+        <table border=1 width="100%">
+            <tr>
+                <td style="width:20%">NOME:</td>
+                <td style="width:80%" colspan="5">@Model.Client.Name</td>
+            </tr>
+            <tr>
+                <td style="width:20%">ENDEREÇO:</td>
+                <td style="width:80%" colspan="5">@Model.Client.Address, @Model.Client.Complement - @Model.Client.City / @Model.Client.State @Model.Client.Cep</td>
+            </tr>
+            <tr>
+                <td>RG:</td>
+                <td>@Model.Client.RG</td>
+                <td>CPF:</td>
+                <td>@Model.Client.CPF</td>
+
+            </tr>
+            <tr>
+                <td>EMAIL:</td>
+                <td>@Model.Client.Email</td>
+                <td>TELEFONE</td>
+                <td>@Model.Client.Contact</td>
+            </tr>
+            <tr>
+                <td>PROFISSÃO</td>
+                <td>@Model.Client.Profession</td>
+                <td>ESTADO CIVIL</td>
+                <td>@Model.Client.MaritalStatus</td>
+            </tr>
         </table>
     </div>
+    <p>Por meio do presente instrumento particular, de um lado o cliente / consumidor doravante denominada <b>CONTRATANTE</b>,</p>
+    <p>e de outro lado:</p>
+    <div style="width:100%; border: 1px solid black;">
+        <p> <b>BRASCON INTERMEDIAÇÃO E AGENCIAMENTO DE SERVIÇOS LTDA</b>, sociedade empresarial de direito privado, regularmente inscrita no Cadastro Nacional da Pessoa Jurídica (CNPJ) sob o nº <b>53.161.146.0001-85</b>, com sede na <b>AV.SANTOS DRUMONT Nº 6061 EDF HELITOWER, PORTÃO , LAURO DE FREITAS</b>. através de seu representante legal doravante denominada <b>PRESTADORA DE SERVIÇOS</b>. </p>
+    </div>
+    <p>Separadamente denominadas “PARTE” e em conjunto “PARTES”, têm de maneira justa e acordada, o presente “<b>CONTRATO DE CONSULTORIA FINANCEIRA</b>”.</p>
+    <h4><b>CLÁUSULA PRIMEIRA - DO OBJETO</b></h4>
+    <p><b>1.1</b>     Constitui objeto do presente instrumento a <b>prestação de serviços de consultoria financeira</b>, que será realizada pela        <b>PRESTADORA DE SERVIÇOS</b> para a <b>CONTRATANTE</b>.</p>
+    <div class="divFooter">ASSINATURA DO CONTRATANTE:________________________( idêntica ao doc. Identificação)</div>
+    <div class="pagebreak"> </div>
+
+    <p><b>1.2<u>     Em decorrência da consultoria financeira, a CONTRATADA orientará a CONTRATANTE a realizar investimentos que melhor atendam aos interesses do CONTRATANTE.</u></b></p>
+    <p><b>1.3</b>     Os serviços de <b>consultoria</b>, objeto do presente instrumento, incluem o que se segue:</p>
+    <p><b>a)</b>   <u>Análise do perfil</u> da CONTRATANTE através de consultores financeiros internos; E, após a consulta será expedido em até 24 horas, o relatório da consultoria financeira devidamente prestado. Logo,acabada a relação entre as partes com o serviço totalmente prestado. </p>
+    <p><b>b)</b>   <u>A escolha do investimento</u> a ser adquirido será realizada, exclusivamente pelo CONTRATANTE, de forma livre e espontânea e independente do serviço da consultoria, que apenas fará a indicação,  com seu relatório, e opinamento, através de sua expertise de mercado, do melhor produto financeiro e ainda de acordo com o valor do crédito, valor de parcela, capacidade  financeira do cliente, tipo do bem e demais disposições do perfil do CONTRATANTE;</p>
+    <p><b>c)</b>   Atendimento e esclarecimento de dúvidas através de e-mail e telefone fixo, enquanto vigente o contrato entre as partes;</p>
+    <p><b>d)</b>   Auxílio com informações sobre a documentação necessária;</p>
+    <p><b>e)</b>   Prestar as informações que lhe forem solicitadas pela CONTRATANTE pertinentes ao presente contrato de consultoria, através da ENTREGA DO RELATÓRIO DE CONSULTORIA FINANCEIRA AO FINAL OU ATÉ EM 72 HORAS APÓS A ANAMNESE;</p>
+    <p><b>f)</b>   Desempenhar suas atribuições de modo a atender os interesses e objetivos financeiros do CONTRATANTE;</p>
+    <p><b>g)</b>   Empregar no exercício de sua atividade, o cuidado e a diligência que qualquer pessoa ativa e proba deve dispensar em seus próprios negócios.</p>
+    <p><b>1.4</b>     Referidos serviços serão prestados por meio dos seguintes meios de contato:</p>
+    <p><b>Email: @Model.Client.Email</b></p>
+    <p></p>
+    <p><b>Contato Telefônico: @Model.Client.Contact</b></p>
+    <p></p>
+    <div class="divFooter">ASSINATURA DO CONTRATANTE:________________________( idêntica ao doc. Identificação)</div>
+    <div class="pagebreak"> </div>
+
+    <h4><b>CLÁUSULA SEGUNDA – DO PREÇO E FORMA DE PAGAMENTO PELA ASSESSORIA E INTERMEDIAÇÃO FINANCEIRA</b></h4>
+    <p><b>2.1</b>     O pagamento referente aos <b>HONORÁRIOS DE SERVIÇOS PRESTADOS PELA CONSULTORIA</b> será realizada pelo CONTRATANTE em <b><u>parcela única</u></b>, por meio de boleto ou em espécie mediante recibo ou por PIX para a chave:______________________, de titularidade da empresa de consultoria, ora <b>PRESTADORA DE SERVIÇO</b>. </p>
+    <p><b>2.2</b>     Receberemos, nesta data,  a importância de R$___________________________________( por extenso), referente ao valor dos <b><u>HONORÁRIOS DE PRESTAÇÃO DE SERVIÇO POR CONSULTORIA FINANCEIRA</u></b>, conforme o presente contrato.</p>
+    <div>
+        <table border="1">
+            <tr>
+                <td>Valor Total: R$@Model.Proposal.CreditTotalValue</td>
+                <td></td>
+                <td>( )Deslocamento:</td>
+                <td></td>
+                <td>( ) Outros:</td>
+            </tr>
+            <tr><td colspan="5">OBSERVAÇÕES: ----- CASO TENHA TAXA DE DESLOCAMENTO ATÉ O CLIENTE : FAVOR CITAR AQUI. E SE POSSÍVEL A FORMA DE RECEBIMENTO DO PAGAMENTO. </td></tr>
+        </table>
+    </div>
+    <center><p><b>HONORÁRIOS EXTRAS</b></p></center>
+    <div class="divFooter">ASSINATURA DO CONTRATANTE:________________________( idêntica ao doc. Identificação)</div>
+    <div class="pagebreak"> </div>
+
+    <p><b>2.3</b>     A CONTRATANTE concorda que a remuneração pela <b>CONSULTORIA</b> será devida em sua integralidade, <b><u>e ainda que o CONTRATANTE se arrependa do produto financeiro que ESCOLHEU e CONTRATOU com a Administradora de Consórcio</u></b>, ou  outra entidade financeira, deverá formalizar este arrependimento através de documento de desistência com a própria empresa  contratada do produto financeiro ( administradora de consórcio ou outra entidade financeira), logo, EM NADA E POR MOTIVO ALGUM SERÁ devolvido o valor dos HONORÁRIOS da CONSULTORIA FINANCEIRA, uma vez que o serviço foi devidamente prestado com o relatório de consultoria, após ANAMNESE, estudo de mercado, perfil e objetivo do CONTRATANTE;  e, ainda, contrato do PRODUTO FINANCEIRO escolhido, perfeito, acabado e assinado pelo cliente, espontaneamente, com sua assinatura ( física ou digital com validade jurídica - assinatura válida pelo Certificado Digital), dando assim validação da sua ESCOLHA, CONCORDÂNCIA E ANUÊNCIA pela <b>indicação/parecer</b> feito  através da assessoria financeira, conforme contrato de prestação de serviço de assessoria e consultoria financeira.</p>
+    <p><b>2.4</b>     Em caso excepcional, caso O CONTRATANTE deseje , após a conclusão deste primeiro serviço de consultoria, com a emissão do relatório consultivo, um POSTERIOR E OUTRO serviço ( através de <u>outro</u> contrato do posterior produto financeiro escolhido), desde já informa CIÊNCIA, ANUÊNCIA E CONCORDÂNCIA, bem como autoriza desde já a PRESTADORA DE SERVIÇOS a receber seja por PIX, TRANSFERÊNCIA (TED OU DOC) ou inclusive em espécie, mediante recibo, e realizar a transferência dos valores no prazo de   <u>24horas</u> para Administradora de Consórcio devidamente autorizada pelo Banco Central, referente a aquisição da cota de consórcio  em nome do consorciado (CONTRATANTE). O investimento a ser realizado pela CONTRATANTE junto a um Banco ou Financeira ou Administradora de Consórcios, seja na modalidade de consórcio, financiamento, empréstimo ou outra modalidade, é de inteira responsabilidade, CONCORDÂNCIA, CIÊNCIA E ANUÊNCIA EXPRESSA ( ASSINATURA E PAGAMENTO FEITO SOB SUA AUTORIZAÇÃO) do CONTRATANTE. Conforme inclusive o Termo e <u>Declaração de autorização em apenso a este</u>.</p>
+    <h4><b>CLÁUSULA TERCEIRA – DAS OBRIGAÇÕES DA CONTRATANTE</b></h4>
+    <p><b>3.1</b>     A CONTRATANTE se obriga a pagar pela consultoria financeira, <b>independente do investimento financeiro</b> a ser realizado junto a  um Banco ou Financeira ou Administradora de Consórcios.</p>
+    <p><b>3.2</b>     A CONTRATANTE se obriga a cumprir com todas as obrigações descritas no presente instrumento, mantendo a boa-fé e não participando de atos que venham a acarretar prejuízos morais e/ou financeiros à PRESTADORA DE SERVIÇOS, <b><u>sobretudo eventuais difamações e  calúnias em redes sociais</u></b>, OU REALIZAÇÃO DE B.O por ato que este mesmo tenha CAUSADO ( CONTRATOS DEVIDAMENTE ESCOLHIDOS E ASSINADOS LEGALMENTE ENTRE AS PARTES – CAPAZES E LIVRES PARA CONTRATAR SERVIÇOS) sob pena do</p>
+    <div class="divFooter">ASSINATURA DO CONTRATANTE:________________________( idêntica ao doc. Identificação)</div>
+    <div class="pagebreak"> </div>
+
+    <p>pagamento de uma multa no importe de <b><u>R$ 5.000,00 (cinco mil reais) para cada publicação ofensiva, testemunho ou uso de sua imagem em situações de matérias jornalísticas em redes de comunicação ou redes sociais, ou ainda por cada B.O. REALIZADO. Ademais, fica ainda ciente e CONCORDA que caso entre na JUSTIÇA com processo, para tentar anular este contrato, tendo realizado este de livre e espontânea vontade, poderá ainda, pagar a multa por DESACORDO E DESLEALDADE CONTRATUAL na importância do dobro do valor da presente contratação, tendo em vista as repercussões e danos à presente empresa prestadora de serviços</u></b>. </p>
+    <h4><b>CLÁUSULA QUARTA – DAS OBRIGAÇÕES DA CONTRATADA</b></h4>x
+    <p><b>4.1</b>     A PRESTADORA DE SERVIÇOS se obriga a prestar <b>a consultoria financeira</b> com excelência e assegura a confidencialidade de todas as informações prestadas pela CONTRATANTE, independentemente da natureza das informações compartilhadas, excetuadas as hipóteses de informações públicas e/ou cuja declaração se faça obrigatória por imposição legal.</p>
+    <h4><b>CLÁUSULA QUINTA – DA VIGÊNCIA E RESCISÃO</b></h4>
+    <p><b>5.1</b>     O presente instrumento passa a vigorar a partir da assinatura pela CONTRATANTE, <u>conjuntamente ao pagamento da  remuneração dos honorários</u> pela consultoria financeira prestada.</p>
+    <p><b>5.2</b>     A desistência ou inadimplência do ora contratante com a Administradora do Consórcio ou do produto financeiro escolhido e assinado em contrato de adesão, IRÁ SE SUBMETER E SEGUIRÁ as REGRAS, REGULAMENTO da Administradora do Consórcio, bem como a LEI DOS CONSÓRCIOS ou do produto financeiro específico conforme regulamento e normativas do BANCO CENTRAL sobre aquele determinado produto. Isto é, desde já informado por este prestador de serviço de consultoria financeira, ao ora contratante, que nos casos de DESISTÊNCIA OU INADIMPLÊNCIA, o consumidor do CONSÓRCIO que aderiu NÃO RECEBE os valores pagos, ao consórcio,  integralmente e tampouco receberá a quantia de forma imediata, conforme O DISPOSTO NOS ARTIGOS 22 E 30 DA LEI FEDERAL 11.795/2008, que trata da forma de devolução através de sorteios mensais para os casos de quotistas excluídos ou desistentes, ou ao final do grupo no prazo de 30 dias do seu  encerramento, junto à Administradora de Consórcios escolhida.</p>
+    <h4><b>CLÁUSULA SEXTA – DISPOSIÇÕES GERAIS</b></h4>
+    <p><b>6.1</b>     A CONTRATANTE, ao assinar o presente instrumento, <b><u>declara e ratifica que leu na íntegra</u></b>, compreendeu e concorda com os  direitos e obrigações que <b><u>passa a ter e assumir, aceitando, sem restrições</u></b>, por si, seus herdeiros e sucessores, as condições ora    estabelecidas.</p>
+    <div class="divFooter">ASSINATURA DO CONTRATANTE:________________________( idêntica ao doc. Identificação)</div>
+    <div class="pagebreak"> </div>
+    <p><b>6.2</b>     Não faz parte do presente instrumento ou da avença por ele expressa <b>nenhuma eventual promessa ou informação escrita ou   verbal do consultor ou qualquer outra pessoa que seja divergente deste contrato</b>, devendo ser desconsiderado todo e qualquer instrumento que não seja parte integrante deste contrato.</p>
+    <p><b>6.3</b>     A CONTRATANTE autoriza o uso de sua imagem em fotos ou filmagens, ou gravações telefônicas e via whatsapp, com ou sem finalidade comercial, por parte da empresa PRESTADORA DE SERVIÇO de consultoria financeira. A presente autorização é concedida a título gratuito, abrangendo o uso da <u>imagem e voz</u>, acima mencionada em todo território nacional e no exterior, em todas as suas modalidades, inclusive para exposição no Instagram,  junto ao perfil da referida empresa.</p>
+    <p><b>6.4</b>     As partes elegem o foro da comarca de __________________ para resoluções de conflitos.</p>
+    <p>Por estarem assim justos e contratados, reputando o avençado por bom, firme e valioso, firmam o presente instrumento, em 02 (duas) vias de igual teor, juntamente com 02 (duas) testemunhas.</p>
+    <p>Data: _______________________________            	Cidade: _____________________________ </p>
+    <center><h4 style="color:red">NÃO ASSINE SEM LER.</h4></center>
+    <center><h4 style="color:red">LEIA COM ATENÇÃO O CONTRATO DO SEU PRODUTO FINANCEIRO ESCOLHIDO</h4></center>
+    <br />
+    <br />
+    <table style="border: none !important; width: 100%;">
+        <thead style="border: none !important">
+            <tr style="border: none !important">
+                <th style="border: none !important; width: 50%;"></th>
+                <th style="border: none !important; width: 50%;"></th>
+            </tr>
+        </thead>
+        <tbody style="border: none !important">
+            <tr class="text-center" style="border: none !important">
+                <td style="border: none !important"><center>____________________________________</center><br /><center>CONTRATANTE</center><br /><center>(Declaro que li e concordei com todas as cláusulas)</center></td>
+                <td style="border: none !important"><center>____________________________________</center><br /><center>CONTRATADA</center><br />&nbsp;</td>
+            </tr>
+        </tbody>
+    </table>
+    <br />
+    <table style="border-bottom: thick; border-left: thick; border-right: thick; border-top: thick ">
+        <tr>
+            <td>TESTEMUNHA 1: _________________________<br /><br /><br />TESTEMUNHA 2: _________________________<br /> <br /><br /> </td>
+            <td>CONTATO: _________________________<br /><br /><br />CONTATO: _________________________<br /> <br /><br /> </td>
+            <td>CPF: _________________________<br /><br /><br />CPF: ________________________<br /> <br /><br /> </td>
+        </tr>
+    </table>
+
 </body>
 </html>
