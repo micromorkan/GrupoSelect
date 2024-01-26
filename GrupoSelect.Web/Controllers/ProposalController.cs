@@ -95,6 +95,8 @@ namespace GrupoSelect.Web.Controllers
 
                 return Json(new
                 {
+                    Page = result.Page,
+                    Total = result.Total,
                     Success = result.Success,
                     Message = result.Message,
                     Object = result.Object,
