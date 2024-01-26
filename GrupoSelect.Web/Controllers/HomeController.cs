@@ -74,6 +74,8 @@ namespace GrupoSelect.Web.Controllers
 
                     var userList = (await _userService.GetAll(new Domain.Entity.User())).Object.ToList();
 
+                    userList = userList.Where(x => x.Active).ToList();
+
                     for (int i = 0; i < userList.Count(); i++)
                     {
                         if ((userList[i].Profile == Constants.PROFILE_REPRESENTANTE || userList[i].Profile == Constants.PROFILE_GERENTE)

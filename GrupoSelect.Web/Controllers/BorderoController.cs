@@ -99,7 +99,7 @@ namespace GrupoSelect.Web.Controllers
 
                 foreach (User item in result.Object)
                 {
-                    if (item.Profile == Constants.PROFILE_GERENTE || item.Profile == Constants.PROFILE_REPRESENTANTE || item.Profile == Constants.PROFILE_ADVOGADO)
+                    if (item.Active == true && (item.Profile == Constants.PROFILE_GERENTE || item.Profile == Constants.PROFILE_REPRESENTANTE || item.Profile == Constants.PROFILE_ADVOGADO))
                     {
                         items.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Representation + " - " + item.Profile, Selected = filter.Id == item.Id ? true : false });
                     }
