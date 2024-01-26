@@ -22,15 +22,12 @@
             <div class="row">
                 @using (Html.BeginForm("Index", "Contract", FormMethod.Post, new { @id = "search", @class = "form-horizontal col-md-12 col-xs-12" }))
                 {
-                    @if (User.GetProfile() == Constants.PROFILE_ADVOGADO)
-                    {
-                        <div class="form-group col-md-4 col-xs-12">
-                            @Html.LabelFor(model => model.ClientId)
-                            <select asp-for="ClientId" id="ddlClient" class="form-control js-example-responsive component-select" style="width: 100%">
-                                <option value="">-- Todos --</option>
-                            </select>
-                        </div>
-                    }
+                    <div class="form-group col-md-4 col-xs-12">
+                        @Html.LabelFor(model => model.ClientId)
+                        <select asp-for="ClientId" id="ddlClient" class="form-control js-example-responsive component-select" style="width: 100%">
+                            <option value="">-- Todos --</option>
+                        </select>
+                    </div>
                     <div class="form-group col-md-4 col-xs-12">
                         @Html.LabelFor(model => model.ContractNum)
                         @Html.TextBoxFor(model => model.ContractNum, new { @class = "form-control text-uppercase" })
@@ -63,7 +60,7 @@
                                     @{
                                         if (User.GetProfile() == Constants.PROFILE_ADMINISTRATIVO || User.GetProfile() == Constants.PROFILE_GERENTE || User.GetProfile() == Constants.PROFILE_DIRETOR || User.GetProfile() == Constants.PROFILE_ADVOGADO)
                                         {
-                                                <th class="column text-center" data-prefix="" data-sufix="" data-column="proposal.user.representation" data-css="text-center">Representação</th>
+                                            <th class="column text-center" data-prefix="" data-sufix="" data-column="proposal.user.representation" data-css="text-center">Representação</th>
                                         }
                                     }
                                     <th class="column text-center" data-prefix="" data-sufix="" data-column="contractNum" data-css="text-center">Nº Contrato</th>
@@ -87,14 +84,12 @@
     <script src="~/js/jquery.mask.min.js"></script>
     <script src="~/js/jquery.inputmask.bundle.min.js"></script>
     <script src="~/js/daterangepicker.js"></script>
-    @if (User.GetProfile() == Constants.PROFILE_ADVOGADO)
-    {
-        <script>
-            $(document).ready(function () {
-                FillSelect("@Url.Action("GetClientList", "Contract")", null, "#ddlClient");
-            });
-        </script>
-    }
+    
+    <script>
+        $(document).ready(function () {
+            FillSelect("@Url.Action("GetClientList", "Contract")", null, "#ddlClient");
+        });
+    </script>
     <script>
         $(document).ready(function () {
             $('.component-select').select2();
@@ -223,14 +218,11 @@
 
                             var actionButtons = "";
 
-                            if ('@User.GetProfile()' === '@Constants.PROFILE_ADVOGADO') 
-                            {
+                            if ('@User.GetProfile()' === '@Constants.PROFILE_ADVOGADO') {
                                 actionButtons += "<a title='Detalhar Contrato' class='btn btn-xs btn-info' target = '_blank' href='" + '@Url.Action("Detail", "Contract")' + "\/" + item.id + "'><span class='glyphicon glyphicon-search' aria-hidden='true'></span></a>";
                             }
-                            else
-                            {
-                                if ('@User.GetProfile()' === '@Constants.PROFILE_ADMINISTRATIVO' || '@User.GetProfile()' === '@Constants.PROFILE_GERENTE' || '@User.GetProfile()' === '@Constants.PROFILE_DIRETOR') 
-                                {
+                            else {
+                                if ('@User.GetProfile()' === '@Constants.PROFILE_ADMINISTRATIVO' || '@User.GetProfile()' === '@Constants.PROFILE_GERENTE' || '@User.GetProfile()' === '@Constants.PROFILE_DIRETOR') {
                                     actionButtons += "<a title='Detalhar Contrato' class='btn btn-xs btn-info' target = '_blank' href='" + '@Url.Action("Detail", "Contract")' + "\/" + item.id + "'><span class='glyphicon glyphicon-search' aria-hidden='true'></span></a>";
                                 }
 
