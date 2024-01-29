@@ -35,4 +35,11 @@
     <Folder Include="wwwroot\lib\font-awesome\fonts\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="wwwroot\reports\ContractForm.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
