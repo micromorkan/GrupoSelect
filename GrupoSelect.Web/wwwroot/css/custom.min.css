@@ -1064,7 +1064,7 @@
 }
 
 .left_col {
-    background: #0D260D
+    background: #0E1F33
 }
 
 .container {
@@ -1338,7 +1338,7 @@ body .container.body .right_col {
 .nav_title {
     width: 230px;
     float: left;
-    background: #0D260D;
+    background: #0E1F33;
     border-radius: 0;
     height: 57px;
     padding: 0px
@@ -1500,7 +1500,7 @@ body .container.body .right_col {
 
 body {
     color: #000000;
-    background: #0D260D;
+    background: #0E1F33;
     font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
     font-size: 13px;
     font-weight: 400;
@@ -1744,7 +1744,7 @@ a {
     }
 
 .nav-md ul.nav.child_menu li:before {
-    background: #0D260D;
+    background: #0E1F33;
     bottom: auto;
     content: "";
     height: 8px;
@@ -1758,7 +1758,7 @@ a {
 }
 
 .nav-md ul.nav.child_menu li:after {
-    border-left: 1px solid #0D260D;
+    border-left: 1px solid #0E1F33;
     bottom: 0;
     content: "";
     left: 27px;
@@ -1808,7 +1808,7 @@ a {
 .nav.side-menu > li.active > a {
     text-shadow: rgba(0,0,0,0.25) 0 -1px 0;
     background: -webkit-gradient(linear, left top, left bottom, from(#0D290D), to(#0D270D)),#0D290D;
-    background: linear-gradient(#0D290D, #0D270D),#0D290D;
+    background: linear-gradient(#0E1F33, #0E1F33),#0E1F33;
     -webkit-box-shadow: rgba(0,0,0,0.25) 0 1px 0,inset rgba(255,255,255,0.16) 0 1px 0;
     box-shadow: rgba(0,0,0,0.25) 0 1px 0,inset rgba(255,255,255,0.16) 0 1px 0
 }
@@ -1832,7 +1832,7 @@ a {
     display: block;
     height: 55px;
     margin: 0;
-    padding-left: 10px
+    padding-left: 10px;
 }
 
     .site_title:hover, .site_title:focus {
@@ -2827,7 +2827,7 @@ span.right {
     padding: 5px 0 0 0;
     position: fixed;
     width: 230px;
-    background: #0D260D
+    background: #0E1F33
 }
 
     .sidebar-footer a {
@@ -2929,7 +2929,7 @@ span.right {
     }
 
 a.user-profile {
-    color: #5E6974 !important
+    color: #ffffff !important
 }
 
 .user-profile img {
@@ -4867,7 +4867,7 @@ ul.project_files li {
     }
 
 .login {
-    background: #DEFFDD
+    background: #0E1F33
 }
 
     .login .fa-paw {
@@ -4969,7 +4969,7 @@ a.hiddenanchor {
     padding: 25px 0 0;
     position: relative;
     text-align: center;
-    text-shadow: 0 1px 0 #fff;
+    //text-shadow: 0 1px 0 #fff;
     min-width: 280px
 }
 
