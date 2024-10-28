@@ -42,7 +42,15 @@ namespace GrupoSelect.Services.Service
 
         public async Task<PaginateResult<IEnumerable<Contract>>> GetAllPaginate(Contract filter, int page, int qtPage, DateTime startDate, DateTime endDate, int groupId= 0)
         {
-            if(groupId == 0)
+            if (groupId == -99)
+            {
+                return await _contractRepository.GetAllPaginate(f => (filter.Proposal.UserId == 0 || f.Proposal.UserId == filter.Proposal.UserId) &&
+                                                         (filter.Proposal.ClientId == 0 || f.Proposal.ClientId == filter.Proposal.ClientId) &&
+                                                         (string.IsNullOrEmpty(filter.Status) || f.Status == filter.Status) &&
+                                                         (string.IsNullOrEmpty(filter.ContractNum) || f.ContractNum.Contains(filter.ContractNum)) &&
+                                                         (f.DateAproved.Value.Date >= startDate.Date && f.DateAproved.Value.Date <= endDate.Date), page, qtPage);
+            }
+            else if (groupId == 0)
             {
                 return await _contractRepository.GetAllPaginate(f => (filter.Proposal.UserId == 0 || f.Proposal.UserId == filter.Proposal.UserId) &&
                                                          (filter.Proposal.ClientId == 0 || f.Proposal.ClientId == filter.Proposal.ClientId) &&

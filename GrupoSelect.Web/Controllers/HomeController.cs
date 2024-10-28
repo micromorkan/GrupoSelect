@@ -333,7 +333,7 @@ namespace GrupoSelect.Web.Controllers
 
             if (userProfile == Constants.PROFILE_DIRETOR || userProfile == Constants.PROFILE_GERENTE || userProfile == Constants.PROFILE_ADMINISTRATIVO)
             {
-                result = await _contractService.GetAllPaginate(new Contract { Proposal = new Proposal(), Status = Constants.CONTRACT_STATUS_CA }, 1, 1000, startOfWeek, startOfWeek.AddDays(6));
+                result = await _contractService.GetAllPaginate(new Contract { Proposal = new Proposal(), Status = Constants.CONTRACT_STATUS_CA }, 1, 1000, startOfWeek, startOfWeek.AddDays(6), -99);
             }
 
             List<Contract> listContracts = result.Object.ToList();
@@ -390,7 +390,7 @@ namespace GrupoSelect.Web.Controllers
 
             if (userProfile == Constants.PROFILE_DIRETOR || userProfile == Constants.PROFILE_GERENTE || userProfile == Constants.PROFILE_ADMINISTRATIVO)
             {
-                result = await _contractService.GetAllPaginate(new Contract { Proposal = new Proposal(), Status = Constants.CONTRACT_STATUS_CA }, 1, 1000, firstDayOfMonth, lastDayOfMonth);
+                result = await _contractService.GetAllPaginate(new Contract { Proposal = new Proposal(), Status = Constants.CONTRACT_STATUS_CA }, 1, 1000, firstDayOfMonth, lastDayOfMonth, -99);
             }
 
             List<Contract> listContracts = result.Object.ToList();
@@ -452,7 +452,7 @@ namespace GrupoSelect.Web.Controllers
 
                 months[i + 5] = firstMonth.ToString("MMMM", CultureInfo.CreateSpecificCulture("pt-BR")).ToUpper();
 
-                PaginateResult<IEnumerable<Contract>> result = await _contractService.GetAllPaginate(new Contract { Proposal = new Proposal(), Status = Constants.CONTRACT_STATUS_CA }, 1, 1000, firstMonth, lastDayOfMonth);
+                PaginateResult<IEnumerable<Contract>> result = await _contractService.GetAllPaginate(new Contract { Proposal = new Proposal(), Status = Constants.CONTRACT_STATUS_CA }, 1, 1000, firstMonth, lastDayOfMonth, -99);
 
                 if (result.Object.Count() > 0)
                 {
