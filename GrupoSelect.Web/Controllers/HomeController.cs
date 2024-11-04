@@ -69,7 +69,7 @@ namespace GrupoSelect.Web.Controllers
                 }
 
                 if (userProfile == Constants.PROFILE_GERENTE)
-                {                    
+                {
                     var grupoId = Convert.ToInt32(User.GetGroupId());
 
                     var userList = (await _userService.GetAll(new Domain.Entity.User())).Object.ToList();
@@ -79,7 +79,7 @@ namespace GrupoSelect.Web.Controllers
                     for (int i = 0; i < userList.Count(); i++)
                     {
                         if ((userList[i].Profile == Constants.PROFILE_REPRESENTANTE || userList[i].Profile == Constants.PROFILE_GERENTE)
-                            && userList[i].GroupUsers.Any(x=> x.GroupId == grupoId))
+                            && userList[i].GroupUsers.Any(x => x.GroupId == grupoId))
                         {
                             dashboard.LstTile.Add(await MontarTileContratoMensal(i + 1, userList[i].Id));
                         }
@@ -111,7 +111,7 @@ namespace GrupoSelect.Web.Controllers
             if (userProfile == Constants.PROFILE_DIRETOR || userProfile == Constants.PROFILE_GERENTE || userProfile == Constants.PROFILE_ADMINISTRATIVO)
             {
                 var grupoId = 0;
-                if(userProfile == Constants.PROFILE_GERENTE)
+                if (userProfile == Constants.PROFILE_GERENTE)
                 {
                     grupoId = Convert.ToInt32(User.GetGroupId());
                 }
@@ -308,6 +308,8 @@ namespace GrupoSelect.Web.Controllers
                 {
                     dashboard.LstTile.Add(await MontarTileAdesaoParcelaFinanceiroMensal());
                     dashboard.LstTile.Add(await MontarTileAdesaoFinanceiroMensal());
+                    dashboard.LstTile.Add(await MontarTileComissaoTotalSemanal());
+                    dashboard.LstTile.Add(await MontarTileComissaoTotalMasterSemanal());
                 }
 
                 dashboard.LstChartMoney.Add(await MontarChartContratoFinanceiroSemanal());
@@ -553,7 +555,7 @@ namespace GrupoSelect.Web.Controllers
             tile.Icone = "fa-money";
             tile.Descricao = string.Empty;
             tile.Titulo = "Faturamento Mensal";
-            tile.Valor = result.Object.Count() > 0 ? string.Format("{0:C}", result.Object.Sum(x => Convert.ToDecimal(x.Proposal.CreditTotalValue))) : "R$ 0,00"; 
+            tile.Valor = result.Object.Count() > 0 ? string.Format("{0:C}", result.Object.Sum(x => Convert.ToDecimal(x.Proposal.CreditTotalValue))) : "R$ 0,00";
             tile.Controller = "Home";
             tile.Action = "AtualizarTileAdesaoParcelaFinanceiroMensal";
             tile.IntervaloAtualizacao = 60000;
@@ -589,6 +591,79 @@ namespace GrupoSelect.Web.Controllers
             return tile;
         }
 
+        private async Task<Tile> MontarTileComissaoTotalSemanal()
+        {
+            string userProfile = User.GetProfile();
+
+            DateTime date = DateTime.Now;
+
+            var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
+            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+
+            var result = await _contractService.GetAllPaginate(new Contract { Status = Constants.CONTRACT_STATUS_CA, Proposal = new Proposal() }, 1, 1000, firstDayOfMonth, lastDayOfMonth);
+
+            decimal SomatoriaComisao = 0;
+
+            foreach (var item in result.Object)
+            {
+                SomatoriaComisao += Convert.ToDecimal(item.Proposal.CreditValue) * Convert.ToDecimal(item.Proposal.TableTypeCommission) / 100;
+
+                //Comissão Gerente
+                SomatoriaComisao += (Convert.ToDecimal(item.Proposal.CreditValue) * Convert.ToDecimal(item.Proposal.TableTypeManager) / 100) * 2;
+
+                //Comissão Advogado
+                SomatoriaComisao += Convert.ToDecimal(item.Proposal.CreditValue) * 1 / 1000;
+            }
+
+            Tile tile = new Tile();
+
+            tile.Id = 3;
+            tile.BackgroundColor = Constants.SYSTEM_RGBA_WHITE;
+            tile.Icone = "fa-money";
+            tile.Descricao = string.Empty;
+            tile.Titulo = "Total de Comissão";
+            tile.Valor = SomatoriaComisao > 0 ? string.Format("{0:C}", SomatoriaComisao) : "R$ 0,00";
+            tile.Controller = "Home";
+            tile.Action = "AtualizarTileComissaoTotalSemanal";
+            tile.IntervaloAtualizacao = 60000;
+            tile.Filter = null;
+
+            return tile;
+        }
+
+        private async Task<Tile> MontarTileComissaoTotalMasterSemanal()
+        {
+            string userProfile = User.GetProfile();
+
+            DateTime date = DateTime.Now;
+
+            var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
+            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+
+            var result = await _contractService.GetAllPaginate(new Contract { Status = Constants.CONTRACT_STATUS_CA, Proposal = new Proposal() }, 1, 1000, firstDayOfMonth, lastDayOfMonth);
+
+            decimal SomatoriaComisao = 0;
+
+            foreach (var item in result.Object)
+            {
+                SomatoriaComisao += (Convert.ToDecimal(item.Proposal.CreditValue) * Convert.ToDecimal(item.Proposal.TableTypeManager) / 100) * 2;
+            }
+
+            Tile tile = new Tile();
+
+            tile.Id = 4;
+            tile.BackgroundColor = Constants.SYSTEM_RGBA_WHITE;
+            tile.Icone = "fa-money";
+            tile.Descricao = string.Empty;
+            tile.Titulo = "Comissão Master Semanal";
+            tile.Valor = SomatoriaComisao > 0 ? string.Format("{0:C}", SomatoriaComisao) : "R$ 0,00";
+            tile.Controller = "Home";
+            tile.Action = "AtualizarTileComissaoTotalMasterSemanal";
+            tile.IntervaloAtualizacao = 60000;
+            tile.Filter = null;
+
+            return tile;
+        }
         [HttpPost]
         public async Task<JsonResult> AtualizarChartContratoFinanceiroSemanal()
         {
@@ -619,6 +694,17 @@ namespace GrupoSelect.Web.Controllers
             return Json(await MontarTileAdesaoFinanceiroMensal());
         }
 
+        [HttpPost]
+        public async Task<JsonResult> AtualizarTileComissaoTotalSemanal()
+        {
+            return Json(await MontarTileComissaoTotalSemanal());
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> AtualizarTileComissaoTotalMasterSemanal()
+        {
+            return Json(await MontarTileComissaoTotalMasterSemanal());
+        }
         #endregion
 
         #region EXEMPLOS COMPONENTES
