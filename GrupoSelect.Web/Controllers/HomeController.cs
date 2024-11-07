@@ -311,6 +311,18 @@ namespace GrupoSelect.Web.Controllers
                     dashboard.LstTile.Add(await MontarTileComissaoTotalSemanal());
                     dashboard.LstTile.Add(await MontarTileComissaoTotalMasterSemanal());
                     dashboard.LstTile.Add(await MontarTileComissaoTotalRepresentanteSemanal());
+
+                    var userList = (await _userService.GetAll(new Domain.Entity.User())).Object.ToList();
+
+                    userList = userList.Where(x => x.Active).ToList();
+
+                    for (int i = 0; i < userList.Count(); i++)
+                    {
+                        if (userList[i].Profile == Constants.PROFILE_REPRESENTANTE || userList[i].Profile == Constants.PROFILE_GERENTE)
+                        {
+                            dashboard.LstTile.Add(await MontarTileRepresentanteIndividual(dashboard.LstTile.Count + 1, userList[i].Id));
+                        }
+                    }
                 }
 
                 dashboard.LstChartMoney.Add(await MontarChartContratoFinanceiroSemanal());
@@ -596,12 +608,13 @@ namespace GrupoSelect.Web.Controllers
         {
             string userProfile = User.GetProfile();
 
-            DateTime date = DateTime.Now;
+            DateTime startOfWeek = DateTime.Now;
 
-            var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
-            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+            int days = CalculateOffset(startOfWeek.DayOfWeek, DayOfWeek.Friday);
 
-            var result = await _contractService.GetAllPaginate(new Contract { Status = Constants.CONTRACT_STATUS_CA, Proposal = new Proposal() }, 1, 1000, firstDayOfMonth, lastDayOfMonth);
+            startOfWeek = startOfWeek.AddDays(days - 7);
+
+            var result = await _contractService.GetAllPaginate(new Contract { Status = Constants.CONTRACT_STATUS_CA, Proposal = new Proposal() }, 1, 1000, startOfWeek, startOfWeek.AddDays(6));
 
             decimal SomatoriaComisao = 0;
 
@@ -636,12 +649,13 @@ namespace GrupoSelect.Web.Controllers
         {
             string userProfile = User.GetProfile();
 
-            DateTime date = DateTime.Now;
+            DateTime startOfWeek = DateTime.Now;
 
-            var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
-            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+            int days = CalculateOffset(startOfWeek.DayOfWeek, DayOfWeek.Friday);
 
-            var result = await _contractService.GetAllPaginate(new Contract { Status = Constants.CONTRACT_STATUS_CA, Proposal = new Proposal() }, 1, 1000, firstDayOfMonth, lastDayOfMonth);
+            startOfWeek = startOfWeek.AddDays(days - 7);
+
+            var result = await _contractService.GetAllPaginate(new Contract { Status = Constants.CONTRACT_STATUS_CA, Proposal = new Proposal() }, 1, 1000, startOfWeek, startOfWeek.AddDays(6));
 
             decimal SomatoriaComisao = 0;
 
@@ -670,12 +684,13 @@ namespace GrupoSelect.Web.Controllers
         {
             string userProfile = User.GetProfile();
 
-            DateTime date = DateTime.Now;
+            DateTime startOfWeek = DateTime.Now;
 
-            var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
-            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+            int days = CalculateOffset(startOfWeek.DayOfWeek, DayOfWeek.Friday);
 
-            var result = await _contractService.GetAllPaginate(new Contract { Status = Constants.CONTRACT_STATUS_CA, Proposal = new Proposal() }, 1, 1000, firstDayOfMonth, lastDayOfMonth);
+            startOfWeek = startOfWeek.AddDays(days - 7);
+
+            var result = await _contractService.GetAllPaginate(new Contract { Status = Constants.CONTRACT_STATUS_CA, Proposal = new Proposal() }, 1, 1000, startOfWeek, startOfWeek.AddDays(6));
 
             decimal SomatoriaComisao = 0;
 
@@ -696,6 +711,41 @@ namespace GrupoSelect.Web.Controllers
             tile.Action = "AtualizarTileComissaoTotalRepresentanteSemanal";
             tile.IntervaloAtualizacao = 60000;
             tile.Filter = null;
+
+            return tile;
+        }
+
+        private async Task<Tile> MontarTileRepresentanteIndividual(int id, int userId)
+        {
+            string userProfile = User.GetProfile();
+
+            DateTime startOfWeek = DateTime.Now;
+
+            int days = CalculateOffset(startOfWeek.DayOfWeek, DayOfWeek.Friday);
+
+            startOfWeek = startOfWeek.AddDays(days - 7);
+
+            var result = await _contractService.GetAllPaginate(new Contract { Status = Constants.CONTRACT_STATUS_CA, Proposal = new Proposal { UserId = userId } }, 1, 1000, startOfWeek, startOfWeek.AddDays(6));
+
+            decimal SomatoriaComisao = 0;
+
+            foreach (var item in result.Object)
+            {
+                SomatoriaComisao += Convert.ToDecimal(item.Proposal.CreditValue) * Convert.ToDecimal(item.Proposal.TableTypeCommission) / 100;
+            }
+
+            Tile tile = new Tile();
+
+            tile.Id = id;
+            tile.BackgroundColor = Constants.SYSTEM_RGBA_WHITE;
+            tile.Icone = "fa-money";
+            tile.Descricao = string.Empty;
+            tile.Titulo = (await _userService.GetById(userId)).Object.Representation;
+            tile.Valor = SomatoriaComisao > 0 ? string.Format("{0:C}", SomatoriaComisao) : "R$ 0,00";
+            tile.Controller = "Home";
+            tile.Action = "AtualizarTileRepresentanteIndividual";
+            tile.IntervaloAtualizacao = 60000;
+            tile.Filter = userId;
 
             return tile;
         }
@@ -746,6 +796,12 @@ namespace GrupoSelect.Web.Controllers
         public async Task<JsonResult> AtualizarTileComissaoTotalRepresentanteSemanal()
         {
             return Json(await MontarTileComissaoTotalRepresentanteSemanal());
+        }
+        
+        [HttpPost]
+        public async Task<JsonResult> AtualizarTileRepresentanteIndividual(int id, string filter)
+        {
+            return Json(await MontarTileRepresentanteIndividual(id, Convert.ToInt32(filter)));
         }
         #endregion
 
