@@ -567,7 +567,7 @@ namespace GrupoSelect.Web.Controllers
             tile.BackgroundColor = Constants.SYSTEM_RGBA_WHITE;
             tile.Icone = "fa-money";
             tile.Descricao = string.Empty;
-            tile.Titulo = "Faturamento Mensal";
+            tile.Titulo = "FATURAMENTO BRUTO MENSAL";
             tile.Valor = result.Object.Count() > 0 ? string.Format("{0:C}", result.Object.Sum(x => Convert.ToDecimal(x.Proposal.CreditTotalValue))) : "R$ 0,00";
             tile.Controller = "Home";
             tile.Action = "AtualizarTileAdesaoParcelaFinanceiroMensal";
@@ -594,7 +594,7 @@ namespace GrupoSelect.Web.Controllers
             tile.BackgroundColor = Constants.SYSTEM_RGBA_WHITE;
             tile.Icone = "fa-money";
             tile.Descricao = string.Empty;
-            tile.Titulo = "Total Consultoria Mensal";
+            tile.Titulo = "FATURAMENTO CONSULTORIA MENSAL";
             tile.Valor = result.Object.Count() > 0 ? string.Format("{0:C}", result.Object.Sum(x => Convert.ToDecimal(x.Proposal.CreditMembershipValue))) : "R$ 0,00";
             tile.Controller = "Home";
             tile.Action = "AtualizarTileAdesaoFinanceiroMensal";
@@ -635,7 +635,7 @@ namespace GrupoSelect.Web.Controllers
             tile.BackgroundColor = Constants.SYSTEM_RGBA_WHITE;
             tile.Icone = "fa-money";
             tile.Descricao = string.Empty;
-            tile.Titulo = "Total de Comissão";
+            tile.Titulo = "COMISSÃO GERAL SEMANAL";
             tile.Valor = SomatoriaComisao > 0 ? string.Format("{0:C}", SomatoriaComisao) : "R$ 0,00";
             tile.Controller = "Home";
             tile.Action = "AtualizarTileComissaoTotalSemanal";
@@ -670,7 +670,7 @@ namespace GrupoSelect.Web.Controllers
             tile.BackgroundColor = Constants.SYSTEM_RGBA_WHITE;
             tile.Icone = "fa-money";
             tile.Descricao = string.Empty;
-            tile.Titulo = "Comissão Master Semanal";
+            tile.Titulo = "COMISSÃO MASTERS SEMANAL";
             tile.Valor = SomatoriaComisao > 0 ? string.Format("{0:C}", SomatoriaComisao) : "R$ 0,00";
             tile.Controller = "Home";
             tile.Action = "AtualizarTileComissaoTotalMasterSemanal";
@@ -705,7 +705,7 @@ namespace GrupoSelect.Web.Controllers
             tile.BackgroundColor = Constants.SYSTEM_RGBA_WHITE;
             tile.Icone = "fa-money";
             tile.Descricao = string.Empty;
-            tile.Titulo = "Comissão Representante Semanal";
+            tile.Titulo = "COMISSÃO REPRESENTANTES SEMANAL";
             tile.Valor = SomatoriaComisao > 0 ? string.Format("{0:C}", SomatoriaComisao) : "R$ 0,00";
             tile.Controller = "Home";
             tile.Action = "AtualizarTileComissaoTotalRepresentanteSemanal";
