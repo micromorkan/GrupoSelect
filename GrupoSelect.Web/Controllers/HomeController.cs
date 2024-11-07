@@ -102,7 +102,7 @@ namespace GrupoSelect.Web.Controllers
 
             DateTime startOfWeek = DateTime.Now;
 
-            int days = CalculateOffset(startOfWeek.DayOfWeek, DayOfWeek.Thursday);
+            int days = CalculateOffset(startOfWeek.DayOfWeek, DayOfWeek.Friday);
 
             startOfWeek = startOfWeek.AddDays(days - 7);
 
@@ -310,6 +310,7 @@ namespace GrupoSelect.Web.Controllers
                     dashboard.LstTile.Add(await MontarTileAdesaoFinanceiroMensal());
                     dashboard.LstTile.Add(await MontarTileComissaoTotalSemanal());
                     dashboard.LstTile.Add(await MontarTileComissaoTotalMasterSemanal());
+                    dashboard.LstTile.Add(await MontarTileComissaoTotalRepresentanteSemanal());
                 }
 
                 dashboard.LstChartMoney.Add(await MontarChartContratoFinanceiroSemanal());
@@ -327,7 +328,7 @@ namespace GrupoSelect.Web.Controllers
 
             DateTime startOfWeek = DateTime.Now;
 
-            int days = CalculateOffset(startOfWeek.DayOfWeek, DayOfWeek.Thursday);
+            int days = CalculateOffset(startOfWeek.DayOfWeek, DayOfWeek.Friday);
 
             startOfWeek = startOfWeek.AddDays(days - 7);
 
@@ -664,6 +665,41 @@ namespace GrupoSelect.Web.Controllers
 
             return tile;
         }
+
+        private async Task<Tile> MontarTileComissaoTotalRepresentanteSemanal()
+        {
+            string userProfile = User.GetProfile();
+
+            DateTime date = DateTime.Now;
+
+            var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
+            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+
+            var result = await _contractService.GetAllPaginate(new Contract { Status = Constants.CONTRACT_STATUS_CA, Proposal = new Proposal() }, 1, 1000, firstDayOfMonth, lastDayOfMonth);
+
+            decimal SomatoriaComisao = 0;
+
+            foreach (var item in result.Object)
+            {
+                SomatoriaComisao += Convert.ToDecimal(item.Proposal.CreditValue) * Convert.ToDecimal(item.Proposal.TableTypeCommission) / 100;
+            }
+
+            Tile tile = new Tile();
+
+            tile.Id = 5;
+            tile.BackgroundColor = Constants.SYSTEM_RGBA_WHITE;
+            tile.Icone = "fa-money";
+            tile.Descricao = string.Empty;
+            tile.Titulo = "Comissão Representante Semanal";
+            tile.Valor = SomatoriaComisao > 0 ? string.Format("{0:C}", SomatoriaComisao) : "R$ 0,00";
+            tile.Controller = "Home";
+            tile.Action = "AtualizarTileComissaoTotalRepresentanteSemanal";
+            tile.IntervaloAtualizacao = 60000;
+            tile.Filter = null;
+
+            return tile;
+        }
+
         [HttpPost]
         public async Task<JsonResult> AtualizarChartContratoFinanceiroSemanal()
         {
@@ -704,6 +740,12 @@ namespace GrupoSelect.Web.Controllers
         public async Task<JsonResult> AtualizarTileComissaoTotalMasterSemanal()
         {
             return Json(await MontarTileComissaoTotalMasterSemanal());
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> AtualizarTileComissaoTotalRepresentanteSemanal()
+        {
+            return Json(await MontarTileComissaoTotalRepresentanteSemanal());
         }
         #endregion
 
