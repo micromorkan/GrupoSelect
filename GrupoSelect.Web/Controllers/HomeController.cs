@@ -559,7 +559,7 @@ namespace GrupoSelect.Web.Controllers
             var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
             var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
 
-            var result = await _contractService.GetAllPaginate(new Contract { Status = Constants.CONTRACT_STATUS_CA, Proposal = new Proposal() }, 1, 1000, firstDayOfMonth, lastDayOfMonth);
+            var result = await _contractService.GetAllPaginate(new Contract { Status = Constants.CONTRACT_STATUS_CA, Proposal = new Proposal() }, 1, 1000, firstDayOfMonth, lastDayOfMonth, -99);
 
             Tile tile = new Tile();
 
@@ -586,7 +586,7 @@ namespace GrupoSelect.Web.Controllers
             var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
             var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
 
-            var result = await _contractService.GetAllPaginate(new Contract { Status = Constants.CONTRACT_STATUS_CA, Proposal = new Proposal() }, 1, 1000, firstDayOfMonth, lastDayOfMonth);
+            var result = await _contractService.GetAllPaginate(new Contract { Status = Constants.CONTRACT_STATUS_CA, Proposal = new Proposal() }, 1, 1000, firstDayOfMonth, lastDayOfMonth, -99);
 
             Tile tile = new Tile();
 
@@ -614,7 +614,7 @@ namespace GrupoSelect.Web.Controllers
 
             startOfWeek = startOfWeek.AddDays(days - 7);
 
-            var result = await _contractService.GetAllPaginate(new Contract { Status = Constants.CONTRACT_STATUS_CA, Proposal = new Proposal() }, 1, 1000, startOfWeek, startOfWeek.AddDays(6));
+            var result = await _contractService.GetAllPaginate(new Contract { Status = Constants.CONTRACT_STATUS_CA, Proposal = new Proposal() }, 1, 1000, startOfWeek, startOfWeek.AddDays(6), -99);
 
             decimal SomatoriaComisao = 0;
 
@@ -655,7 +655,7 @@ namespace GrupoSelect.Web.Controllers
 
             startOfWeek = startOfWeek.AddDays(days - 7);
 
-            var result = await _contractService.GetAllPaginate(new Contract { Status = Constants.CONTRACT_STATUS_CA, Proposal = new Proposal() }, 1, 1000, startOfWeek, startOfWeek.AddDays(6));
+            var result = await _contractService.GetAllPaginate(new Contract { Status = Constants.CONTRACT_STATUS_CA, Proposal = new Proposal() }, 1, 1000, startOfWeek, startOfWeek.AddDays(6), -99);
 
             decimal SomatoriaComisao = 0;
 
@@ -690,7 +690,7 @@ namespace GrupoSelect.Web.Controllers
 
             startOfWeek = startOfWeek.AddDays(days - 7);
 
-            var result = await _contractService.GetAllPaginate(new Contract { Status = Constants.CONTRACT_STATUS_CA, Proposal = new Proposal() }, 1, 1000, startOfWeek, startOfWeek.AddDays(6));
+            var result = await _contractService.GetAllPaginate(new Contract { Status = Constants.CONTRACT_STATUS_CA, Proposal = new Proposal() }, 1, 1000, startOfWeek, startOfWeek.AddDays(6), -99);
 
             decimal SomatoriaComisao = 0;
 
@@ -725,7 +725,7 @@ namespace GrupoSelect.Web.Controllers
 
             startOfWeek = startOfWeek.AddDays(days - 7);
 
-            var result = await _contractService.GetAllPaginate(new Contract { Status = Constants.CONTRACT_STATUS_CA, Proposal = new Proposal { UserId = userId } }, 1, 1000, startOfWeek, startOfWeek.AddDays(6));
+            var result = await _contractService.GetAllPaginate(new Contract { Status = Constants.CONTRACT_STATUS_CA, Proposal = new Proposal { UserId = userId } }, 1, 1000, startOfWeek, startOfWeek.AddDays(6), -99);
 
             decimal SomatoriaComisao = 0;
 
