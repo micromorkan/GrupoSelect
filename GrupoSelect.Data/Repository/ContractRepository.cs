@@ -105,7 +105,7 @@ namespace GrupoSelect.Data.Repository
             var grupoUsuario = await _dbContext.GroupUsers.Where(i => i.UserId == userId).FirstOrDefaultAsync();
             return await _dbContext.Contracts.Include(x => x.Proposal.Client)
                                              .Include(x => x.Proposal.User.GroupUsers)
-                                             .Where(f => (f.Proposal.User.Profile == Constants.PROFILE_GERENTE || f.Proposal.User.Profile == Constants.PROFILE_REPRESENTANTE) &&
+                                             .Where(f => (f.Proposal.User.Profile == Constants.PROFILE_GERENTE || f.Proposal.User.Profile == Constants.PROFILE_GESTOR || f.Proposal.User.Profile == Constants.PROFILE_REPRESENTANTE) &&
                                                            f.Status == Constants.CONTRACT_STATUS_CA &&
                                                            f.DateAproved >= startDate &&
                                                            f.DateAproved <= endDate && 

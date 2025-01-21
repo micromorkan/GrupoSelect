@@ -10,6 +10,7 @@
         public const string PROFILE_DIRETOR = "DIRETOR";
         public const string PROFILE_ADVOGADO = "ADVOGADO";
         public const string PROFILE_TI = "TI";
+        public const string PROFILE_GESTOR = "GESTOR";
 
         #endregion
 

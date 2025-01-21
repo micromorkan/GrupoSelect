@@ -48,7 +48,7 @@ namespace GrupoSelect.Web.Controllers
             _configuration = configuration;
         }
 
-        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_GERENTE)]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_GESTOR)]
         public async Task<IActionResult> Index()
         {
             var proposal = new ProposalVM();
@@ -62,7 +62,7 @@ namespace GrupoSelect.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_GERENTE)]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_GESTOR)]
         [TypeFilter(typeof(ExceptionLog))]
         public async Task<IActionResult> Index(ProposalVM proposalVM, int page, int qtPage)
         {
@@ -76,7 +76,7 @@ namespace GrupoSelect.Web.Controllers
                     filter.UserId = Convert.ToInt32(User.GetId());
                 }
 
-                if (HttpContext.User.IsInRole(Constants.PROFILE_GERENTE))
+                if (HttpContext.User.IsInRole(Constants.PROFILE_GERENTE) || HttpContext.User.IsInRole(Constants.PROFILE_GESTOR))
                 {
                     groupId = Convert.ToInt32(User.GetGroupId());
                 }
@@ -109,14 +109,14 @@ namespace GrupoSelect.Web.Controllers
             }
         }
 
-        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_GERENTE)]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_GESTOR)]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_GERENTE)]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_GESTOR)]
         [TypeFilter(typeof(ExceptionLog))]
         public async Task<IActionResult> Create(ProposalVM proposalVM)
         {
@@ -135,6 +135,7 @@ namespace GrupoSelect.Web.Controllers
                     proposalVM.TableTypeFee = credit.TableType.MembershipFee;
                     proposalVM.TableTypeCommission = credit.TableType.CommissionFee;
                     proposalVM.TableTypeManager = credit.TableType.ManagerFee;
+                    proposalVM.TableTypeGestor = credit.TableType.GestorFee;
                     proposalVM.TableTypeRate = credit.TableType.RemainingRate;
                     proposalVM.TableTypeTax = credit.TableType.TableTax;
                     proposalVM.ProductTypeName = credit.ProductType.ProductName;
@@ -160,7 +161,7 @@ namespace GrupoSelect.Web.Controllers
             }
         }
 
-        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_GERENTE)]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_GESTOR)]
         public async Task<IActionResult> Edit(int id)
         {
             try
@@ -211,7 +212,7 @@ namespace GrupoSelect.Web.Controllers
 
         [HttpPost]
         [TypeFilter(typeof(ExceptionLog))]
-        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_GERENTE)]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_GESTOR)]
         public async Task<IActionResult> Edit(int id, ProposalVM proposalVM)
         {
             try
@@ -238,6 +239,7 @@ namespace GrupoSelect.Web.Controllers
                         proposalVM.TableTypeFee = credit.TableType.MembershipFee;
                         proposalVM.TableTypeCommission = credit.TableType.CommissionFee;
                         proposalVM.TableTypeManager = credit.TableType.ManagerFee;
+                        proposalVM.TableTypeGestor = credit.TableType.GestorFee;
                         proposalVM.TableTypeRate = credit.TableType.RemainingRate;
                         proposalVM.TableTypeTax = credit.TableType.TableTax;
                         proposalVM.ProductTypeName = credit.ProductType.ProductName;
@@ -263,7 +265,7 @@ namespace GrupoSelect.Web.Controllers
         }
 
         [TypeFilter(typeof(ExceptionLog))]
-        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_GERENTE)]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_GESTOR)]
         public async Task<IActionResult> Delete(int id)
         {
             try
@@ -407,7 +409,7 @@ namespace GrupoSelect.Web.Controllers
 
         [HttpPost]
         [TypeFilter(typeof(ExceptionLog))]
-        [Authorize(Roles = Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
+        [Authorize(Roles = Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_GESTOR + "," + Constants.PROFILE_DIRETOR)]
         public async Task<IActionResult> Check(int id)
         {
             try

@@ -106,6 +106,17 @@ namespace GrupoSelect.Services.FluentValidation
             {
                 context.AddFailure("Taxa Comissão do Gerente inválida.");
             }
+
+            Decimal result5 = 0;
+
+            if (!Decimal.TryParse(model.GestorFee, out result5))
+            {
+                context.AddFailure("Informe um valor numérico para Taxa Comissão do Gestor.");
+            }
+            else if (result5 < 0)
+            {
+                context.AddFailure("Taxa Comissão do Gestor inválida.");
+            }
         }
         private void DeleteBlock(Domain.Entity.TableType model, ValidationContext<Domain.Entity.TableType> context)
         {

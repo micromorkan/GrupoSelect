@@ -59,7 +59,7 @@ namespace GrupoSelect.Web.Controllers
                     result = new Result<IEnumerable<Contract>> { Success = false, Message = "Nenhum represente foi selecionado!" };
                 }
 
-                if (userResult.Object.Profile == Constants.PROFILE_GERENTE || userResult.Object.Profile == Constants.PROFILE_ADVOGADO)
+                if (userResult.Object.Profile == Constants.PROFILE_GERENTE || userResult.Object.Profile == Constants.PROFILE_GESTOR || userResult.Object.Profile == Constants.PROFILE_ADVOGADO)
                 {
                     result = await _borderoService.GetAllManager(proposalVM.UserId, proposalVM.StartDate, proposalVM.EndDate);
                 }
@@ -99,7 +99,7 @@ namespace GrupoSelect.Web.Controllers
 
                 foreach (User item in result.Object)
                 {
-                    if (item.Active == true && (item.Profile == Constants.PROFILE_GERENTE || item.Profile == Constants.PROFILE_REPRESENTANTE || item.Profile == Constants.PROFILE_ADVOGADO))
+                    if (item.Active == true && (item.Profile == Constants.PROFILE_GERENTE || item.Profile == Constants.PROFILE_GESTOR || item.Profile == Constants.PROFILE_REPRESENTANTE || item.Profile == Constants.PROFILE_ADVOGADO))
                     {
                         items.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.Representation + " - " + item.Profile, Selected = filter.Id == item.Id ? true : false });
                     }
@@ -126,7 +126,7 @@ namespace GrupoSelect.Web.Controllers
                     throw new Exception("Nenhum representante foi selecionado!");
                 }
 
-                if (userResult.Object.Profile == Constants.PROFILE_GERENTE)
+                if (userResult.Object.Profile == Constants.PROFILE_GERENTE || userResult.Object.Profile == Constants.PROFILE_GESTOR)
                 {
                     IEnumerable<Contract> contracts = (await _borderoService.GetAllManager(userId, Convert.ToDateTime(startDate), Convert.ToDateTime(endDate))).Object;
 

@@ -8,5 +8,6 @@
         public string RemainingRate { get; set; }
         public string CommissionFee { get; set; }
         public string ManagerFee { get; set; }
+        public string GestorFee { get; set; }
     }
 }

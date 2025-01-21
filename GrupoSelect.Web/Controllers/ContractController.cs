@@ -35,7 +35,7 @@ namespace GrupoSelect.Web.Controllers
             _configuration = configuration;
         }
 
-        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_ADVOGADO)]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_GESTOR + "," + Constants.PROFILE_ADVOGADO)]
         public async Task<IActionResult> Index()
         {
             var proposal = new ContractVM();
@@ -50,7 +50,7 @@ namespace GrupoSelect.Web.Controllers
 
         [HttpPost]
         [TypeFilter(typeof(ExceptionLog))]
-        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_ADVOGADO)]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_GESTOR + "," + Constants.PROFILE_ADVOGADO)]
         public async Task<IActionResult> Index(ContractVM contractVM, int page, int qtPage)
         {
             try
@@ -69,7 +69,7 @@ namespace GrupoSelect.Web.Controllers
                     filter.Proposal.ClientId = contractVM.ClientId;
                     filter.Status = Constants.CONTRACT_STATUS_CA;
                 }
-                if (HttpContext.User.IsInRole(Constants.PROFILE_GERENTE))
+                if (HttpContext.User.IsInRole(Constants.PROFILE_GERENTE) || HttpContext.User.IsInRole(Constants.PROFILE_GESTOR))
                 {
                     groupId = Convert.ToInt32(User.GetGroupId());
                 }
@@ -100,7 +100,7 @@ namespace GrupoSelect.Web.Controllers
             }
         }
 
-        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_GESTOR + "," + Constants.PROFILE_DIRETOR)]
         public async Task<IActionResult> Edit(int id)
         {
             try
@@ -141,7 +141,7 @@ namespace GrupoSelect.Web.Controllers
         [HttpPost]
         [TypeFilter(typeof(ExceptionLog))]
         [RequestSizeLimit(100_000_000)]
-        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
+        [Authorize(Roles = Constants.PROFILE_REPRESENTANTE + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_GESTOR + "," + Constants.PROFILE_DIRETOR)]
         public async Task<IActionResult> Edit(int id, ContractVM contractVM)
         {
             try
@@ -322,7 +322,7 @@ namespace GrupoSelect.Web.Controllers
         }
 
         [TypeFilter(typeof(ExceptionLog))]
-        [Authorize(Roles = Constants.PROFILE_ADVOGADO + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_DIRETOR)]
+        [Authorize(Roles = Constants.PROFILE_ADVOGADO + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_GESTOR + "," + Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_DIRETOR)]
         public async Task<IActionResult> Detail(int id)
         {
             try
@@ -411,7 +411,7 @@ namespace GrupoSelect.Web.Controllers
         }
 
         [TypeFilter(typeof(ExceptionLog))]
-        [Authorize(Roles = Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_ADMINISTRATIVO)]
+        [Authorize(Roles = Constants.PROFILE_GERENTE + "," + Constants.PROFILE_GESTOR + "," + Constants.PROFILE_DIRETOR + "," + Constants.PROFILE_ADMINISTRATIVO)]
         public async Task<IActionResult> Cancel(int id, string reason)
         {
             try

@@ -108,10 +108,10 @@ namespace GrupoSelect.Web.Controllers
 
             PaginateResult<IEnumerable<Contract>> result = null;
 
-            if (userProfile == Constants.PROFILE_DIRETOR || userProfile == Constants.PROFILE_GERENTE || userProfile == Constants.PROFILE_ADMINISTRATIVO)
+            if (userProfile == Constants.PROFILE_DIRETOR || userProfile == Constants.PROFILE_GERENTE || userProfile == Constants.PROFILE_GESTOR || userProfile == Constants.PROFILE_ADMINISTRATIVO)
             {
                 var grupoId = 0;
-                if (userProfile == Constants.PROFILE_GERENTE)
+                if (userProfile == Constants.PROFILE_GERENTE || userProfile == Constants.PROFILE_GESTOR)
                 {
                     grupoId = Convert.ToInt32(User.GetGroupId());
                 }
@@ -162,10 +162,10 @@ namespace GrupoSelect.Web.Controllers
 
             PaginateResult<IEnumerable<Contract>> result = null;
 
-            if (userProfile == Constants.PROFILE_DIRETOR || userProfile == Constants.PROFILE_GERENTE || userProfile == Constants.PROFILE_ADMINISTRATIVO)
+            if (userProfile == Constants.PROFILE_DIRETOR || userProfile == Constants.PROFILE_GERENTE || userProfile == Constants.PROFILE_GESTOR || userProfile == Constants.PROFILE_ADMINISTRATIVO)
             {
                 var grupoId = 0;
-                if (userProfile == Constants.PROFILE_GERENTE)
+                if (userProfile == Constants.PROFILE_GERENTE || userProfile == Constants.PROFILE_GESTOR)
                 {
                     grupoId = Convert.ToInt32(User.GetGroupId());
                 }

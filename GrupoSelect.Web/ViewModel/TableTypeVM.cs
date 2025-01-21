@@ -25,5 +25,9 @@ namespace GrupoSelect.Web.ViewModel
         [Display(Name = "Taxa Comissão Gerente")]
         [Required(ErrorMessage = "O campo {0} é obrigatório!")]
         public string ManagerFee { get; set; }
+
+        [Display(Name = "Taxa Comissão Gestor")]
+        [Required(ErrorMessage = "O campo {0} é obrigatório!")]
+        public string GestorFee { get; set; }
     }
 }
