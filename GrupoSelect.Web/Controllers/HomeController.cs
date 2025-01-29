@@ -68,7 +68,7 @@ namespace GrupoSelect.Web.Controllers
                     }
                 }
 
-                if (userProfile == Constants.PROFILE_GERENTE)
+                if (userProfile == Constants.PROFILE_GERENTE || userProfile == Constants.PROFILE_GESTOR)
                 {
                     var grupoId = Convert.ToInt32(User.GetGroupId());
 
@@ -102,7 +102,7 @@ namespace GrupoSelect.Web.Controllers
 
             DateTime startOfWeek = DateTime.Now;
 
-            int days = CalculateOffset(startOfWeek.DayOfWeek, DayOfWeek.Friday);
+            int days = CalculateOffset(startOfWeek.DayOfWeek, DayOfWeek.Thursday);
 
             startOfWeek = startOfWeek.AddDays(days - 7);
 
@@ -294,7 +294,7 @@ namespace GrupoSelect.Web.Controllers
 
         #region FINANCEIRO
 
-        [Authorize(Roles = Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_DIRETOR)]
+        [Authorize(Roles = Constants.PROFILE_ADMINISTRATIVO + "," + Constants.PROFILE_GERENTE + "," + Constants.PROFILE_GESTOR + "," + Constants.PROFILE_DIRETOR)]
         public async Task<IActionResult> Financeiro()
         {
             ComponentsVM dashboard = new ComponentsVM();
@@ -340,13 +340,13 @@ namespace GrupoSelect.Web.Controllers
 
             DateTime startOfWeek = DateTime.Now;
 
-            int days = CalculateOffset(startOfWeek.DayOfWeek, DayOfWeek.Friday);
+            int days = CalculateOffset(startOfWeek.DayOfWeek, DayOfWeek.Thursday);
 
             startOfWeek = startOfWeek.AddDays(days - 7);
 
             PaginateResult<IEnumerable<Contract>> result = null;
 
-            if (userProfile == Constants.PROFILE_DIRETOR || userProfile == Constants.PROFILE_GERENTE || userProfile == Constants.PROFILE_ADMINISTRATIVO)
+            if (userProfile == Constants.PROFILE_DIRETOR || userProfile == Constants.PROFILE_GERENTE || userProfile == Constants.PROFILE_GESTOR || userProfile == Constants.PROFILE_ADMINISTRATIVO)
             {
                 result = await _contractService.GetAllPaginate(new Contract { Proposal = new Proposal(), Status = Constants.CONTRACT_STATUS_CA }, 1, 1000, startOfWeek, startOfWeek.AddDays(6), -99);
             }
@@ -403,7 +403,7 @@ namespace GrupoSelect.Web.Controllers
 
             PaginateResult<IEnumerable<Contract>> result = null;
 
-            if (userProfile == Constants.PROFILE_DIRETOR || userProfile == Constants.PROFILE_GERENTE || userProfile == Constants.PROFILE_ADMINISTRATIVO)
+            if (userProfile == Constants.PROFILE_DIRETOR || userProfile == Constants.PROFILE_GERENTE || userProfile == Constants.PROFILE_GESTOR || userProfile == Constants.PROFILE_ADMINISTRATIVO)
             {
                 result = await _contractService.GetAllPaginate(new Contract { Proposal = new Proposal(), Status = Constants.CONTRACT_STATUS_CA }, 1, 1000, firstDayOfMonth, lastDayOfMonth, -99);
             }
@@ -610,7 +610,7 @@ namespace GrupoSelect.Web.Controllers
 
             DateTime startOfWeek = DateTime.Now;
 
-            int days = CalculateOffset(startOfWeek.DayOfWeek, DayOfWeek.Friday);
+            int days = CalculateOffset(startOfWeek.DayOfWeek, DayOfWeek.Thursday);
 
             startOfWeek = startOfWeek.AddDays(days - 7);
 
@@ -651,7 +651,7 @@ namespace GrupoSelect.Web.Controllers
 
             DateTime startOfWeek = DateTime.Now;
 
-            int days = CalculateOffset(startOfWeek.DayOfWeek, DayOfWeek.Friday);
+            int days = CalculateOffset(startOfWeek.DayOfWeek, DayOfWeek.Thursday);
 
             startOfWeek = startOfWeek.AddDays(days - 7);
 
@@ -686,7 +686,7 @@ namespace GrupoSelect.Web.Controllers
 
             DateTime startOfWeek = DateTime.Now;
 
-            int days = CalculateOffset(startOfWeek.DayOfWeek, DayOfWeek.Friday);
+            int days = CalculateOffset(startOfWeek.DayOfWeek, DayOfWeek.Thursday);
 
             startOfWeek = startOfWeek.AddDays(days - 7);
 
@@ -721,7 +721,7 @@ namespace GrupoSelect.Web.Controllers
 
             DateTime startOfWeek = DateTime.Now;
 
-            int days = CalculateOffset(startOfWeek.DayOfWeek, DayOfWeek.Friday);
+            int days = CalculateOffset(startOfWeek.DayOfWeek, DayOfWeek.Thursday);
 
             startOfWeek = startOfWeek.AddDays(days - 7);
 

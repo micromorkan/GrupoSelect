@@ -102,14 +102,15 @@ namespace GrupoSelect.Data.Repository
 
         public async Task<IEnumerable<Contract>> GetAllBorderoManager(int userId, DateTime startDate, DateTime endDate)
         {
-            var grupoUsuario = await _dbContext.GroupUsers.Where(i => i.UserId == userId).FirstOrDefaultAsync();
+            var grupoUsuarioId = await _dbContext.GroupUsers.Where(i => i.UserId == userId).Select(x => x.GroupId).ToListAsync();
+
             return await _dbContext.Contracts.Include(x => x.Proposal.Client)
                                              .Include(x => x.Proposal.User.GroupUsers)
                                              .Where(f => (f.Proposal.User.Profile == Constants.PROFILE_GERENTE || f.Proposal.User.Profile == Constants.PROFILE_GESTOR || f.Proposal.User.Profile == Constants.PROFILE_REPRESENTANTE) &&
                                                            f.Status == Constants.CONTRACT_STATUS_CA &&
                                                            f.DateAproved >= startDate &&
-                                                           f.DateAproved <= endDate && 
-                                                           f.Proposal.User.GroupUsers.Any(x=> x.GroupId==grupoUsuario.GroupId))
+                                                           f.DateAproved <= endDate &&
+                                                           f.Proposal.User.GroupUsers.Any(z => grupoUsuarioId.Contains(z.GroupId)))
                                              .OrderBy(x => x.ContractNum)
                                              .Select(x => new Contract
                                              {

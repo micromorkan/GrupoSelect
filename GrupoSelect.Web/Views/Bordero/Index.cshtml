@@ -75,8 +75,8 @@
             $('.component-select').select2();
             moment.locale('pt-br');
             void 0 !== $.fn.daterangepicker && $("#dateFilter").daterangepicker({
-                startDate: '@DateTime.Today.AddDays((int)DayOfWeek.Friday - (int)DateTime.Today.DayOfWeek - 7).ToShortDateString()',
-                endDate: '@DateTime.Today.AddDays((int)DayOfWeek.Friday - (int)DateTime.Today.DayOfWeek - 7).AddDays(6).ToShortDateString()',
+                startDate: '@DateTime.Today.AddDays((int)DayOfWeek.Thursday - (int)DateTime.Today.DayOfWeek - 7).ToShortDateString()',
+                endDate: '@DateTime.Today.AddDays((int)DayOfWeek.Thursday - (int)DateTime.Today.DayOfWeek - 7).AddDays(6).ToShortDateString()',
                 locale: {
                     format: "DD/MM/YYYY",
                     "applyLabel": "Selecionar",
