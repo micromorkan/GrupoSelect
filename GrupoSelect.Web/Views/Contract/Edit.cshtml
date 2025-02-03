@@ -173,6 +173,15 @@
             }
         });
 
+        $('#VideoAgreeFormFile').on('change', function () {
+            let size = this.files[0].size / 1024 / 1024;
+
+            if (size > 95) {
+                swal('Aviso!', 'O vídeo selecionado excede o tamanho permitido!', 'warning');
+                $("#VideoAgreeFormFile").val('');
+            }            
+        });
+
     </script>
 }
 
