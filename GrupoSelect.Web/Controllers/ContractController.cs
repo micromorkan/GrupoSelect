@@ -75,6 +75,7 @@ namespace GrupoSelect.Web.Controllers
                 }
 
                 filter.ContractNum = string.IsNullOrEmpty(filter.ContractNum) ? string.Empty : filter.ContractNum.ToUpper();
+                filter.Proposal.ClientId = contractVM.ClientId;
 
                 var result = await _contractService.GetAllPaginate(filter, page, qtPage, contractVM.StartDate, contractVM.EndDate, groupId);
 
